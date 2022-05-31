@@ -12,6 +12,12 @@ class HomeScreen extends Component{
         super(props);
     
         this.state={
+            modalVisible:false,
+            warehouseMap:[],  // 仓库
+            menuList:[],  // 菜单数据
+
+
+
             lanyaStatus:9,
             isProcurement: false,  // 采购商
             isFinancing:false,   //  财务
@@ -28,6 +34,8 @@ class HomeScreen extends Component{
     componentWillUnmount(){
         this.listener.remove();
         this.toCenter.remove();
+        this.getMenu.remove();
+
     }
 
 
@@ -49,6 +57,16 @@ class HomeScreen extends Component{
         });  
 
 
+        // 初始化菜单
+        this.initMenu()
+
+
+        // 获取菜单
+        this.getMenu =DeviceEventEmitter.addListener('globalEmitter_get_menu',function(){
+            that.getWarehouseFunc()
+        });
+
+
         // 到个人中心
         this.toCenter =DeviceEventEmitter.addListener('globalEmitter_to_center',function(){
             navigation.navigate('centerPage'); 
@@ -63,7 +81,87 @@ class HomeScreen extends Component{
     }
 
 
+    /**
+     * 初始化 菜单
+     */
+    initMenu=()=>{
+        let that=this;
 
+        AsyncStorage.getItem("menu_buffer_list").then((data)=>{
+            that.setState({
+                menuList:JSON.parse(data)
+            })
+            console.log( JSON.parse(data) )
+        })
+
+    }
+
+
+    /**
+     * 获取 仓库
+    */
+    getWarehouseFunc=()=>{
+
+        let that=this;
+    
+        WISHttpUtils.get("system/user/selectUserStore",{
+          params:{
+    
+          }
+        },(result)=>{
+
+            const {rows}=result
+    
+            that.setState({
+                modalVisible:true,
+                warehouseMap:rows
+            })
+    
+        })
+
+
+    }
+
+    /**
+     * 绑定 菜单
+     */
+     getMenuFunc=(option)=>{
+        const that=this;
+        const {tmBasStorageId}=option;
+    
+        WISHttpUtils.get(`system/user/selectStorage/${tmBasStorageId}`,{
+          params:{
+    
+          }
+        },(result)=>{
+            that.getMenuData();
+            // console.log(1123)
+            //  console.log(result)
+             // const {code,rows=[]}=result;
+        })
+     }
+
+    /**
+     * 获取 菜单
+     */
+     getMenuData=()=>{
+        const that=this;
+
+        WISHttpUtils.get(`system/menu/getRouters/A/2527`,{
+            params:{
+      
+            }
+          },(result)=>{
+            const {data=[]}=result;
+
+      
+            if(data.length){
+                let _list=(data[0]["children"])||[];
+                AsyncStorage.setItem("menu_buffer_list",JSON.stringify(_list));
+                that.initMenu();
+            }      
+          })
+     }
  
 
     /**
@@ -143,8 +241,9 @@ class HomeScreen extends Component{
     }
 
     render() {
+        const that=this;
         const {navigation} = this.props;
-        const {isProcurement,lanyaStatus,isFinancing,version,numberConfig}=this.state;
+        const {menuList,modalVisible,warehouseMap,isProcurement,lanyaStatus,isFinancing,version,numberConfig}=this.state;
 
         return (
         <ScrollView style={styles.page}>
@@ -153,9 +252,52 @@ class HomeScreen extends Component{
             <Button type="primary" onPress={this.lanyard}>测试蓝牙</Button> */}
 
 
-
+            {/* <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    console.log("2222")
+                }}
+            > */}
 
             <Modal
+                animationType="slide"
+                title={`选择仓库 (${warehouseMap.length})`}
+                onClose={()=>{
+                    that.setState({modalVisible:false})
+                }}
+                visible={modalVisible}
+                closable
+                transparent
+            >
+                <View style={{paddingVertical: 20 }}>
+                    <ScrollView style={{height:300,}}>
+                        <View>
+                            { warehouseMap.map((o,i)=>{
+                                return (<Button onPress={()=> that.getMenuFunc(o) } key={String(i)} type="ghost" style={styles.warehouseButton}>
+                                <View style={styles.warehouseButtonBox}>
+                                    <View style={styles.warehouseButtonIcon} >
+                                        <Icon name="cloud" color="#ffad33"/>
+                                    </View>
+                                    <View >
+                                        <Text numberOfLines={1} style={styles.warehouseButtonText}>{o.storageName}</Text>
+                                    </View>
+                                </View>
+
+                                </Button>)
+                            })         
+                            }
+                        </View>
+                    </ScrollView>        
+                </View>
+            </Modal>
+
+
+
+
+
+            {/* <Modal
             title="版本更新"
             transparent
             onClose={this.onClose}
@@ -179,55 +321,59 @@ class HomeScreen extends Component{
                 </View>
             </View>
             <Button type="ghost" onPress={this.onClose}>取消</Button>
-            </Modal>
+            </Modal> */}
 
 
 
             <WingBlank size="md" style={styles.wingBlank}>
+                { menuList.map((o,i)=>{
+                    return <Card key={i} style={styles.card}>
+                        <Card.Header
+                            title={o.menuName}
+                            thumb={<Icon name="audit" size="md" color="#1890ff" style={{marginRight:6}} />}
+                        />
+                        <Card.Body>
+                            <View style={styles.cardContent}>
+                                <View style={styles.flexBox}>
+                                    <View style={styles.flexBoxCol}>
+                                        <View style={styles.flexBoxColChild}>
+                                            <TouchableOpacity onPress={() => this.authority('malfunction') }>
+                                                <View style={styles.menu_child}>
+                                                    <Icon style={styles.menu_child_icon} name="folder-add" size="lg" color="#1890ff" />
+                                                    <Text style={styles.menu_child_text}>屏幕绑定</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>  
+                                    <View style={styles.flexBoxCol}>
+                                        <View style={styles.flexBoxColChild}>
+                                            <TouchableOpacity onPress={() => this.authority('malfunctionList') }>
+                                                <View style={styles.menu_child}>
+                                                    <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
+                                                    <Text style={styles.menu_child_text}>顺位出库单</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View> 
+                                    <View style={styles.flexBoxCol}>
+                                        <View style={styles.flexBoxColChild}>
+                                            {/* <TouchableOpacity onPress={() => this.authority('NG') }>
+                                                <View style={styles.menu_child}>
+                                                    <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
+                                                    <Text style={styles.menu_child_text}>NG出入口手动触发</Text>
+                                                </View>
+                                            </TouchableOpacity> */}
+                                        </View>
+                                    </View>                                                         
+                                </View>
+                                    
+                            </View>         
+                        </Card.Body>
+                    </Card>
+                })
 
-                <Card style={styles.card}>
-                    <Card.Header
-                        title="常用"
-                        thumb={<Icon name="audit" size="md" color="#1890ff" style={{marginRight:6}} />}
-                    />
-                    <Card.Body>
-                        <View style={styles.cardContent}>
-                            <View style={styles.flexBox}>
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('malfunction') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="folder-add" size="lg" color="#1890ff" />
-                                                <Text style={styles.menu_child_text}>屏幕绑定</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>  
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('malfunctionList') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
-                                                <Text style={styles.menu_child_text}>顺位出库单</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View> 
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
-                                        {/* <TouchableOpacity onPress={() => this.authority('NG') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
-                                                <Text style={styles.menu_child_text}>NG出入口手动触发</Text>
-                                            </View>
-                                        </TouchableOpacity> */}
-                                    </View>
-                                </View>                                                         
-                            </View>
-                                 
-                        </View>         
-                    </Card.Body>
-                </Card>
+                }
+
 
                 <View style={styles.footer}><Text style={styles.footerText}>——到底了——</Text></View>
             </WingBlank>
@@ -239,6 +385,36 @@ class HomeScreen extends Component{
 
 
 const styles = StyleSheet.create({
+      warehouseButton:{
+        marginTop:16
+      },
+      warehouseButtonBox:{
+        width:120,
+        flexDirection:"row",
+        textAlign:'left',
+        // backgroundColor:'red'
+      },
+      warehouseButtonIcon:{
+        // flex:1,
+        // backgroundColor:'red',
+        // width:28,
+        // height:22,
+        // // marginTop:16,
+        // // marginRight:6,
+        // // backgroundColor:"red",
+        // paddingTop:4,
+        // paddingRight:1
+        // position:'absolute',
+        // top:36
+      },
+      warehouseButtonText:{
+        
+        paddingLeft:8,
+        fontSize:16
+      },
+      warehouseBox:{
+        backgroundColor:'red'
+      }, 
     cardContent:{
         paddingTop:8
     },

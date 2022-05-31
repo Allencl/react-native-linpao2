@@ -111,7 +111,9 @@ class LoginScreenForm extends React.Component {
               AsyncStorage.setItem("login_type","in");
             });
 
-            navigation.navigate('Home');           
+            navigation.navigate('Home');    
+            DeviceEventEmitter.emit('globalEmitter_get_menu');
+
           })
        
         }
