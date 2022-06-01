@@ -49,7 +49,7 @@ class HomeScreen extends Component{
         AsyncStorage.getItem("login_type").then((option)=>{
             // Toast.offline(option,1);
             if( option !="in" ){
-                navigation.navigate('Login');
+                // navigation.navigate('Login');
             }else{
              
 
@@ -329,8 +329,8 @@ class HomeScreen extends Component{
                 { menuList.map((o,i)=>{
                     return <Card key={i} style={styles.card}>
                         <Card.Header
-                            title={o.menuName}
-                            thumb={<Icon name="audit" size="md" color="#1890ff" style={{marginRight:6}} />}
+                            title={<Text style={{fontWeight:"bold",fontSize:14}}>{o.menuName}</Text>}
+                            thumb={<Icon name="audit" size="md" color="#1890ff" style={{fontSize:16,marginRight:6}} />}
                         />
                         <Card.Body>
                             <View style={styles.cardContent}>

@@ -190,7 +190,7 @@ export default class WISHttpUtils extends Component{
       
 
             if(json){
-                // console.log(json);
+                console.log(json);
                 // that.getUserData(json.data);
 
                 try{
