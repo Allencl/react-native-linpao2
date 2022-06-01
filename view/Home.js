@@ -91,7 +91,7 @@ class HomeScreen extends Component{
             that.setState({
                 menuList:JSON.parse(data)
             })
-            console.log( JSON.parse(data) )
+            // console.log( JSON.parse(data) )
         })
 
     }
@@ -326,6 +326,54 @@ class HomeScreen extends Component{
 
 
             <WingBlank size="md" style={styles.wingBlank}>
+
+
+                <Card style={styles.card}>
+                    <Card.Header
+                        title="测试"
+                        thumb={<Icon name="audit" size="md" color="#1890ff" style={{marginRight:6}} />}
+                    />
+                    <Card.Body>
+                        <View style={styles.cardContent}>
+                            <View style={styles.flexBox}>
+                                <View style={styles.flexBoxCol}>
+                                    <View style={styles.flexBoxColChild}>
+                                        <TouchableOpacity onPress={() => this.authority('take') }>
+                                            <View style={styles.menu_child}>
+                                                <Icon style={styles.menu_child_icon} name="folder-add" size="lg" color="#1890ff" />
+                                                <Text style={styles.menu_child_text}>ASN收货</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>  
+                                <View style={styles.flexBoxCol}>
+                                    <View style={styles.flexBoxColChild}>
+                                        <TouchableOpacity onPress={() => this.authority('malfunctionList') }>
+                                            <View style={styles.menu_child}>
+                                                <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
+                                                <Text style={styles.menu_child_text}>故障机列表</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View> 
+                                <View style={styles.flexBoxCol}>
+                                    <View style={styles.flexBoxColChild}>
+                                        <TouchableOpacity onPress={() => this.authority('NG') }>
+                                            <View style={styles.menu_child}>
+                                                <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
+                                                <Text style={styles.menu_child_text}>NG出入口手动触发</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>                                                         
+                            </View>
+                                 
+                        </View>         
+                    </Card.Body>
+                </Card>
+
+
+
                 { menuList.map((o,i)=>{
                     return <Card key={i} style={styles.card}>
                         <Card.Header

@@ -16,6 +16,11 @@ import HomeScreen from './view/Home';    // 首页
 import LoginScreen from './view/Login';   // 登录
 
 
+import takeScreen from './view_page/take/index';     // ASN 收货
+
+
+
+
 import malfunctionScreen from './view_page/malfunction/index';     // 屏幕绑定
 import malfunctionListScreen from './view_page/malfunctionList/index';     // 故障机列表
 // import awaitDetailsScreen from './view_page/malfunctionList/awaitDetails.js';     // 待维修 详情
@@ -175,6 +180,38 @@ class App extends Component {
                 </Tab.Navigator>
               )}            
             </Stack.Screen>
+
+
+            <Stack.Screen name="take" options={{title:'收货',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="take" component={takeScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             <Stack.Screen name="malfunction" options={{title:'屏幕绑定',...headOption}}>
