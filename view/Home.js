@@ -335,38 +335,22 @@ class HomeScreen extends Component{
                         <Card.Body>
                             <View style={styles.cardContent}>
                                 <View style={styles.flexBox}>
-                                    <View style={styles.flexBoxCol}>
-                                        <View style={styles.flexBoxColChild}>
-                                            <TouchableOpacity onPress={() => this.authority('malfunction') }>
-                                                <View style={styles.menu_child}>
-                                                    <Icon style={styles.menu_child_icon} name="folder-add" size="lg" color="#1890ff" />
-                                                    <Text style={styles.menu_child_text}>屏幕绑定</Text>
+                                    { o.children.map((k,j)=>{
+                                        return ( <View key={j} style={styles.flexBoxCol}>
+                                                <View style={styles.flexBoxColChild}>
+                                                    <TouchableOpacity onPress={() => this.authority('malfunctionList') }>
+                                                        <View style={styles.menu_child}>
+                                                            <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
+                                                            <Text style={styles.menu_child_text}>{k.menuName}</Text>
+                                                        </View>
+                                                    </TouchableOpacity>
                                                 </View>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>  
-                                    <View style={styles.flexBoxCol}>
-                                        <View style={styles.flexBoxColChild}>
-                                            <TouchableOpacity onPress={() => this.authority('malfunctionList') }>
-                                                <View style={styles.menu_child}>
-                                                    <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
-                                                    <Text style={styles.menu_child_text}>顺位出库单</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View> 
-                                    <View style={styles.flexBoxCol}>
-                                        <View style={styles.flexBoxColChild}>
-                                            {/* <TouchableOpacity onPress={() => this.authority('NG') }>
-                                                <View style={styles.menu_child}>
-                                                    <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
-                                                    <Text style={styles.menu_child_text}>NG出入口手动触发</Text>
-                                                </View>
-                                            </TouchableOpacity> */}
-                                        </View>
-                                    </View>                                                         
+                                            </View> 
+                                        )
+                                    })
+
+                                    }                                    
                                 </View>
-                                    
                             </View>         
                         </Card.Body>
                     </Card>
@@ -419,12 +403,20 @@ const styles = StyleSheet.create({
         paddingTop:8
     },
     flexBox:{
-        flexDirection:"row",
-        paddingLeft:6,
-        paddingRight:6
+        // backgroundColor:'red',
+        // alignItems: 'flex-start',
+
+        // flexDirection:"row",
+        flexDirection:'row',
+        flexWrap:'wrap',
+        paddingLeft:3,
+        paddingRight:3
     },
     flexBoxCol:{
-        flex:1,
+        marginBottom:8,
+        marginRight:4,
+        marginLeft:4
+        // flex:1,
     },
     flexBoxColChild:{
         alignItems: 'center'
@@ -463,8 +455,8 @@ const styles = StyleSheet.create({
     menu_child: {
         justifyContent: 'center',
         alignItems: 'center',
-        width:100,
-        height:100,   
+        width:90,
+        height:90,   
         borderWidth: 1,
         borderColor: "#e8eaec",
         borderRadius: 6,
