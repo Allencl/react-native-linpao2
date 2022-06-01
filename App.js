@@ -17,6 +17,7 @@ import LoginScreen from './view/Login';   // 登录
 
 
 import takeScreen from './view_page/take/index';     // ASN 收货
+import takeDetailedScreen from './view_page/take/detailed.js';     // ASN 收货单明细
 
 
 
@@ -191,10 +192,18 @@ class App extends Component {
             </Stack.Screen>
 
 
+            <Stack.Screen name="takeDetailed" options={{title:'收货单明细',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="takeDetailed" component={takeDetailedScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>
 
 
 
 
+            
 
 
 

@@ -17,7 +17,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {origin} from '@wis_component/origin';     // 服务地址
 
 
-// 屏幕绑定
+// ASN 收货单
 class PageForm extends Component {
 
   constructor(props) {
@@ -161,7 +161,7 @@ class PageForm extends Component {
 
 
         <View style={{marginTop:32,marginBottom:50}}>
-          <Button type="primary" onPress={this.passHandle}>提交</Button>          
+          <Button type="primary" onPress={this.passHandle}>确 定</Button>          
         </View>      
                 
       </ScrollView>

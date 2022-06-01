@@ -348,10 +348,10 @@ class HomeScreen extends Component{
                                 </View>  
                                 <View style={styles.flexBoxCol}>
                                     <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('malfunctionList') }>
+                                        <TouchableOpacity onPress={() => this.authority('takeDetailed') }>
                                             <View style={styles.menu_child}>
                                                 <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
-                                                <Text style={styles.menu_child_text}>故障机列表</Text>
+                                                <Text style={styles.menu_child_text}>收货单明细</Text>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
