@@ -8,6 +8,10 @@ import InputSNComponent from './inputSN';     // 卡片
 
 import BluetoothComponent from './bluetooth';   // 蓝牙
 
+
+import FlexTableComponent from './flexTable';   // 蓝牙
+
+
 module.exports = {
     WisButton:ButtonComponent,
     WisButtonFloat:ButtonFloatComponent,
@@ -16,7 +20,8 @@ module.exports = {
     WisCameraComponent: CameraComponent,
     WisCard:CardComponent,
     WisInputSN:InputSNComponent,
-    WisBluetooth:BluetoothComponent
+    WisBluetooth:BluetoothComponent,
+    WisFlexTable:FlexTableComponent
 };
 
 
