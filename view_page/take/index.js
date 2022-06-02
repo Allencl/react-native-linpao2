@@ -24,7 +24,7 @@ class PageForm extends Component {
     super(props);
 
     this.state={
-      odd:"",   // 单号
+      odd:"220005",   // 单号
     }
   }
 
@@ -95,27 +95,26 @@ class PageForm extends Component {
       } else{
         let _odd=value["odd"].trim();
 
-        let _json={
-          "screenNo":_odd,
-        }
 
-        // console.log(_json)
-        // WISHttpUtils.post("tmScreenBinding/binding.do",{
-        //   params:_json,
-        //   // hideLoading:true
-        // },(result) => {
-        //   let {data,success}=result;
+        WISHttpUtils.get(`wms/poOrderPart/getOrderDetails/${_odd}`,{
+          params:{
+    
+          }
+        },(result)=>{
+          const {code,msg,data={}}=result;
 
-        //   // console.log( result )
-        //   if(!data){
-        //     Toast.offline('数据为空！',1);
-        //   }
-          
-        //   if(success && data){
-        //     Toast.success("提交成功！");
-        //     that.saveImage(_odd,data);
-        //   }
-        // }); 
+          if(code==200){         
+            navigation.navigate('takeDetailed',{
+              data:data
+            });       
+          }else{
+            Toast.offline(msg,1);
+          }
+
+        })
+
+
+
 
       }
   });

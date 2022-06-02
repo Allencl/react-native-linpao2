@@ -63,7 +63,11 @@ class HomeScreen extends Component{
 
         // 获取菜单
         this.getMenu =DeviceEventEmitter.addListener('globalEmitter_get_menu',function(){
-            that.getWarehouseFunc()
+            that.getWarehouseFunc() // 获取仓库
+
+            that.getCompanyList()  // 获取所有公司
+            that.getOrderType()   // 获取所有 订单类型
+            that.getTakeType()   // 获取所有 收货类型
         });
 
 
@@ -96,6 +100,58 @@ class HomeScreen extends Component{
 
     }
 
+    /**
+     * 获取所有 收货类型
+     */
+    getTakeType=()=>{
+        WISHttpUtils.get("system/dict/data/type/asn_status",{
+            params:{
+        
+            },
+            hideLoading:true
+        },(result)=>{
+            const {data=[]}=result;
+            console.log(result)
+            // AsyncStorage.setItem("buffer_order_type",JSON.stringify(data));     
+        })          
+    }
+
+
+    /**
+     * 获取所有订单 类型
+     */
+    getOrderType=()=>{
+        const that=this;
+
+        WISHttpUtils.get("system/dict/data/type/po_type",{
+            params:{
+        
+            },
+            hideLoading:true
+        },(result)=>{
+            const {data=[]}=result;
+            // console.log(result)
+            AsyncStorage.setItem("buffer_order_type",JSON.stringify(data));     
+        })  
+    }
+
+
+    /**
+     * 获取  所有公司
+     */
+     getCompanyList=()=>{
+        const that=this;
+    
+        WISHttpUtils.get("wms/suppl/list?status=1",{
+            params:{
+        
+            },
+            hideLoading:true
+        },(result)=>{
+            const {rows=[]}=result;
+            AsyncStorage.setItem("buffer_company_list",JSON.stringify(rows));     
+        })         
+     }
 
     /**
      * 获取 仓库
@@ -154,7 +210,10 @@ class HomeScreen extends Component{
           },(result)=>{
             const {data=[]}=result;
 
-      
+            that.setState({
+                modalVisible:false
+            })
+
             if(data.length){
                 let _list=(data[0]["children"])||[];
                 AsyncStorage.setItem("menu_buffer_list",JSON.stringify(_list));
