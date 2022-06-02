@@ -26,6 +26,8 @@ class PageForm extends Component {
 
     this.state={
       visible:false,  
+      visible2:false,
+      visible3:false,
 
 
       basicData:{},  // 基础信息
@@ -34,8 +36,9 @@ class PageForm extends Component {
       _takeState:'',   // 收货状态
 
 
+      rowData:{},   // 行数据
       waitReceivingList:[],  // 待收货列表 
-
+      quarantineList:[],   // 待检列表 库区数据
     }
   }
 
@@ -67,19 +70,21 @@ class PageForm extends Component {
   initFunc=()=>{
     const that=this;
     const {data}=this.props.route.params.routeParams;
+    const {poOrder={},poOrderPartList=[]}=data;
 
     
     // console.log(23322)
-    console.log( data )
+    // console.log( data )
+
 
     this.setState({
-      basicData:data.poOrder,
+      basicData:poOrder,
     })
 
     // 公司
     AsyncStorage.getItem("buffer_company_list").then((option)=>{
       let _data=JSON.parse(option);
-      let company= _data.filter(o=>o.tmBasSupplId==data.poOrder.tmBasSupplId)[0];
+      let company= _data.filter(o=>o.tmBasSupplId==poOrder.tmBasSupplId)[0];
 
       that.setState({
         _company:`${company.supplNo}-${company.supplName}`
@@ -91,7 +96,7 @@ class PageForm extends Component {
     // 单据类型
     AsyncStorage.getItem("buffer_order_type").then((option)=>{
       let _typeData=JSON.parse(option);
-      let _json=_typeData.filter(o=>o.dictValue==data.poOrder["poType"])[0];
+      let _json=_typeData.filter(o=>o.dictValue==poOrder["poType"])[0];
 
       that.setState({
         _orderType:`${_json.dictValue}-${_json.dictLabel}`
@@ -102,7 +107,7 @@ class PageForm extends Component {
     // 收货状态
     AsyncStorage.getItem("buffer_take_type").then((option)=>{
       let _takeData=JSON.parse(option);
-      let _json=_takeData.filter(o=>o.dictValue==data.poOrder["asnStatus"])[0];
+      let _json=_takeData.filter(o=>o.dictValue==poOrder["asnStatus"])[0];
 
       // console.log(_json)
       that.setState({
@@ -116,18 +121,56 @@ class PageForm extends Component {
     AsyncStorage.getItem("buffer_units").then((option)=>{
       let _unitsData=JSON.parse(option);
 
-      let _newList=(data.poOrderPartList||[]).map(o=> Object.assign(o,{
+      let _newList=poOrderPartList.map(o=> Object.assign(o,{
         _checked:false,
         _unitName:_unitsData.filter(j=>o.dictValue==j.unit)[0]['dictLabel']
       }))
 
 
-      that.setState({
-        basicData:data.poOrder,
-        waitReceivingList:_newList
-      })
+
+      // 获取库区  下拉
+      if(poOrderPartList.length){
+        WISHttpUtils.get('wms/loc/list',{
+          params:{
+            stotageId:poOrderPartList[0]["storageId"],
+            dlocType:3
+          },
+          
+        },(result)=>{
+          const {rows=[]}=result;  
+
+          let _newData=_newList.map((o)=>{
+            let _bufferData=rows.filter(k=>o.locId==k.tmBasLocId)[0]||{};
+            return Object.assign(o,{
+              _tmBasLocId:_bufferData.tmBasLocId,
+              _reservoirName:`${_bufferData.locNo}-${_bufferData.locName}`
+            })
+          })
+          
+
+          that.setState({
+            quarantineList:rows
+          })
+
+
+          that.setState({
+            basicData:poOrder,
+            waitReceivingList:_newData
+          })
+
+    
+        })
+      }
+
+
+
+
 
     })
+
+
+
+
     
 
   }
@@ -188,26 +231,143 @@ class PageForm extends Component {
     })
   }
 
+  /**
+   * 库区选择 切换
+   */
+  cheCkquarantineFunc=(value,index)=>{
+    const that=this;
+    const {quarantineList}=this.state;
 
+    this.setState({
+      quarantineList:[]
+    },()=>{
+      that.setState({
+        quarantineList:quarantineList.map((o,i)=>Object.assign(o,{_checked:(i==index)?value:false}))
+      })
+    })
+  }
 
   /**
    * 批量收货
    * @returns 
    */
   batchTakeFunc=()=>{
-    console.log( 1221 )
+
+
   }
 
 
   render() {
     let that=this;
-    let{visible,basicData,_company,_orderType,_takeState,waitReceivingList}=this.state;
+    let{visible,visible2,visible3,basicData,rowData,_company,_orderType,_takeState,waitReceivingList,quarantineList}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
 
     
     return (
       <ScrollView style={{padding:8,backgroundColor:'#fff'}}>
+
+
+        <Modal
+          title="逐条收货"
+          transparent
+          onClose={()=>{
+            this.setState({visible2:false})
+          }}
+          maskClosable
+          visible={visible2}
+          closable
+          footer={[
+            {text:'确认',onPress:()=> {} },
+            {text:'取消',onPress:()=>{}}
+          ]}
+        >
+          <ScrollView style={{maxHeight:380,paddingLeft:12,marginTop:12,marginBottom:12}}>
+            <View style={{paddingTop:16}}>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>ASN:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{basicData.asnNo}</Text>
+                </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>行号:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.lineno}</Text>
+                </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>物料:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.part}</Text>
+                </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>名称:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>显示在物料</Text>
+                </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>单位:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData._unitName}</Text>
+                </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>计划数量:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receiveQty}</Text>
+                </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>已收数量:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receivedQty}</Text>
+                </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>收货数量:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receiveQty}</Text>
+                </Flex.Item>    
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>待检库位:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>未知</Text>
+                </Flex.Item>  
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>质检标准:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>无数据</Text>
+                </Flex.Item>  
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>包装方案:</Text>
+                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>无数据</Text>
+                </Flex.Item> 
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flexDirection:"row"}}>
+                  <Text style={{flex:3,paddingRight:8,marginBottom:8,paddingTop:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>LPN:</Text>
+                  <View style={{flex:7,}}>
+                    <TextInput
+                      style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
+                      value={""}
+                      placeholder={"请输入HU号"}
+                      // onChangeText={text => that.takeChangeText(text,index)}
+                    />  
+                  </View>
+                </Flex.Item>  
+              </Flex>
+            </View>
+          </ScrollView>
+        </Modal>
+
+
 
         <Modal
           title="批量收货"
@@ -226,6 +386,44 @@ class PageForm extends Component {
           <View style={{paddingLeft:12,marginTop:38,marginBottom:22}}>
             <Text style={{fontSize:18}}>确认是否进行批量收货操作？</Text>
           </View>
+        </Modal>
+
+
+
+        <Modal
+          title="待检库位 (单选)"
+          transparent
+          onClose={()=>{
+            this.setState({visible3:false})
+          }}
+          maskClosable
+          visible={visible3}
+          closable
+          footer={[
+            {text:'确认',onPress:()=> {} },
+            {text:'取消',onPress:()=>{}}
+          ]}
+        >
+          <ScrollView style={{maxHeight:220,paddingTop:22}}>
+            { quarantineList.map((o,i)=>{
+              return (<View key={i}>
+                <Flex>
+                  <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Checkbox
+                      checked={o._checked}
+                      onChange={event => {
+                        that.cheCkquarantineFunc(event.target.checked,i)
+                      }}
+                    >
+                    </Checkbox>
+                  </Flex.Item>
+                  <Flex.Item style={{flex:8,paddingBottom:4,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{fontSize:14,textAlign:'left'}}>{`${o.locNo}-${o.locName}`}</Text>
+                  </Flex.Item>
+                </Flex>
+              </View>)
+            })}
+          </ScrollView>
         </Modal>
         
         <View style={{padding:10,borderWidth:1,borderColor:'#e6ebf1',borderRadius:6,backgroundColor:'#fff'}}>
@@ -282,7 +480,24 @@ class PageForm extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>默认值PK01-包装区库位01</Text>
+
+
+                    <TouchableOpacity onPress={() =>{ 
+                        that.setState({
+                          quarantineList:[]
+                        },()=>{
+                          that.setState({
+                            quarantineList:quarantineList.map(j=>Object.assign(j,{_checked:(j.tmBasLocId==row._tmBasLocId)?true:false}))
+                          })
+                        })
+
+                        that.setState({visible3:true}) 
+                      }}
+                    >
+                      <View style={{borderColor:'#d9d9d9',paddingLeft:6,paddingRight:6,borderWidth:1,borderRadius:6}}>
+                        <Text numberOfLines={1} style={{textAlign:'left'}}>{row._reservoirName}</Text>
+                      </View>
+                    </TouchableOpacity>
                   </Flex.Item>
               </Flex>
               <Flex>
@@ -309,20 +524,40 @@ class PageForm extends Component {
 
 
         <View style={{height:12}}></View>
-        <Flex style={{backgroundColor:"#fff"}}>
-            <Flex.Item style={{ paddingLeft:2, paddingRight:2 }}>
-              <Button style={{height:36}} size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>逐条收货</Text></Button>
-            </Flex.Item>
-            <Flex.Item style={{ paddingLeft:2, paddingRight:2 }}>
-              <Button style={{height:36}} onPress={()=>{ 
-                if(waitReceivingList.filter(o=>o._checked).length){
-                  this.setState({visible:true})
-                }else{
-                  Toast.fail('未选择单据！');
-                }
-               }} size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>批量收货</Text></Button>
-            </Flex.Item>
-        </Flex>
+          <Flex style={{backgroundColor:"#fff"}}>
+              <Flex.Item style={{ paddingLeft:2, paddingRight:2 }}>
+                <Button onPress={()=>{
+
+                    if(!waitReceivingList.filter(o=>o._checked).length){
+                      Toast.fail({content:'未选择单据！',duration:1});
+                      return
+                    }
+
+                    if(waitReceivingList.filter(o=>o._checked).length>1){
+                      Toast.fail({content:'最多选择一条！',duration:1});
+                      return
+                    }
+
+                    that.setState({
+                      rowData:(waitReceivingList.filter(o=>o._checked)[0])
+                    },()=>{
+                      that.setState({visible2:true})
+
+                      console.log(that.state.rowData)
+                    })
+
+                }} style={{height:36}} size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>逐条收货</Text></Button>
+              </Flex.Item>
+              <Flex.Item style={{ paddingLeft:2, paddingRight:2 }}>
+                <Button style={{height:36}} onPress={()=>{ 
+                  if(waitReceivingList.filter(o=>o._checked).length){
+                    this.setState({visible:true})
+                  }else{
+                    Toast.fail('未选择单据！');
+                  }
+                }} size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>批量收货</Text></Button>
+              </Flex.Item>
+          </Flex>
         <View style={{height:12}}></View>
 
 
