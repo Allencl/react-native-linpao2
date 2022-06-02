@@ -68,6 +68,8 @@ class HomeScreen extends Component{
             that.getCompanyList()  // 获取所有公司
             that.getOrderType()   // 获取所有 订单类型
             that.getTakeType()   // 获取所有 收货类型
+            that.getUnits()      // 获取 所有单位
+
         });
 
 
@@ -101,6 +103,21 @@ class HomeScreen extends Component{
     }
 
     /**
+     * 获取 所有单位
+     */
+    getUnits=()=>{
+        WISHttpUtils.get("system/dict/data/type/base_unit",{
+            params:{
+        
+            },
+            hideLoading:true
+        },(result)=>{
+            const {data=[]}=result;
+            AsyncStorage.setItem("buffer_units",JSON.stringify(data));     
+        })         
+    }
+
+    /**
      * 获取所有 收货类型
      */
     getTakeType=()=>{
@@ -111,8 +128,7 @@ class HomeScreen extends Component{
             hideLoading:true
         },(result)=>{
             const {data=[]}=result;
-            console.log(result)
-            // AsyncStorage.setItem("buffer_order_type",JSON.stringify(data));     
+            AsyncStorage.setItem("buffer_take_type",JSON.stringify(data));     
         })          
     }
 

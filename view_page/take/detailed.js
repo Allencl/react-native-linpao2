@@ -31,6 +31,10 @@ class PageForm extends Component {
       basicData:{},  // 基础信息
       _company:'',   // 公司
       _orderType:'',  // 订单类型
+      _takeState:'',   // 收货状态
+
+
+      waitReceivingList:[],  // 待收货列表 
 
     }
   }
@@ -69,7 +73,7 @@ class PageForm extends Component {
     console.log( data )
 
     this.setState({
-      basicData:data.poOrder
+      basicData:data.poOrder,
     })
 
     // 公司
@@ -93,17 +97,111 @@ class PageForm extends Component {
         _orderType:`${_json.dictValue}-${_json.dictLabel}`
       })
     })
+
+
+    // 收货状态
+    AsyncStorage.getItem("buffer_take_type").then((option)=>{
+      let _takeData=JSON.parse(option);
+      let _json=_takeData.filter(o=>o.dictValue==data.poOrder["asnStatus"])[0];
+
+      // console.log(_json)
+      that.setState({
+        _takeState:`${_json.dictValue}-${_json.dictLabel}`
+      })
+      
+    })
+
+
+    // 单位
+    AsyncStorage.getItem("buffer_units").then((option)=>{
+      let _unitsData=JSON.parse(option);
+
+      let _newList=(data.poOrderPartList||[]).map(o=> Object.assign(o,{
+        _checked:false,
+        _unitName:_unitsData.filter(j=>o.dictValue==j.unit)[0]['dictLabel']
+      }))
+
+
+      that.setState({
+        basicData:data.poOrder,
+        waitReceivingList:_newList
+      })
+
+    })
     
 
   }
 
+  /**
+   * cheak box 切换
+   * @param {*} value 
+   * @param {*} index 
+  */
+  checkBoxFunc=(value,index)=>{
+    const that=this;
+    const {waitReceivingList}=this.state;
+
+    this.setState({
+      waitReceivingList:waitReceivingList.map((o,i)=>{
+        return (i==index) ? Object.assign(o,{_checked:value}):o
+      })
+    });
+  }
 
 
+  /**
+   * 全选
+   * @param {*} value 
+   * @param {*} index 
+   */
+  onCheckedAll=(value)=>{
+    const that=this;
+    const {waitReceivingList}=this.state;
+
+    this.setState({
+      waitReceivingList:waitReceivingList.map((o,i)=> Object.assign(o,{_checked:value}) )
+    });
+
+
+  }
+
+
+  /**
+   * 切换 收货数
+   * @returns 
+   */
+  takeChangeText=(value,index)=>{
+    const that=this;
+    const {waitReceivingList}=this.state;
+
+    let _value=Number(value);
+
+    // console.log( _value )
+    that.setState({
+      waitReceivingList:[]
+    },()=>{
+      this.setState({
+        waitReceivingList:waitReceivingList.map((o,i)=>{
+          return (i==index) ? Object.assign(o,{_takeNumber:_value}):o
+        })
+      })
+    })
+  }
+
+
+
+  /**
+   * 批量收货
+   * @returns 
+   */
+  batchTakeFunc=()=>{
+    console.log( 1221 )
+  }
 
 
   render() {
     let that=this;
-    let{visible,basicData,_company,_orderType}=this.state;
+    let{visible,basicData,_company,_orderType,_takeState,waitReceivingList}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
 
@@ -121,8 +219,8 @@ class PageForm extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=>console.log('ok')},
-            {text:'取消',onPress:()=>console.log('no')}
+            {text:'确认',onPress:()=> that.batchTakeFunc() },
+            {text:'取消',onPress:()=>{}}
           ]}
         >
           <View style={{paddingLeft:12,marginTop:38,marginBottom:22}}>
@@ -140,7 +238,7 @@ class PageForm extends Component {
               <Text numberOfLines={1} style={{textAlign:'center'}}>{basicData.asnNo}</Text>
             </Flex.Item>
             <Flex.Item style={{paddingLeft:2,paddingRight:2}}>
-              <Text numberOfLines={1} style={{textAlign:'center'}}>道口部分收货</Text>
+              <Text numberOfLines={1} style={{textAlign:'center'}}>{_takeState}</Text>
             </Flex.Item>
             <Flex.Item style={{paddingLeft:2,paddingRight:2}}>
               <Text numberOfLines={1} style={{textAlign:'center'}}>{_orderType}</Text>
@@ -152,51 +250,59 @@ class PageForm extends Component {
               <Text numberOfLines={1} style={{textAlign:'left'}}>{_company}</Text>
             </Flex.Item>
             <Flex.Item style={{paddingLeft:2,paddingRight:2}}>
-              <Text numberOfLines={1} style={{textAlign:'right'}}>收货行数：4/10</Text>
+              <Text numberOfLines={1} style={{textAlign:'right'}}>收货行数：4/10未知</Text>
             </Flex.Item>
           </Flex>   
         </View>
 
         <View style={{height:12}}></View>
 
+
         <WisFlexTable
           title="待收货列表"
-          data={[{},{},{}]}
-          renderBody={(row)=>{
-            return (
-              <Flex style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
-
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Checkbox
-                    checked={false}
-                  >
-                  </Checkbox>
-                </Flex.Item>
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>010</Text>
-                </Flex.Item>
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>5220820-TB01</Text>
-                </Flex.Item>
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                    value={'1111'}
-                  />
+          // maxHeight={360}
+          data={waitReceivingList}
+          onCheckedAll={(value)=> that.onCheckedAll(value) }
+          renderBody={(row,index)=>{
+            return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
+              <Flex >
+                  <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Checkbox
+                      checked={row._checked}
+                      onChange={event => {
+                        that.checkBoxFunc(event.target.checked,index)
+                      }}
+                    >
+                    </Checkbox>
+                  </Flex.Item>
+                  <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lineno}</Text>
+                  </Flex.Item>
+                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
+                  </Flex.Item>
+                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>默认值PK01-包装区库位01</Text>
+                  </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flex:5,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text></Text>
                 </Flex.Item>                
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'center'}}>5/5件</Text>
-                </Flex.Item>
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>S111库位</Text>
-                </Flex.Item>
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                <Flex.Item style={{flex:5,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                    value={'1111'}
-                  />
-                </Flex.Item>   
-            </Flex>
+                    editable={!false}
+                    style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
+                    value={ (row._takeNumber!=undefined)?String(row._takeNumber):String(row.receiveQty)}
+                    keyboardType={"numeric"}
+                    onChangeText={text => that.takeChangeText(text,index)}
+                  />               
+                </Flex.Item>
+                <Flex.Item style={{flex:18,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{` ${row.receivedQty}/${row.baseQty} （${row._unitName}）`}</Text>
+                </Flex.Item>
+              </Flex>
+            </View>
             )
           }}
         />
@@ -208,37 +314,38 @@ class PageForm extends Component {
               <Button style={{height:36}} size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>逐条收货</Text></Button>
             </Flex.Item>
             <Flex.Item style={{ paddingLeft:2, paddingRight:2 }}>
-              <Button style={{height:36}} onPress={()=>{ this.setState({visible:true}) }} size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>批量收货</Text></Button>
+              <Button style={{height:36}} onPress={()=>{ 
+                if(waitReceivingList.filter(o=>o._checked).length){
+                  this.setState({visible:true})
+                }else{
+                  Toast.fail('未选择单据！');
+                }
+               }} size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>批量收货</Text></Button>
             </Flex.Item>
-            {/* <Flex.Item style={{ paddingLeft:2, paddingRight:2 }}>
-              <Button size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>取消收货</Text></Button>
-            </Flex.Item>
-            <Flex.Item style={{ paddingLeft:2, paddingRight:2 }}>
-              <Button size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>整入整出</Text></Button>
-            </Flex.Item>             */}
         </Flex>
         <View style={{height:12}}></View>
 
 
         <WisFlexTable
           title="已收货"
-          data={[{},{}]}
-          renderBody={(row)=>{
-            return (
-              <Flex style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>010</Text>
-                </Flex.Item>
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>5220820-TB01</Text>
-                </Flex.Item>
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'center'}}>5/5件</Text>
-                </Flex.Item>
-                <Flex.Item style={{paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>S111库位</Text>
-                </Flex.Item>
-            </Flex>
+          data={waitReceivingList}
+          renderBody={(row,index)=>{
+            return (<View key={index}>
+                <Flex style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
+                  <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lineno}</Text>
+                  </Flex.Item>
+                  <Flex.Item style={{flex:7,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
+                  </Flex.Item>
+                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'center'}}>{` ${row.receivedQty}/${row.baseQty} (${row._unitName})`}</Text>
+                  </Flex.Item>
+                  <Flex.Item style={{flex:5,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>S111库位</Text>
+                  </Flex.Item>
+              </Flex>
+            </View>
             )
           }}
         />
