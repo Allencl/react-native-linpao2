@@ -18,23 +18,23 @@ class CenterPage extends React.Component {
     let that=this;
 
       // 缓存的 登录数据
-      AsyncStorage.getItem("token_config").then((option)=>{
-        if(option){
-          try{
-            let loginConfig=JSON.parse(option);
+      // AsyncStorage.getItem("token_config").then((option)=>{
+      //   if(option){
+      //     try{
+      //       let loginConfig=JSON.parse(option);
 
-            // console.log(loginConfig);
+      //       // console.log(loginConfig);
 
-            that.setState({
-              name:loginConfig.user["name"],
-              position:loginConfig.user["phone"],
-              email:loginConfig.user["email"],
-            });
+      //       that.setState({
+      //         name:loginConfig.user["name"],
+      //         position:loginConfig.user["phone"],
+      //         email:loginConfig.user["email"],
+      //       });
 
-          } catch (error) {
-          }          
-        }
-      });    
+      //     } catch (error) {
+      //     }          
+      //   }
+      // });    
 
   }
 

@@ -86,7 +86,7 @@ class PageForm extends Component {
     return (
       <ScrollView style={{padding:8,backgroundColor:"#fff"}}>
 
-            <View style={{paddingTop:16}}>
+            <View style={{paddingTop:15}}>
               <Flex>
                 <Flex.Item style={{flexDirection:"row"}}>
                   <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>ASN:</Text>

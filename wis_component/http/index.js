@@ -154,11 +154,11 @@ export default class WISHttpUtils extends Component{
             
             // return;
             // 账户 密码 错误
-            if( response["status"]==401 ){
-                response.json().then((json)=>{
-                    Toast.offline(json.message,1);
-                })
-            }
+            // if( response["status"]==401 ){
+            //     response.json().then((json)=>{
+            //         Toast.offline(json.message,1);
+            //     })
+            // }
 
 
             if(response.ok){
@@ -207,7 +207,7 @@ export default class WISHttpUtils extends Component{
                     AsyncStorage.setItem("token_config",JSON.stringify(Object.assign(
                         json.data,
                         // {buffer_new_expires_in: new Date().getTime()+(json.data["buffer_new_expires_in"]*1000) } 
-                        {buffer_new_expires_in: new Date().getTime()+(500000) }                
+                        // {buffer_new_expires_in: new Date().getTime()+(500000) }                
                     )));                  
 
                     // 登录成功
@@ -273,37 +273,42 @@ export default class WISHttpUtils extends Component{
      */
     static async get(url,option,callback){
         var that=this;
-        var okToken= await this.disabledToken();
-
-        // token 失效|有效
-        if(okToken){
 
 
-            // 缓存的 登录信息
-            AsyncStorage.getItem("login_message").then((option)=>{
-                if(option){
-                    try{
-                        let loginMessage=JSON.parse(option);
+        this.getAjax(url,option,callback);
 
-                        that.loginFunc({
-                            // userName: Base64.encode(loginMessage["userName"]),
-                            // password: Base64.encode(loginMessage["password"]),
-                            userName: loginMessage["userName"],
-                            password: loginMessage["password"],
-                            hideLoading:true
-                        },()=>{
-                            that.getAjax(url,option,callback);
-                        });
-                    } catch (error) {
+
+        // var okToken= await this.disabledToken();
+
+        // // token 失效|有效
+        // if(okToken){
+
+
+        //     // 缓存的 登录信息
+        //     AsyncStorage.getItem("login_message").then((option)=>{
+        //         if(option){
+        //             try{
+        //                 let loginMessage=JSON.parse(option);
+
+        //                 that.loginFunc({
+        //                     // userName: Base64.encode(loginMessage["userName"]),
+        //                     // password: Base64.encode(loginMessage["password"]),
+        //                     userName: loginMessage["userName"],
+        //                     password: loginMessage["password"],
+        //                     hideLoading:true
+        //                 },()=>{
+        //                     that.getAjax(url,option,callback);
+        //                 });
+        //             } catch (error) {
             
-                    }          
-                }
-            });
+        //             }          
+        //         }
+        //     });
 
-        }else{
+        // }else{
 
-            this.getAjax(url,option,callback);
-        }
+        //     this.getAjax(url,option,callback);
+        // }
     
     };
 
@@ -324,10 +329,6 @@ export default class WISHttpUtils extends Component{
                 _bufferParmasURL.map(o=>{ _parmasURL+=`${o[0]}=${o[1]}&` });
                 _parmasURL=`?${_parmasURL.slice(0,_parmasURL.length-1)}`
             }
-
-            
-            AsyncStorage.getItem("_token").then((data)=>{
-            
 
                 // 关闭 loading
                 if(!option["hideLoading"]){
@@ -388,8 +389,16 @@ export default class WISHttpUtils extends Component{
                     // Toast.offline('服务器响应失败！',1);
                     // 关闭 loding
                     DeviceEventEmitter.emit('globalEmitter_toggle_loding',false);
-                });                
-            });
+                });    
+
+
+
+            
+            // AsyncStorage.getItem("_token").then((data)=>{
+            
+
+            
+            // });
         } catch (error) {
 
         }

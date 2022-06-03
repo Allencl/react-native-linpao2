@@ -49,7 +49,7 @@ class HomeScreen extends Component{
         AsyncStorage.getItem("login_type").then((option)=>{
             // Toast.offline(option,1);
             if( option !="in" ){
-                // navigation.navigate('Login');
+                navigation.navigate('Login');
             }else{
              
 
@@ -186,20 +186,23 @@ class HomeScreen extends Component{
 
         let that=this;
 
-        this.setState({
-            modalVisible:true,
-        })
+        // this.setState({
+        //     // modalVisible:true,
+        // })
     
         WISHttpUtils.get("system/user/selectUserStore",{
           params:{
     
           }
-        },(result)=>{
+        },(result={})=>{
 
-            const {rows}=result
+            const {rows=[],code}=result
+
+            // Toast.offline(code,1);
+            // console.log(result)
     
             that.setState({
-                // modalVisible:true,
+                modalVisible:true,
                 warehouseMap:rows
             })
     
@@ -332,7 +335,7 @@ class HomeScreen extends Component{
     render() {
         const that=this;
         const {navigation} = this.props;
-        const {menuList,modalVisible,warehouseMap,isProcurement,lanyaStatus,isFinancing,version,numberConfig}=this.state;
+        const {menuList,modalVisible,warehouseMap=[],isProcurement,lanyaStatus,isFinancing,version,numberConfig}=this.state;
 
         return (
         <ScrollView style={styles.page}>
@@ -463,7 +466,7 @@ class HomeScreen extends Component{
 
 
 
-                { menuList.map((o,i)=>{
+                { (menuList||[]).map((o,i)=>{
                     return <Card key={i} style={styles.card}>
                         <Card.Header
                             title={<Text style={{fontWeight:"bold",fontSize:14}}>{o.menuName}</Text>}
