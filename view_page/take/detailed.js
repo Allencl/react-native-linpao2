@@ -39,6 +39,7 @@ class PageForm extends Component {
       rowData:{},   // 行数据
       waitReceivingList:[],  // 待收货列表 
       quarantineList:[],   // 待检列表 库区数据
+      quarantineBufferRow:{},  // 库区选中 行
     }
   }
 
@@ -138,6 +139,9 @@ class PageForm extends Component {
           
         },(result)=>{
           const {rows=[]}=result;  
+
+
+          // console.log(rows)
 
           let _newData=_newList.map((o)=>{
             let _bufferData=rows.filter(k=>o.locId==k.tmBasLocId)[0]||{};
@@ -246,6 +250,29 @@ class PageForm extends Component {
       })
     })
   }
+
+  /**
+   * 选中  库区
+   */
+   quarantineChange=()=>{
+      const that=this;
+      const {waitReceivingList,quarantineList,quarantineBufferRow}=this.state;
+
+
+      let _selectData=quarantineList.filter(o=>o._checked)[0];
+      let _newList= waitReceivingList.map((o,i)=>{
+        return (i==quarantineBufferRow._index)?Object.assign(o,{
+          _tmBasLocId:_selectData.tmBasLocId,
+          _reservoirName:`${_selectData.locNo}-${_selectData.locName}`
+        })
+        :o
+      });
+
+      console.log(_newList)
+      this.setState({
+        waitReceivingList:_newList
+      })
+   }
 
   /**
    * 批量收货
@@ -400,7 +427,9 @@ class PageForm extends Component {
           visible={visible3}
           closable
           footer={[
-            {text:'确认',onPress:()=> {} },
+            {text:'确认',onPress:()=> {
+              that.quarantineChange()
+            }},
             {text:'取消',onPress:()=>{}}
           ]}
         >
@@ -491,7 +520,10 @@ class PageForm extends Component {
                           })
                         })
 
-                        that.setState({visible3:true}) 
+                        that.setState({
+                          quarantineBufferRow:Object.assign(row,{_index:index}),
+                          visible3:true
+                        }) 
                       }}
                     >
                       <View style={{borderColor:'#d9d9d9',paddingLeft:6,paddingRight:6,borderWidth:1,borderRadius:6}}>

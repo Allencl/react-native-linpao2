@@ -175,6 +175,10 @@ class HomeScreen extends Component{
     getWarehouseFunc=()=>{
 
         let that=this;
+
+        this.setState({
+            modalVisible:true,
+        })
     
         WISHttpUtils.get("system/user/selectUserStore",{
           params:{
@@ -185,7 +189,7 @@ class HomeScreen extends Component{
             const {rows}=result
     
             that.setState({
-                modalVisible:true,
+                // modalVisible:true,
                 warehouseMap:rows
             })
     
