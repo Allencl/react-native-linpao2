@@ -18,6 +18,8 @@ import LoginScreen from './view/Login';   // 登录
 
 import takeScreen from './view_page/take/index';     // ASN 收货
 import takeDetailedScreen from './view_page/take/detailed.js';     // ASN 收货单明细
+import singleTakeScreen from './view_page/take/take';     // 逐条收货
+
 
 import qualityScreen from './view_page/quality/index.js';   // 质检任务
 import putawayScreen from './view_page/putaway/index.js';   // 上架
@@ -204,6 +206,16 @@ class App extends Component {
                 </Tab.Navigator>
               )}            
             </Stack.Screen>
+
+            <Stack.Screen name="singleTake" options={{title:'逐条收货',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="singleTake" component={singleTakeScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>
+
+            
 
 
 

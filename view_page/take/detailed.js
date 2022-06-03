@@ -295,7 +295,7 @@ class PageForm extends Component {
       <ScrollView style={{padding:8,backgroundColor:'#fff'}}>
 
 
-        <Modal
+        {/* <Modal
           title="逐条收货"
           transparent
           onClose={()=>{
@@ -310,89 +310,9 @@ class PageForm extends Component {
           ]}
         >
           <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
-            <View style={{paddingTop:16}}>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>ASN:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{basicData.asnNo}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>行号:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.lineno}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>物料:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.part}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>名称:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>显示在物料</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>单位:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData._unitName}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>计划数量:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receiveQty}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>已收数量:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receivedQty}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>收货数量:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receiveQty}</Text>
-                </Flex.Item>    
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>待检库位:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>未知</Text>
-                </Flex.Item>  
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>质检标准:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>无数据</Text>
-                </Flex.Item>  
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>包装方案:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>无数据</Text>
-                </Flex.Item> 
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:3,paddingRight:8,marginBottom:8,paddingTop:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>LPN:</Text>
-                  <View style={{flex:7,}}>
-                    <TextInput
-                      style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
-                      value={""}
-                      placeholder={"请输入HU号"}
-                      // onChangeText={text => that.takeChangeText(text,index)}
-                    />  
-                  </View>
-                </Flex.Item>  
-              </Flex>
-            </View>
+
           </ScrollView>
-        </Modal>
+        </Modal> */}
 
 
 
@@ -573,9 +493,11 @@ class PageForm extends Component {
                     that.setState({
                       rowData:(waitReceivingList.filter(o=>o._checked)[0])
                     },()=>{
-                      that.setState({visible2:true})
+                      // that.setState({visible2:true})
 
                       // console.log(that.state.rowData)
+                      navigation.navigate('singleTake',that.state.rowData);    
+
                     })
 
                 }} style={{height:36}} size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>逐条收货</Text></Button>
