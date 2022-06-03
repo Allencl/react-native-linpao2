@@ -9,7 +9,9 @@ import InputSNComponent from './inputSN';     // 卡片
 import BluetoothComponent from './bluetooth';   // 蓝牙
 
 
-import FlexTableComponent from './flexTable';   // 蓝牙
+import FlexTableComponent from './flexTable';   // table
+import FlexTablePageComponent from './flexTablePage';   // table 分页
+
 
 
 module.exports = {
@@ -21,6 +23,7 @@ module.exports = {
     WisCard:CardComponent,
     WisInputSN:InputSNComponent,
     WisBluetooth:BluetoothComponent,
+    WisFlexTablePage:FlexTablePageComponent,
     WisFlexTable:FlexTableComponent
 };
 

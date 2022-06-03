@@ -409,7 +409,7 @@ class HomeScreen extends Component{
 
                 <Card style={styles.card}>
                     <Card.Header
-                        title="测试"
+                        title="测试页面-在这里"
                         thumb={<Icon name="audit" size="md" color="#1890ff" style={{marginRight:6}} />}
                     />
                     <Card.Body>
@@ -427,10 +427,10 @@ class HomeScreen extends Component{
                                 </View>  
                                 <View style={styles.flexBoxCol}>
                                     <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('takeDetailed') }>
+                                        <TouchableOpacity onPress={() => this.authority('quality') }>
                                             <View style={styles.menu_child}>
                                                 <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
-                                                <Text style={styles.menu_child_text}>收货单明细</Text>
+                                                <Text style={styles.menu_child_text}>质检任务</Text>
                                             </View>
                                         </TouchableOpacity>
                                     </View>

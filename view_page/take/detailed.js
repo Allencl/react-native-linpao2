@@ -268,7 +268,7 @@ class PageForm extends Component {
         :o
       });
 
-      console.log(_newList)
+      // console.log(_newList)
       this.setState({
         waitReceivingList:_newList
       })
@@ -309,7 +309,7 @@ class PageForm extends Component {
             {text:'取消',onPress:()=>{}}
           ]}
         >
-          <ScrollView style={{maxHeight:380,paddingLeft:12,marginTop:12,marginBottom:12}}>
+          <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
             <View style={{paddingTop:16}}>
               <Flex>
                 <Flex.Item style={{flexDirection:"row"}}>
@@ -575,7 +575,7 @@ class PageForm extends Component {
                     },()=>{
                       that.setState({visible2:true})
 
-                      console.log(that.state.rowData)
+                      // console.log(that.state.rowData)
                     })
 
                 }} style={{height:36}} size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>逐条收货</Text></Button>

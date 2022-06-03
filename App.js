@@ -19,6 +19,8 @@ import LoginScreen from './view/Login';   // 登录
 import takeScreen from './view_page/take/index';     // ASN 收货
 import takeDetailedScreen from './view_page/take/detailed.js';     // ASN 收货单明细
 
+import qualityScreen from './view_page/quality/index.js';   // 质检任务
+
 
 
 
@@ -202,7 +204,13 @@ class App extends Component {
 
 
 
-
+            <Stack.Screen name="quality" options={{title:'质检任务',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="quality" component={qualityScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>
             
 
 
