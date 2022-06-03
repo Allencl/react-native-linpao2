@@ -63,6 +63,7 @@ class HomeScreen extends Component{
 
         // 获取菜单
         this.getMenu =DeviceEventEmitter.addListener('globalEmitter_get_menu',function(){
+            that.resetMenu();   // 清空菜单
             that.getWarehouseFunc() // 获取仓库
 
             that.getCompanyList()  // 获取所有公司
@@ -84,6 +85,15 @@ class HomeScreen extends Component{
                 navigation.navigate('Login'); 
             });
         });
+    }
+    
+
+    /**
+     * 清空菜单
+    */
+    resetMenu=()=>{
+        this.setState({menuList:[]})
+        AsyncStorage.setItem("menu_buffer_list","[]")
     }
 
 
@@ -437,10 +447,10 @@ class HomeScreen extends Component{
                                 </View> 
                                 <View style={styles.flexBoxCol}>
                                     <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('NG') }>
+                                        <TouchableOpacity onPress={() => this.authority('putaway') }>
                                             <View style={styles.menu_child}>
                                                 <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
-                                                <Text style={styles.menu_child_text}>NG出入口手动触发</Text>
+                                                <Text style={styles.menu_child_text}>上架任务</Text>
                                             </View>
                                         </TouchableOpacity>
                                     </View>

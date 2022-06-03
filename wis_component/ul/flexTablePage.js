@@ -10,6 +10,9 @@ class TableComponent extends Component {
     constructor(props) {
         super(props);
 
+        this.props.onRef && this.props.onRef(this);
+
+
         this.state={
             pageSize:10,   // 每页条数
             page:1,    // 页数
@@ -31,25 +34,28 @@ class TableComponent extends Component {
      * 初始化
      * @param {*} value 
      */
-    initFunc=()=>{
+    initFunc=(option={})=>{
         const that=this;
         const {pageSize,page}=this.state;
+        const {RequestURL}=this.props
 
-        WISHttpUtils.get("wms/iqcTask/listNew",{
+
+        WISHttpUtils.get(RequestURL,{
             params:{
                 pageNum:page,
-                pageSize:pageSize
+                pageSize:pageSize,
+                ...option.params
             },
             // hideLoading:true
         },(result)=>{
             const {total=0,rows=[]}=result;
-            
+
             console.log(result)
 
             that.setState({
                 total:total,
                 totalPage:Math.ceil((total/pageSize)),
-                tableData:rows
+                tableData:rows.map(o=>Object.assign(o,{_checked:false}))
             })
         })  
 
@@ -100,10 +106,28 @@ class TableComponent extends Component {
 
     }   
 
+    /**
+     * 
+     * @param {*} active 
+     * @param {*} index 
+     */
+    renderBodyCallBack=(active,index)=>{
+        const {tableData}=this.state;
+
+        let _newList=tableData.map((o,i)=>{
+            return (i==index)?Object.assign(o,{_checked:active}):o
+        })
+
+        this.setState({
+            tableData:_newList
+        })
+        // console.log(aaa)
+    }
+
 
     render() {
         let that=this;
-        let {title='',renderBody,maxHeight=0,onCheckedAll} = this.props;
+        let {title='',renderHead,renderBody,maxHeight=0,onCheckedAll} = this.props;
         let {page,total,tableData,checkboxValue}=this.state;
 
         return (
@@ -156,9 +180,12 @@ class TableComponent extends Component {
                     <View></View>                
                 }
 
+                { renderHead ? <View>{ renderHead() }</View> : <View></View> }
+
+
                 <ScrollView style={maxHeight?{maxHeight:maxHeight}:{}}>
                     { (tableData).map((o,i)=>{
-                        return renderBody(o,i)
+                        return renderBody(o,i,that.renderBodyCallBack)
                     })}
                 </ScrollView>
                 </View>

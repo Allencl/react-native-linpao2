@@ -20,6 +20,9 @@ import takeScreen from './view_page/take/index';     // ASN 收货
 import takeDetailedScreen from './view_page/take/detailed.js';     // ASN 收货单明细
 
 import qualityScreen from './view_page/quality/index.js';   // 质检任务
+import putawayScreen from './view_page/putaway/index.js';   // 上架
+
+
 
 
 
@@ -213,11 +216,17 @@ class App extends Component {
             </Stack.Screen>
             
 
+            <Stack.Screen name="putaway" options={{title:'上架任务',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="putaway" component={putawayScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>
 
 
 
-
-
+            
 
 
 

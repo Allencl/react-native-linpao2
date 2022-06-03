@@ -80,7 +80,14 @@ class PageForm extends Component {
    searchFunc=()=>{
     const {odd}=this.state;
     
-    console.log(odd)
+    // console.log(odd)
+    // console.log(  )
+
+    this.tableRef.initFunc({
+      params:{
+        lotNo:odd
+      }
+    })
    }
 
 
@@ -280,7 +287,8 @@ class PageForm extends Component {
 
 
         <WisFlexTablePage
-          // title="待收货列表"
+          RequestURL="wms/iqcTask/listNew"
+          onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={460}
           renderBody={(row,index)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
