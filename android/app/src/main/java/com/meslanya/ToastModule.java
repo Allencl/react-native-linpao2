@@ -77,7 +77,7 @@ public class ToastModule extends ReactContextBaseJavaModule {
 
     List<String> list = jsonToObject(images);
     if (list.size() > 0) {
-      application.updateImage(dress,jsonToObject(images));
+      // application.updateImage(dress,jsonToObject(images));
     }
 
   }

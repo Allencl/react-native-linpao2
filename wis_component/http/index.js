@@ -371,7 +371,7 @@ export default class WISHttpUtils extends Component{
                     }                  
                 })
                 .then((json) => {
-
+                    const {code,msg}=json
 
                     // console.log(1111)
                     // console.log(json)
@@ -380,13 +380,18 @@ export default class WISHttpUtils extends Component{
                     DeviceEventEmitter.emit('globalEmitter_toggle_loding',false);
 
                     // 提示
-                    if(json && json["message"]){
-                        Toast.info(json["message"],1);
-                    }
+                    // if(json && json["message"]){
+                    //     Toast.info(json["message"],1);
+                    // }
 
                     // 返回数据
                     if(json){
-                        callback(json);
+                        if(code==200){
+                            callback(json);
+                        }else{
+                            Toast.offline(`[${code}]${msg}`,1);
+                        }
+                        
                     }
                 })
                 .catch(error => {

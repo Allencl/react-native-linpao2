@@ -103,13 +103,9 @@ class PageForm extends Component {
         },(result)=>{
           const {code,msg,data={}}=result;
 
-          if(code==200){         
-            navigation.navigate('takeDetailed',{
-              data:data
-            });       
-          }else{
-            Toast.offline(msg,1);
-          }
+          navigation.navigate('takeDetailed',{
+            data:data
+          });    
 
         })
 

@@ -14,8 +14,10 @@ import {WisTableCross,WisInputSN,WisBluetooth,WisFlexTable} from '@wis_component
 import {WisFormPhoto} from '@wis_component/form';   // form 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
-import {origin} from '@wis_component/origin';     // 服务地址
-import a from '@ant-design/react-native/lib/modal/alert';
+// import {origin} from '@wis_component/origin';     // 服务地址
+// import a from '@ant-design/react-native/lib/modal/alert';
+
+import SelectReservoir from './select.js';  // 选择库区 下拉框
 
 
 // ASN 收货单 明细
@@ -25,6 +27,7 @@ class PageForm extends Component {
     super(props);
 
     this.state={
+      _pageIndex:0,  // 
       visible:false,  
       visible2:false,
       visible3:false,
@@ -38,6 +41,8 @@ class PageForm extends Component {
 
       rowData:{},   // 行数据
       waitReceivingList:[],  // 待收货列表 
+      completeList:[],   // 已完成
+
       quarantineList:[],   // 待检列表 库区数据
       quarantineBufferRow:{},  // 库区选中 行
     }
@@ -145,10 +150,10 @@ class PageForm extends Component {
 
           let _newData=_newList.map((o)=>{
             let _bufferData=rows.filter(k=>o.locId==k.tmBasLocId)[0]||{};
-            return Object.assign(o,{
-              _tmBasLocId:_bufferData.tmBasLocId,
-              _reservoirName:`${_bufferData.locNo}-${_bufferData.locName}`
-            })
+              return Object.assign(o,{
+                _tmBasLocId:_bufferData.tmBasLocId,
+                _reservoirName:`${_bufferData.locNo}-${_bufferData.locName}`
+              })
           })
           
 
@@ -156,10 +161,11 @@ class PageForm extends Component {
             quarantineList:rows
           })
 
-
+          console.log(_newData)
           that.setState({
             basicData:poOrder,
-            waitReceivingList:_newData
+            waitReceivingList:_newData.filter(o=>o.detailStatus!='60'),
+            completeList:_newData.filter(o=>o.detailStatus=='60')
           })
 
     
@@ -217,15 +223,20 @@ class PageForm extends Component {
    * 切换 收货数
    * @returns 
    */
-  takeChangeText=(value,index)=>{
+  takeChangeText=(value,index,row)=>{
     const that=this;
     const {waitReceivingList}=this.state;
 
     let _value=Number(value);
 
-    // console.log( _value )
+    if(_value>row.receiveQty){
+      Toast.fail('收货数量不能大于可收货数量！',1);
+      return
+    }
+    
+    // row._takeNumber=_value
     that.setState({
-      waitReceivingList:[]
+      // waitReceivingList:[]
     },()=>{
       this.setState({
         waitReceivingList:waitReceivingList.map((o,i)=>{
@@ -235,44 +246,80 @@ class PageForm extends Component {
     })
   }
 
-  /**
-   * 库区选择 切换
-   */
-  cheCkquarantineFunc=(value,index)=>{
-    const that=this;
-    const {quarantineList}=this.state;
+  // /**
+  //  * 库区选择 切换
+  //  */
+  // cheCkquarantineFunc=(value,index)=>{
+  //   const that=this;
+  //   const {quarantineList}=this.state;
 
-    this.setState({
-      quarantineList:[]
-    },()=>{
-      that.setState({
-        quarantineList:quarantineList.map((o,i)=>Object.assign(o,{_checked:(i==index)?value:false}))
-      })
-    })
-  }
+  //   this.setState({
+  //     quarantineList:[]
+  //   },()=>{
+  //     that.setState({
+  //       quarantineList:quarantineList.map((o,i)=>Object.assign(o,{_checked:(i==index)?value:false}))
+  //     })
+  //   })
+  // }
 
   /**
    * 选中  库区
    */
-   quarantineChange=()=>{
-      const that=this;
-      const {waitReceivingList,quarantineList,quarantineBufferRow}=this.state;
+  //  quarantineChange=()=>{
+  //     const that=this;
+  //     const {waitReceivingList,quarantineList,quarantineBufferRow}=this.state;
 
 
-      let _selectData=quarantineList.filter(o=>o._checked)[0];
-      let _newList= waitReceivingList.map((o,i)=>{
-        return (i==quarantineBufferRow._index)?Object.assign(o,{
-          _tmBasLocId:_selectData.tmBasLocId,
-          _reservoirName:`${_selectData.locNo}-${_selectData.locName}`
-        })
-        :o
-      });
+  //     let _selectData=quarantineList.filter(o=>o._checked)[0];
+  //     let _newList= waitReceivingList.map((o,i)=>{
+  //       return (i==quarantineBufferRow._index)?Object.assign(o,{
+  //         _tmBasLocId:_selectData.tmBasLocId,
+  //         _reservoirName:`${_selectData.locNo}-${_selectData.locName}`
+  //       })
+  //       :o
+  //     });
 
-      // console.log(_newList)
-      this.setState({
-        waitReceivingList:_newList
-      })
-   }
+  //     // console.log(_newList)
+  //     this.setState({
+  //       waitReceivingList:_newList
+  //     })
+  //  }
+
+
+  /**
+   * 选择 库位
+   * @param {*} value 
+  */
+  selectReservoirFunc=()=>{
+    this.selectReservoirRef.openModle()
+  }
+
+  /**
+    * 确认库位
+    * @param {*} value 
+  */
+  reservoirConfirm=(option)=>{
+    const that=this;
+    const {_pageIndex,waitReceivingList}=this.state;
+
+    let _newList=waitReceivingList.map((o,i)=>{
+      return (i==_pageIndex)?
+          Object.assign(o,{
+            _tmBasLocId:option.tmBasLocId,
+            _reservoirName:`${option.locNo}-${option.locName}`
+          })
+        :o;
+    });
+
+
+    this.setState({
+      waitReceivingList:[]
+    },()=>{
+      that.setState({waitReceivingList:_newList})
+    })
+
+  }
+
 
   /**
    * 批量收货
@@ -286,7 +333,7 @@ class PageForm extends Component {
 
   render() {
     let that=this;
-    let{visible,visible2,visible3,basicData,rowData,_company,_orderType,_takeState,waitReceivingList,quarantineList}=this.state;
+    let{visible,visible2,visible3,basicData,rowData,_company,_orderType,_takeState,completeList=[],waitReceivingList=[],quarantineList=[]}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
 
@@ -314,10 +361,17 @@ class PageForm extends Component {
           </ScrollView>
         </Modal> */}
 
+        <SelectReservoir 
+          data={quarantineList||[]}
+          onRef={(ref)=>{ this.selectReservoirRef=ref }}
+          onConfirm={(option)=>{
+            that.reservoirConfirm(option)
+          }}
+        />
 
 
         <Modal
-          title="批量收货"
+          title={`批量收货 (${waitReceivingList.filter(o=>o._checked).length})`}
           transparent
           onClose={()=>{
             this.setState({visible:false})
@@ -337,7 +391,7 @@ class PageForm extends Component {
 
 
 
-        <Modal
+        {/* <Modal
           title="待检库位 (单选)"
           transparent
           onClose={()=>{
@@ -373,12 +427,12 @@ class PageForm extends Component {
               </View>)
             })}
           </ScrollView>
-        </Modal>
+        </Modal> */}
         
         <View style={{padding:10,borderWidth:1,borderColor:'#e6ebf1',borderRadius:6,backgroundColor:'#fff'}}>
-          <View style={{paddingBottom:12}}>
+          {/* <View style={{paddingBottom:12}}>
             <Text style={{fontSize:13,fontWeight:'600',color:"#1890ff"}}>基础信息</Text>
-          </View>
+          </View> */}
 
           <Flex style={{marginBottom:10}}>
             <Flex.Item style={{paddingLeft:2,paddingRight:2}}>
@@ -408,7 +462,7 @@ class PageForm extends Component {
         <WisFlexTable
           title="待收货列表"
           // maxHeight={360}
-          data={waitReceivingList}
+          data={waitReceivingList||[]}
           onCheckedAll={(value)=> that.onCheckedAll(value) }
           renderBody={(row,index)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
@@ -430,20 +484,11 @@ class PageForm extends Component {
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
 
-
                     <TouchableOpacity onPress={() =>{ 
                         that.setState({
-                          quarantineList:[]
-                        },()=>{
-                          that.setState({
-                            quarantineList:quarantineList.map(j=>Object.assign(j,{_checked:(j.tmBasLocId==row._tmBasLocId)?true:false}))
-                          })
+                          _pageIndex:index
                         })
-
-                        that.setState({
-                          quarantineBufferRow:Object.assign(row,{_index:index}),
-                          visible3:true
-                        }) 
+                        that.selectReservoirFunc()
                       }}
                     >
                       <View style={{borderColor:'#d9d9d9',paddingLeft:6,paddingRight:6,borderWidth:1,borderRadius:6}}>
@@ -462,7 +507,7 @@ class PageForm extends Component {
                     style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
                     value={ (row._takeNumber!=undefined)?String(row._takeNumber):String(row.receiveQty)}
                     keyboardType={"numeric"}
-                    onChangeText={text => that.takeChangeText(text,index)}
+                    onChangeText={text => that.takeChangeText(text,index,row)}
                   />               
                 </Flex.Item>
                 <Flex.Item style={{flex:18,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
@@ -496,7 +541,11 @@ class PageForm extends Component {
                       // that.setState({visible2:true})
 
                       // console.log(that.state.rowData)
-                      navigation.navigate('singleTake',that.state.rowData);    
+                      navigation.navigate('singleTake',Object.assign(
+                        that.state.rowData,{
+                          _basicData:basicData,
+                          _quarantineList:quarantineList
+                        }) );    
 
                     })
 
@@ -517,21 +566,21 @@ class PageForm extends Component {
 
         <WisFlexTable
           title="已收货"
-          data={waitReceivingList}
+          data={completeList}
           renderBody={(row,index)=>{
             return (<View key={index}>
                 <Flex style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
                   <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lineno}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:7,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:5,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'center'}}>{` ${row.receivedQty}/${row.baseQty} (${row._unitName})`}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:5,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>S111库位</Text>
+                  <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row._reservoirName}</Text>
                   </Flex.Item>
               </Flex>
             </View>
