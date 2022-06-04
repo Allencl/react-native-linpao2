@@ -21,7 +21,11 @@ import takeDetailedScreen from './view_page/take/detailed.js';     // ASN 收货
 import singleTakeScreen from './view_page/take/take';     // 逐条收货
 
 
-import qualityScreen from './view_page/quality/index.js';   // 质检任务
+import qualityScreen from './view_page/quality/index.js';   // 质检任务 详情
+import qualityDetailedScreen from './view_page/quality/detailed.js';   // 质检任务 详情
+
+
+
 import putawayScreen from './view_page/putaway/index.js';   // 上架
 
 
@@ -94,6 +98,7 @@ class App extends Component {
       headerTintColor: '#fff',
       headerTitleStyle: {
         fontWeight: 'bold',
+        fontSize:15
       },
       headerRight: (props) => (
         <TouchableOpacity onPress={() =>{ 
@@ -230,6 +235,17 @@ class App extends Component {
                 </Tab.Navigator>
               )}            
             </Stack.Screen>
+
+            <Stack.Screen name="qualityDetailed" options={{title:'质检任务-详情',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="qualityDetailed" component={qualityDetailedScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>
+
+
+            
             
 
             <Stack.Screen name="putaway" options={{title:'上架任务',...headOption}}>

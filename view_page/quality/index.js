@@ -159,7 +159,6 @@ class PageForm extends Component {
 
 
 
-
   render() {
     let that=this;
     let{odd,rowData,visible}=this.state;
@@ -290,6 +289,7 @@ class PageForm extends Component {
           RequestURL="wms/iqcTask/listNew"
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={460}
+          onRowClick={(row)=> navigation.navigate('qualityDetailed',{row:row}) }
           renderBody={(row,index)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
@@ -323,7 +323,7 @@ class PageForm extends Component {
                   <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:8,flexDirection:"row",justifyContent:'flex-end'}}>
                     <TouchableOpacity onPress={() =>  that.clickRow(row,index) }>
                       <View>
-                        <Icon style={{fontSize:24}} name="eye" />
+                        <Icon style={{fontSize:24}} name="right" />
                       </View>
                     </TouchableOpacity>
                   </Flex.Item>

@@ -127,7 +127,7 @@ class TableComponent extends Component {
 
     render() {
         let that=this;
-        let {title='',renderHead,renderBody,maxHeight=0,onCheckedAll} = this.props;
+        let {title='',renderHead,renderBody,maxHeight=0,onCheckedAll,onRowClick} = this.props;
         let {page,total,tableData,checkboxValue}=this.state;
 
         return (
@@ -136,16 +136,16 @@ class TableComponent extends Component {
                     <Flex>
                         <Flex.Item style={{flex:1}}>
                             <TouchableOpacity onPress={() =>  that.pageChange(false) }>
-                                <Icon name="left-circle" />
+                                <Icon style={{fontSize:26}} name="left-circle" />
                             </TouchableOpacity>
                         </Flex.Item>
                         <Flex.Item style={{flex:1}}>
                             <TouchableOpacity onPress={() =>  that.pageChange(true) }>
-                                <Icon name="right-circle" />
+                                <Icon style={{fontSize:26}} name="right-circle" />
                             </TouchableOpacity>
                         </Flex.Item>
                         <Flex.Item style={{flex:10}}>
-                            <Text style={{fontSize:14}}>{` 第${page}页 共${total}`}</Text>
+                            <Text style={{fontSize:14}}>{` 第${page}页 共${total}条`}</Text>
                         </Flex.Item>                  
                     </Flex>
                 </View>
@@ -185,7 +185,11 @@ class TableComponent extends Component {
 
                 <ScrollView style={maxHeight?{maxHeight:maxHeight}:{}}>
                     { (tableData).map((o,i)=>{
-                        return renderBody(o,i,that.renderBodyCallBack)
+                        return <TouchableOpacity key={i} disabled={!onRowClick} onPress={() =>{ 
+                            onRowClick && onRowClick(o)
+                        }}>
+                            { renderBody(o,i,that.renderBodyCallBack) }
+                        </TouchableOpacity>       
                     })}
                 </ScrollView>
                 </View>

@@ -20,8 +20,16 @@ class InputComponent extends Component{
     /**
      * change 
      */
-     onChange(value){
-        let{name,form,onChangeValue,onValidate}=this.props;
+     onChange(_value){
+        let{name,form,onChangeValue,onValidate,type}=this.props;
+
+        
+        let value=_value;
+
+        if(type=="number"){
+            // value=String(Number(value));
+        }
+
 
         // 校验
         if( onValidate && (onValidate(value)==false) ){
@@ -55,7 +63,7 @@ class InputComponent extends Component{
                 {...this.props}
                 style={disabled?styles.isDisabled:styles.InputItem}
 
-                type={type=="password"?(toggleEye?"password":"text"):"text"}
+                type={type=="password"?(toggleEye?"password":"text"):type}
                 extra={
                     type=="password"?
                     (<TouchableOpacity onPress={()=>{

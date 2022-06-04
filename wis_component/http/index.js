@@ -379,10 +379,7 @@ export default class WISHttpUtils extends Component{
                     // 关闭 loding
                     DeviceEventEmitter.emit('globalEmitter_toggle_loding',false);
 
-                    // 提示
-                    // if(json && json["message"]){
-                    //     Toast.info(json["message"],1);
-                    // }
+
 
                     // 返回数据
                     if(json){
@@ -414,37 +411,41 @@ export default class WISHttpUtils extends Component{
      */
     static async post(url,option,callback){
         var that=this;
-        var okToken= await this.disabledToken();
 
-        // token 失效|有效
-        if(okToken){
+        this.postAjax(url,option,callback);
 
 
-            // 缓存的 登录信息
-            AsyncStorage.getItem("login_message").then((option)=>{
-                if(option){
-                    try{
-                        let loginMessage=JSON.parse(option);
+        // var okToken= await this.disabledToken();
 
-                        that.loginFunc({
-                            // userName: Base64.encode(loginMessage["userName"]),
-                            // password: Base64.encode(loginMessage["password"]),
-                            userName: loginMessage["userName"],
-                            password: loginMessage["password"],
-                            hideLoading:true
-                        },()=>{
-                            that.postAjax(url,option,callback);
-                        });
-                    } catch (error) {
+        // // token 失效|有效
+        // if(okToken){
+
+
+        //     // 缓存的 登录信息
+        //     AsyncStorage.getItem("login_message").then((option)=>{
+        //         if(option){
+        //             try{
+        //                 let loginMessage=JSON.parse(option);
+
+        //                 that.loginFunc({
+        //                     // userName: Base64.encode(loginMessage["userName"]),
+        //                     // password: Base64.encode(loginMessage["password"]),
+        //                     userName: loginMessage["userName"],
+        //                     password: loginMessage["password"],
+        //                     hideLoading:true
+        //                 },()=>{
+        //                     that.postAjax(url,option,callback);
+        //                 });
+        //             } catch (error) {
             
-                    }          
-                }
-            });
+        //             }          
+        //         }
+        //     });
 
-        }else{
+        // }else{
 
-            this.postAjax(url,option,callback);
-        }
+        //     this.postAjax(url,option,callback);
+        // }
     
     };
 
@@ -457,11 +458,6 @@ export default class WISHttpUtils extends Component{
 
         try {
 
-
-            // 模拟 form 数据提交
-            var formData = '';
-            Object.entries(option["params"]).map((o)=>formData+='&'+o[0]+'='+String(o[1]));
-
             
             AsyncStorage.getItem("_token").then((data)=>{
             
@@ -473,16 +469,19 @@ export default class WISHttpUtils extends Component{
                 }
 
 
-
                 fetch(origin+url,{
                     method:'POST',
-                    headers: option["headers"]?Object.assign({'Authorization': 'Bearer '+data},option["headers"]):{
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-Requested-With':'XMLHttpRequest',
+                    mode:"cors",
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        // 'Content-Type': 'application/json;charset=UTF-8',
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                        // 'Authorization': 'Basic d2ViQXBwOndlYkFwcA=='
                         'Authorization': 'Bearer '+data
+
                     },
-                    // body: formData
-                    body: option["body"] || formData.slice(1)
+                    body:JSON.stringify(option["params"])
                 })
                 .then((response) => {
 
@@ -503,7 +502,7 @@ export default class WISHttpUtils extends Component{
                     }                  
                 })
                 .then((json) => {
-
+                    const {code,msg}=json;
 
                     // console.log(1111)
                     // console.log(json)
@@ -511,19 +510,20 @@ export default class WISHttpUtils extends Component{
                     // 关闭 loding
                     DeviceEventEmitter.emit('globalEmitter_toggle_loding',false);
 
-                    // 提示
-                    if(json && json["message"]){
-                        Toast.info(json["message"],1);
-                    }
 
                     // 返回数据
                     if(json){
-                        callback(json);
+                        if(code==200){
+                            callback(json);
+                        }else{
+                            Toast.offline(`[${code}]${msg}`,1);
+                        }
                     }
+
                 })
                 .catch(error => {
                     // console.log(error.message)
-                    // Toast.offline('服务器响应失败！',1);
+                    Toast.offline('服务器响应失败！',1);
                     // 关闭 loding
                     DeviceEventEmitter.emit('globalEmitter_toggle_loding',false);
                 });                
