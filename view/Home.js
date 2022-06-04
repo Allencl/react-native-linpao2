@@ -49,7 +49,7 @@ class HomeScreen extends Component{
         AsyncStorage.getItem("login_type").then((option)=>{
             // Toast.offline(option,1);
             if( option !="in" ){
-                navigation.navigate('Login');
+                // navigation.navigate('Login');
             }else{
              
 
@@ -294,41 +294,44 @@ class HomeScreen extends Component{
      * @param {路由名称} code 
     */
     authority=async (code)=>{
-        let that=this;
+        const that=this;
         const {navigation} = this.props;
-        const {ToastExample}=NativeModules;
-        let _list=[];
+        // const {ToastExample}=NativeModules;
+        // let _list=[];
 
        
-        try {
-            // 获取权限
-            const granted1 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
-            const granted2 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS);
-            const granted3 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
-            const granted4 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-            const granted5 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
-            const granted6 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+        navigation.navigate(code);
+
+
+        // try {
+        //     // 获取权限
+        //     const granted1 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+        //     const granted2 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS);
+        //     const granted3 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+        //     const granted4 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+        //     const granted5 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
+        //     const granted6 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
 
 
 
-            _list.push(granted1);
-            _list.push(granted2);
-            _list.push(granted3);
-            _list.push(granted4);
-            _list.push(granted5);
-            _list.push(granted6);
+        //     _list.push(granted1);
+        //     _list.push(granted2);
+        //     _list.push(granted3);
+        //     _list.push(granted4);
+        //     _list.push(granted5);
+        //     _list.push(granted6);
 
 
-            // 未获取权限
-            if( _list.includes("denied") ){
-                Toast.offline('未获取到所需权限！',1);
-            }else{
-                navigation.navigate(code);
-            }
+        //     // 未获取权限
+        //     if( _list.includes("denied") ){
+        //         Toast.offline('未获取到所需权限！',1);
+        //     }else{
+        //         navigation.navigate(code);
+        //     }
   
-        } catch(err){
-            console.warn(err);
-        }
+        // } catch(err){
+        //     console.warn(err);
+        // }
         
     }
 

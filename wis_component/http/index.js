@@ -154,11 +154,11 @@ export default class WISHttpUtils extends Component{
             
             // return;
             // 账户 密码 错误
-            // if( response["status"]==401 ){
-            //     response.json().then((json)=>{
-            //         Toast.offline(json.message,1);
-            //     })
-            // }
+            if( response["status"]==401 ){
+                response.json().then((json)=>{
+                    Toast.offline(json.message,1);
+                })
+            }
 
 
             if(response.ok){
@@ -207,7 +207,7 @@ export default class WISHttpUtils extends Component{
                     AsyncStorage.setItem("token_config",JSON.stringify(Object.assign(
                         json.data,
                         // {buffer_new_expires_in: new Date().getTime()+(json.data["buffer_new_expires_in"]*1000) } 
-                        // {buffer_new_expires_in: new Date().getTime()+(500000) }                
+                        {buffer_new_expires_in: new Date().getTime()+(500000) }                
                     )));                  
 
                     // 登录成功
@@ -275,6 +275,7 @@ export default class WISHttpUtils extends Component{
         var that=this;
 
 
+
         this.getAjax(url,option,callback);
 
 
@@ -329,6 +330,10 @@ export default class WISHttpUtils extends Component{
                 _bufferParmasURL.map(o=>{ _parmasURL+=`${o[0]}=${o[1]}&` });
                 _parmasURL=`?${_parmasURL.slice(0,_parmasURL.length-1)}`
             }
+
+            
+            AsyncStorage.getItem("_token").then((data)=>{
+            
 
                 // 关闭 loading
                 if(!option["hideLoading"]){
@@ -386,21 +391,13 @@ export default class WISHttpUtils extends Component{
                 })
                 .catch(error => {
                     // console.log(error.message)
-                    // Toast.offline('服务器响应失败！',1);
+                    Toast.offline('服务器响应失败！',1);
                     // 关闭 loding
                     DeviceEventEmitter.emit('globalEmitter_toggle_loding',false);
-                });    
-
-
-
-            
-            // AsyncStorage.getItem("_token").then((data)=>{
-            
-
-            
-            // });
+                });                
+            });
         } catch (error) {
-
+            // console.log(111333)
         }
     }
 

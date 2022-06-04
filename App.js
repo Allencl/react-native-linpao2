@@ -29,8 +29,8 @@ import putawayScreen from './view_page/putaway/index.js';   // 上架
 
 
 
-import malfunctionScreen from './view_page/malfunction/index';     // 屏幕绑定
-import malfunctionListScreen from './view_page/malfunctionList/index';     // 故障机列表
+// import malfunctionScreen from './view_page/malfunction/index';     // 屏幕绑定
+// import malfunctionListScreen from './view_page/malfunctionList/index';     // 故障机列表
 // import awaitDetailsScreen from './view_page/malfunctionList/awaitDetails.js';     // 待维修 详情
 
 
@@ -123,7 +123,11 @@ class App extends Component {
     return(
       <Provider>
         { activityIndicatorVisible ?
-          <View style={{...styles.activityIndicatorStyle,width:Dimensions.get('window').width,height:Dimensions.get('window').height}}>
+          <View style={{...styles.activityIndicatorStyle,
+            marginTop:70,
+            width:Dimensions.get('window').width,
+            height:Dimensions.get('window').height-160
+          }}>
             <ActivityIndicator size={58} color="#1890ff" />
           </View>
           :
@@ -252,7 +256,7 @@ class App extends Component {
 
 
 
-            <Stack.Screen name="malfunction" options={{title:'屏幕绑定',...headOption}}>
+            {/* <Stack.Screen name="malfunction" options={{title:'屏幕绑定',...headOption}}>
               {(TabProps) => (
                 <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
                   <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="malfunction" component={malfunctionScreen} />
@@ -266,7 +270,7 @@ class App extends Component {
                   <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="malfunctionList" component={malfunctionListScreen} />
                 </Tab.Navigator>
               )}            
-            </Stack.Screen>
+            </Stack.Screen> */}
 
             {/* <Stack.Screen name="awaitDetails" options={{title:'故障机明细-详情',...headOption}}>
               {(TabProps) => (
