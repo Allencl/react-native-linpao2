@@ -86,7 +86,7 @@ class PageForm extends Component {
 
 
         if(!value["odd"]){
-          Toast.fail('收货单号不能为空！');
+          Toast.fail('收货单号不能为空！',1);
           return
         }
 

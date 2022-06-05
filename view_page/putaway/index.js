@@ -379,22 +379,23 @@ class PageForm extends Component {
                       </Checkbox>
                     </View>
                   </Flex.Item>                
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:4,paddingRight:4,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}>
+                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:4,paddingRight:4}}>
                     <TouchableOpacity onPress={() =>{ 
                       that.setState({
                         visible:true,
                         rowData:row
                       })
                     }}>
-                      <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
+                      <Text numberOfLines={1} style={{textAlign:'left',borderRadius:4,borderWidth:1,borderColor:'#e6ebf1'}}>{row.taskNo}</Text>
                     </TouchableOpacity>
+                    {/* <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text> */}
 
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'零件名称'}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'供应商'}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{''}</Text>
                   </Flex.Item>       
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{'推荐库位'}</Text>

@@ -11,6 +11,12 @@ import WisFormText from './formText';   // 表单只读
 import FormPhotoComponent from './photo';   // 拍照
 
 
+
+import FormSelectFlexComponent from './selectFlex';   // 下拉框
+
+
+
+
 module.exports = {
     WisFormText:WisFormText,
     WisInput:InputComponent,
@@ -21,7 +27,8 @@ module.exports = {
     WisDatePicker:DatePickerComponent,
     WisCamera:CameraComponent,
     WisSelect:SelectComponent,
-    WisFormPhoto:FormPhotoComponent
+    WisFormPhoto:FormPhotoComponent,
+    WisSelectFlex:FormSelectFlexComponent
 };
 
 

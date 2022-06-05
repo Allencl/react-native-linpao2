@@ -483,8 +483,8 @@ class PageForm extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-
-                    <TouchableOpacity onPress={() =>{ 
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row._reservoirName}</Text>
+                    {/* <TouchableOpacity onPress={() =>{ 
                         that.setState({
                           _pageIndex:index
                         })
@@ -494,7 +494,7 @@ class PageForm extends Component {
                       <View style={{borderColor:'#d9d9d9',paddingLeft:6,paddingRight:6,borderWidth:1,borderRadius:6}}>
                         <Text numberOfLines={1} style={{textAlign:'left'}}>{row._reservoirName}</Text>
                       </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </Flex.Item>
               </Flex>
               <Flex>

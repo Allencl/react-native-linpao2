@@ -37,13 +37,14 @@ class TableComponent extends Component {
     initFunc=(option={})=>{
         const that=this;
         const {pageSize,page}=this.state;
-        const {RequestURL}=this.props
+        const {RequestURL,Parames}=this.props
 
 
         WISHttpUtils.get(RequestURL,{
             params:{
                 pageNum:page,
                 pageSize:pageSize,
+                ...Parames,
                 ...option.params
             },
             // hideLoading:true
@@ -141,7 +142,7 @@ class TableComponent extends Component {
 
         return (
             <View>
-                <View style={{paddingBottom:8,paddingTop:12}}>
+                <View style={{paddingLeft:12,paddingBottom:8,paddingTop:12}}>
                     <Flex>
                         <Flex.Item style={{flex:1}}>
                             <TouchableOpacity onPress={() =>  that.pageChange(false) }>

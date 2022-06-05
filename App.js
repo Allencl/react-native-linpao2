@@ -28,6 +28,12 @@ import qualityDetailedScreen from './view_page/quality/detailed.js';   // 质检
 import putawayScreen from './view_page/putaway/index.js';   // 上架
 
 
+import packagesScreen from './view_page/packages/index.js';   // 包装
+import packagesDetailedScreen from './view_page/packages/detailed.js';   // 包装 移库
+
+
+
+
 
 import shiftingStandardScreen from './view_page/shiftingStandard/index.js';   // 标准移库 
 import shiftingStandardDetailedScreen from './view_page/shiftingStandard/detailed.js';   // 标准移库 详情
@@ -278,11 +284,23 @@ class App extends Component {
 
 
             
+            <Stack.Screen name="packages" options={{title:'包装任务',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="packages" component={packagesScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>   
+            <Stack.Screen name="packagesDetailed" options={{title:'包装任务-移库',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="packagesDetailed" component={packagesDetailedScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>             
 
             
-
-
-
+            
 
 
 
