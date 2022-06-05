@@ -7,6 +7,11 @@ import { Toast } from '@ant-design/react-native';
 import { Base64 } from 'js-base64';
 import JSEncrypt from 'jsencrypt/bin/jsencrypt.min.js'
 
+// import {* as aaa} from '@react-navigation/native';
+// import * as nameqqqq from "@react-navigation/native";
+// import {CommonActions} from "@react-navigation/native";
+
+
 
 // 密钥
 const publicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDUWQteEr5ZCpOgO0NJ7SM706M\n' +
@@ -383,6 +388,27 @@ export default class WISHttpUtils extends Component{
 
                     // 返回数据
                     if(json){
+
+                        // 登录 过期
+                        if(code==401){
+                            Toast.offline(`[${code}]${msg}111`,2);
+                            // navigation.navigate('Login'); 
+                            // nameqqqq.CommonActions.navigate({
+                            //     name:"Login"
+                            // })
+
+                            // CommonActions.navigate({
+                            //     name: 'Home',
+                            //     params: {
+                            //       user: 'jane',
+                            //     },
+                            // })
+
+                            // console.log( nameqqqq )
+                            return
+                        }
+
+
                         if(code==200){
                             callback(json);
                         }else{

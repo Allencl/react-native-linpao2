@@ -50,7 +50,7 @@ class TableComponent extends Component {
         },(result)=>{
             const {total=0,rows=[]}=result;
 
-            console.log(result)
+            // console.log(result)
 
             that.setState({
                 total:total,
@@ -125,6 +125,15 @@ class TableComponent extends Component {
     }
 
 
+    /**
+     * 返回 选中 数据
+     * @returns 
+    */
+    getSelectData=()=>{
+        const {tableData}=this.state;
+        return tableData.filter(o=>o._checked)
+    }
+
     render() {
         let that=this;
         let {title='',renderHead,renderBody,maxHeight=0,onCheckedAll,onRowClick} = this.props;
@@ -145,7 +154,7 @@ class TableComponent extends Component {
                             </TouchableOpacity>
                         </Flex.Item>
                         <Flex.Item style={{flex:10}}>
-                            <Text style={{fontSize:14}}>{` 第${page}页 共${total}条`}</Text>
+                            <Text style={{fontSize:15}}>{` 第${page}页 共${total}条`}</Text>
                         </Flex.Item>                  
                     </Flex>
                 </View>
@@ -180,7 +189,7 @@ class TableComponent extends Component {
                     <View></View>                
                 }
 
-                { renderHead ? <View>{ renderHead() }</View> : <View></View> }
+                { renderHead ? <View style={{marginBottom:6}}>{ renderHead() }</View> : <View></View> }
 
 
                 <ScrollView style={maxHeight?{maxHeight:maxHeight}:{}}>

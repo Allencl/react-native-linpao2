@@ -25,9 +25,12 @@ import qualityScreen from './view_page/quality/index.js';   // 质检任务 详�
 import qualityDetailedScreen from './view_page/quality/detailed.js';   // 质检任务 详情
 
 
-
 import putawayScreen from './view_page/putaway/index.js';   // 上架
 
+
+
+import shiftingStandardScreen from './view_page/shiftingStandard/index.js';   // 标准移库 
+import shiftingStandardDetailedScreen from './view_page/shiftingStandard/detailed.js';   // 标准移库 详情
 
 
 
@@ -258,12 +261,25 @@ class App extends Component {
 
 
 
+            <Stack.Screen name="shiftingStandard" options={{title:'标准移库',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="shiftingStandard" component={shiftingStandardScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>
+            <Stack.Screen name="shiftingStandardDetailed" options={{title:'标准移库-详情',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="shiftingStandardDetailed" component={shiftingStandardDetailedScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>      
+
+
             
 
-
-
-
-
+            
 
 
 

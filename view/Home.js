@@ -460,7 +460,20 @@ class HomeScreen extends Component{
                                             </View>
                                         </TouchableOpacity>
                                     </View>
-                                </View>                                                         
+                                </View>  
+                                <View style={styles.flexBoxCol}>
+                                    <View style={styles.flexBoxColChild}>
+                                        <TouchableOpacity onPress={() => this.authority('shiftingStandard') }>
+                                            <View style={styles.menu_child}>
+                                                <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
+                                                <Text style={styles.menu_child_text}>标准移库</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>  
+
+
+                                                                                       
                             </View>
                                  
                         </View>         
