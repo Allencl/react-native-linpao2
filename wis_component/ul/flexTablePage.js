@@ -201,6 +201,15 @@ class TableComponent extends Component {
                             { renderBody(o,i,that.renderBodyCallBack) }
                         </TouchableOpacity>       
                     })}
+                    { !tableData.length ?
+                        <Flex>
+                            <Flex.Item>
+                                <Text style={{textAlign:'center'}}>—无数据—</Text>
+                            </Flex.Item>
+                        </Flex>
+                        :
+                        <View></View>
+                    }
                 </ScrollView>
                 </View>
             </View>

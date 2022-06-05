@@ -88,7 +88,12 @@ class Page extends Component {
     const that=this;
     const {navigation}=this.props;
     const _selectData=this.tableRef.getSelectData()
+    const _sStorageIdList=_selectData.map(o=>o.sStorageId)   // 仓库ID
 
+    if(Array.from(new Set(_sStorageIdList)).length>1){
+      Toast.fail('必须是同一仓库！',1);
+      return
+    }
 
     WISHttpUtils.post("wms/packageTask/packageFinish",{
       params:_selectData
