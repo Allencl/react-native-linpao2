@@ -24,7 +24,9 @@ class PageForm extends Component {
     super(props);
 
     this.state={
-      odd:"ASN0602074",   // 单号
+      // odd:"ASN0602074",   // 单号
+      odd:"",   // 单号
+
     }
   }
 
