@@ -314,12 +314,12 @@ class PageForm extends Component {
                   <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{'OK:1'}</Text>
                   </Flex.Item>  
-                  <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  {/* <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{'NG:20'}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{'RB:20'}</Text>
-                  </Flex.Item>
+                  </Flex.Item> */}
                   <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:8,flexDirection:"row",justifyContent:'flex-end'}}>
                     <TouchableOpacity onPress={() =>  that.clickRow(row,index) }>
                       <View>

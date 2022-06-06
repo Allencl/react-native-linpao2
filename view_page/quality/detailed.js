@@ -25,6 +25,7 @@ class PageForm extends Component {
 
     this.state={
         visible:false,  
+        visible3:false,
 
 
       taskNo:"",  // 任务号
@@ -113,14 +114,30 @@ class PageForm extends Component {
         // }
       } else{
 
-        let _acceptsQty=Number((value.qualifiedNum).trim());
-        let _concessionQty=Number((value.concessionNum).trim());
-        let _unacceptsQty=Number((value.disqualificationNum).trim());
+        let _acceptsQty=Number((value.qualifiedNum).trim());   // 合格数
+        let _concessionQty=Number((value.concessionNum).trim());   // 让步数
+        let _unacceptsQty=Number((value.disqualificationNum).trim());  // 不合格数
 
 
 
-        if(value.inspectNum!=(_acceptsQty+_concessionQty+_unacceptsQty)){
-            that.setState({visible:true})
+        // 让步说明不能为空
+        if(_concessionQty && !((value.concessionText).trim())){
+          Toast.fail('让步说明不能为空！',1);
+          return
+        }
+
+        // 不合格原因不能为空
+        if(_unacceptsQty && !((value.disqualificationText).trim())){
+          Toast.fail('不合格原因不能为空！',1);
+          return
+        }
+
+
+        // 让步接收时，合格品数量必须为0
+
+
+        if(_acceptsQty && _concessionQty){
+            that.setState({visible3:true})
             return
         }
 
@@ -134,20 +151,22 @@ class PageForm extends Component {
         })
 
 
-            WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
-                params:_json
-                // hideLoading:true
-            },(result) => {
-                let {data=[]}=result;
+        console.log(_json)
+        return
+        WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
+            params:_json
+            // hideLoading:true
+        },(result) => {
+            let {data=[]}=result;
 
-                console.log('1111111111122222')
-                console.log(result)
-        
-                // console.log(result);
-                // that.setState({
-                //   cardList: data.map((o,i)=>Object.assign({},o,{name:`${o.trolleyName}[${o.trolleyCode}]`,id:i+1})),
-                // });
-            });  
+            console.log('1111111111122222')
+            console.log(result)
+    
+            // console.log(result);
+            // that.setState({
+            //   cardList: data.map((o,i)=>Object.assign({},o,{name:`${o.trolleyName}[${o.trolleyCode}]`,id:i+1})),
+            // });
+        });  
 
         
 
@@ -173,7 +192,7 @@ class PageForm extends Component {
         qualifiedNum,  
         concessionNum,  concessionText,disqualificationNum,disqualificationText,  
         }=this.state;
-    let {visible}=this.state;
+    let {visible,visible3}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
 
@@ -201,6 +220,29 @@ class PageForm extends Component {
             <Text style={{fontSize:18}}>合格数+让步数+不合格数</Text>
           </View>
         </Modal>
+
+
+
+        <Modal
+          title={"错误提示"}
+          transparent
+          onClose={()=>{
+            this.setState({visible3:false})
+          }}
+          maskClosable
+          visible={visible3}
+          closable
+          footer={[
+            {text:'确认',onPress:()=> {} },
+            {text:'取消',onPress:()=>{}}
+          ]}
+        >
+          <View style={{paddingLeft:12,marginTop:38,marginBottom:22}}>
+            <Text style={{fontSize:18}}>让步接收时，合格品数量必须为0！</Text>
+            <Text style={{fontSize:18}}>有合格品时，不能让步接收！</Text>
+          </View>
+        </Modal>
+
 
 
         <View style={{marginTop:22}}>
