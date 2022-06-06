@@ -59,13 +59,43 @@ class PageForm extends Component {
   componentDidMount(){
     let that=this;
 
-    this.initFunc()
+    this.initFunc();
+
+
+
+    // 刷新
+    this.update =DeviceEventEmitter.addListener('globalEmitter_update_take_list',function(){
+      that.updateFunc()
+    });
+
   }
 
 
   componentWillUnmount(){
-
+    this.update.remove();
   }
+
+
+  /**
+   * 更新单据
+   */
+   updateFunc=()=>{
+    const that=this;
+    const {odd}=this.props.route.params.routeParams;
+
+
+    WISHttpUtils.get(`wms/poOrderPart/getOrderDetails/${odd}`,{
+      params:{
+
+      }
+    },(result)=>{
+      const {code,msg,data={}}=result;
+
+      that.initFunc(data)
+      console.log(result)
+
+    })     
+   }
 
 
 
@@ -73,10 +103,10 @@ class PageForm extends Component {
    * 初始化
    * @returns 
    */
-  initFunc=()=>{
+  initFunc=(_data)=>{
     const that=this;
     const {data}=this.props.route.params.routeParams;
-    const {poOrder={},poOrderPartList=[]}=data;
+    const {poOrder={},poOrderPartList=[]}=_data || data;
 
     
     // console.log(23322)
@@ -151,17 +181,18 @@ class PageForm extends Component {
           let _newData=_newList.map((o)=>{
             let _bufferData=rows.filter(k=>o.locId==k.tmBasLocId)[0]||{};
               return Object.assign(o,{
+                _takeNumber:o.receiveQty,  // 收货数量
                 _tmBasLocId:_bufferData.tmBasLocId,
                 _reservoirName:`${_bufferData.locNo}-${_bufferData.locName}`
               })
           })
-          
+       
 
           that.setState({
             quarantineList:rows
           })
 
-          console.log(_newData)
+          // console.log(_newData)
           that.setState({
             basicData:poOrder,
             waitReceivingList:_newData.filter(o=>o.detailStatus!='60'),
@@ -234,7 +265,7 @@ class PageForm extends Component {
       return
     }
     
-    // row._takeNumber=_value
+
     that.setState({
       // waitReceivingList:[]
     },()=>{
@@ -326,7 +357,33 @@ class PageForm extends Component {
    * @returns 
    */
   batchTakeFunc=()=>{
+    const that=this;
+    const {waitReceivingList,basicData}=this.state;
+    let _list=waitReceivingList.filter(o=>o._checked)
 
+    let _json=_list.map(o=>Object.assign({
+      dlocId: o.dlocId,
+      locId: o.locId,
+      receiveQty: o._takeNumber,
+      ttMmOrmPoId: o.ttMmOrmPoId,
+      ttMmOrmPoPartId: o.ttMmOrmPoPartId,
+      version: o.version,
+      parentVersion:basicData.version,
+    }))
+
+
+    WISHttpUtils.post("wms/poOrderPart/receiveOrderParts",{
+      params:_json
+    },(result)=>{
+      const {code}=result;
+
+      // console.log(result)
+      if(code==200){
+        Toast.success("收货成功！",1);
+        that.updateFunc()
+      }
+ 
+    })
 
   }
 
@@ -505,7 +562,7 @@ class PageForm extends Component {
                   <TextInput
                     editable={!false}
                     style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
-                    value={ (row._takeNumber!=undefined)?String(row._takeNumber):String(row.receiveQty)}
+                    value={String(row._takeNumber)}
                     keyboardType={"numeric"}
                     onChangeText={text => that.takeChangeText(text,index,row)}
                   />               
@@ -556,7 +613,7 @@ class PageForm extends Component {
                   if(waitReceivingList.filter(o=>o._checked).length){
                     this.setState({visible:true})
                   }else{
-                    Toast.fail('未选择单据！');
+                    Toast.fail('未选择单据！',1);
                   }
                 }} size="small" type="ghost"><Text style={{paddingTop:4,fontSize:14}}>批量收货</Text></Button>
               </Flex.Item>

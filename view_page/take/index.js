@@ -24,7 +24,7 @@ class PageForm extends Component {
     super(props);
 
     this.state={
-      odd:"220005",   // 单号
+      odd:"ASN0602074",   // 单号
     }
   }
 
@@ -75,6 +75,7 @@ class PageForm extends Component {
    */
   passHandle=(value)=>{
     const that=this;
+    const {odd}=this.state;
     const {navigation} = this.props;
 
 
@@ -103,7 +104,9 @@ class PageForm extends Component {
         },(result)=>{
           const {code,msg,data={}}=result;
 
+          
           navigation.navigate('takeDetailed',{
+            odd:odd,
             data:data
           });    
 
@@ -156,7 +159,7 @@ class PageForm extends Component {
 
 
         <View style={{marginTop:32,marginBottom:50}}>
-          <Button type="primary" onPress={this.passHandle}>确 定</Button>          
+          <Button type="ghost" onPress={this.passHandle}>确 定</Button>          
         </View>      
                 
       </ScrollView>

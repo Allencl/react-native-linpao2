@@ -114,8 +114,40 @@ class PageForm extends Component {
   */
   passHandle=(value)=>{
     const that=this;
-    const {navigation} = this.props;
+    const {routeParams}=this.props.route.params;
 
+    const {navigation}=this.props;
+    const {rowData} = this.state;
+
+    // console.log(rowData)
+    // console.log(routeParams)
+
+
+    let _json=[{
+      dlocId: rowData.dlocId,
+      locId: rowData._tmBasLocId,
+      parentVersion: routeParams._basicData.version,
+      receiveQty: rowData._takeNumber,
+      ttMmOrmPoId: rowData.ttMmOrmPoId,
+      ttMmOrmPoPartId: rowData.ttMmOrmPoPartId,
+      version: rowData.version,
+      // _LPN:rowData._LPN  
+    }]
+
+    // console.log(_json)
+    WISHttpUtils.post("wms/poOrderPart/receiveOrderParts",{
+      params:_json
+    },(result)=>{
+      const {code}=result;
+
+      // console.log(result)
+      if(code==200){
+        Toast.success("收货成功！",1);
+        navigation.navigate('takeDetailed'); 
+        DeviceEventEmitter.emit('globalEmitter_update_take_list');
+      }
+ 
+    })
 
   }  
 
@@ -193,7 +225,7 @@ class PageForm extends Component {
                   <TextInput
                     editable={!false}
                     style={{flex:7,height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
-                    value={ (rowData._takeNumber!=undefined)?String(rowData._takeNumber):String(rowData.receiveQty)}
+                    value={String(rowData._takeNumber)}
                     keyboardType={"numeric"}
                     onChangeText={text => that.takeChangeText(text)}
                   /> 
@@ -241,6 +273,24 @@ class PageForm extends Component {
                 </Flex.Item>  
               </Flex>
             </View>
+
+
+            <Flex style={{marginBottom:12,marginTop:26}}>
+              <Flex.Item style={{flex:2}}>
+                <Button 
+                  style={{height:46}} 
+                  onPress={()=>{ 
+                    this.passHandle()
+                  }} 
+                  size="small" 
+                  type="ghost"
+                >
+                  <Text style={{paddingTop:4,fontSize:16}}>确认收货</Text>
+                </Button>  
+              </Flex.Item>
+             
+            </Flex>
+
                 
       </ScrollView>
     );
