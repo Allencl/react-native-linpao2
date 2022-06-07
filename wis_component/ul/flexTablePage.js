@@ -51,7 +51,7 @@ class TableComponent extends Component {
         },(result)=>{
             const {total=0,rows=[]}=result;
 
-            // console.log(result)
+            console.log(result)
 
             that.setState({
                 total:total,

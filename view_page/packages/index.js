@@ -94,7 +94,7 @@ class Page extends Component {
         <Tabs tabs={tabs} 
           animated={false}
           onChange={(obj,index)=>{
-            this.tabsChange(index)
+            // this.tabsChange(index)
           }}
         >
           <View>
