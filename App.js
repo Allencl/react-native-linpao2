@@ -9,11 +9,15 @@ import CenterScreen from './view/Center';       // 个人中心
 import WISHttpUtils from '@wis_component/http';   // http 
 
 
-
+import NavigationService from './view/NavigationService'
 
 // 页面
 import HomeScreen from './view/Home';    // 首页
 import LoginScreen from './view/Login';   // 登录
+import WarehouseListScreen from './view/warehouseList';   // 仓库
+
+
+
 
 
 import takeScreen from './view_page/take/index';     // ASN 收货
@@ -160,7 +164,10 @@ class App extends Component {
         > */}
 
         {/* 菜单 */}
-        <NavigationContainer>
+        <NavigationContainer ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        >
           <Stack.Navigator 
             initialRouteName="Home"
             // screenOptions={({ route, navigation }) =>{
@@ -206,6 +213,16 @@ class App extends Component {
                 </Tab.Navigator>
               )}            
             </Stack.Screen>
+
+            <Stack.Screen name="WarehouseList" options={{title:'选择仓库',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="WarehouseList" component={WarehouseListScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>
+
+            
 
 
             <Stack.Screen name="take" options={{title:'收货',...headOption}}>

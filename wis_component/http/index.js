@@ -11,6 +11,7 @@ import JSEncrypt from 'jsencrypt/bin/jsencrypt.min.js'
 // import * as nameqqqq from "@react-navigation/native";
 // import {CommonActions} from "@react-navigation/native";
 
+import NavigationService from './../../view/NavigationService'
 
 
 // 密钥
@@ -391,20 +392,9 @@ export default class WISHttpUtils extends Component{
 
                         // 登录 过期
                         if(code==401){
-                            Toast.offline(`[${code}]${msg}111`,2);
-                            // navigation.navigate('Login'); 
-                            // nameqqqq.CommonActions.navigate({
-                            //     name:"Login"
-                            // })
+                            Toast.offline(`[${code}]${msg}`,1);
+                            NavigationService.navigate('Login');
 
-                            // CommonActions.navigate({
-                            //     name: 'Home',
-                            //     params: {
-                            //       user: 'jane',
-                            //     },
-                            // })
-
-                            // console.log( nameqqqq )
                             return
                         }
 
@@ -539,6 +529,18 @@ export default class WISHttpUtils extends Component{
 
                     // 返回数据
                     if(json){
+
+
+                        // 登录 过期
+                        if(code==401){
+                            Toast.offline(`[${code}]${msg}`,1);
+                            NavigationService.navigate('Login');
+                                    
+                            return
+                        }
+
+
+
                         if(code==200){
                             callback(json);
                         }else{

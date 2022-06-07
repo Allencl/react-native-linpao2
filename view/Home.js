@@ -49,7 +49,7 @@ class HomeScreen extends Component{
         AsyncStorage.getItem("login_type").then((option)=>{
             // Toast.offline(option,1);
             if( option !="in" ){
-                // navigation.navigate('Login');
+                navigation.navigate('Login');
             }else{
              
 
@@ -63,13 +63,9 @@ class HomeScreen extends Component{
 
         // 获取菜单
         this.getMenu =DeviceEventEmitter.addListener('globalEmitter_get_menu',function(){
-            that.resetMenu();   // 清空菜单
-            that.getWarehouseFunc() // 获取仓库
 
-            that.getCompanyList()  // 获取所有公司
-            that.getOrderType()   // 获取所有 订单类型
-            that.getTakeType()   // 获取所有 收货类型
-            that.getUnits()      // 获取 所有单位
+
+
 
         });
 
@@ -88,13 +84,7 @@ class HomeScreen extends Component{
     }
     
 
-    /**
-     * 清空菜单
-    */
-    resetMenu=()=>{
-        this.setState({menuList:[]})
-        AsyncStorage.setItem("menu_buffer_list","[]")
-    }
+
 
 
     /**
@@ -112,181 +102,6 @@ class HomeScreen extends Component{
 
     }
 
-    /**
-     * 获取 所有单位
-     */
-    getUnits=()=>{
-        WISHttpUtils.get("system/dict/data/type/base_unit",{
-            params:{
-        
-            },
-            hideLoading:true
-        },(result)=>{
-            const {data=[]}=result;
-            AsyncStorage.setItem("buffer_units",JSON.stringify(data));     
-        })         
-    }
-
-    /**
-     * 获取所有 收货类型
-     */
-    getTakeType=()=>{
-        WISHttpUtils.get("system/dict/data/type/asn_status",{
-            params:{
-        
-            },
-            hideLoading:true
-        },(result)=>{
-            const {data=[]}=result;
-            AsyncStorage.setItem("buffer_take_type",JSON.stringify(data));     
-        })          
-    }
-
-
-    /**
-     * 获取所有订单 类型
-     */
-    getOrderType=()=>{
-        const that=this;
-
-        WISHttpUtils.get("system/dict/data/type/po_type",{
-            params:{
-        
-            },
-            hideLoading:true
-        },(result)=>{
-            const {data=[]}=result;
-            // console.log(result)
-            AsyncStorage.setItem("buffer_order_type",JSON.stringify(data));     
-        })  
-    }
-
-
-    /**
-     * 获取  所有公司
-     */
-     getCompanyList=()=>{
-        const that=this;
-    
-        WISHttpUtils.get("wms/suppl/list?status=1",{
-            params:{
-        
-            },
-            hideLoading:true
-        },(result)=>{
-            const {rows=[]}=result;
-            AsyncStorage.setItem("buffer_company_list",JSON.stringify(rows));     
-        })         
-     }
-
-    /**
-     * 获取 仓库
-    */
-    getWarehouseFunc=()=>{
-
-        let that=this;
-
-        // this.setState({
-        //     // modalVisible:true,
-        // })
-    
-        WISHttpUtils.get("system/user/selectUserStore",{
-          params:{
-    
-          }
-        },(result={})=>{
-
-            const {rows=[],code}=result
-
-            // Toast.offline(code,1);
-            // console.log(result)
-    
-            that.setState({
-                modalVisible:true,
-                warehouseMap:rows
-            })
-    
-        })
-
-
-    }
-
-    /**
-     * 绑定 菜单
-     */
-     getMenuFunc=(option)=>{
-        const that=this;
-        const {tmBasStorageId}=option;
-    
-        WISHttpUtils.get(`system/user/selectStorage/${tmBasStorageId}`,{
-          params:{
-    
-          }
-        },(result)=>{
-            that.getMenuData();
-            // console.log(1123)
-            //  console.log(result)
-             // const {code,rows=[]}=result;
-        })
-     }
-
-    /**
-     * 获取 菜单
-     */
-     getMenuData=()=>{
-        const that=this;
-
-        WISHttpUtils.get(`system/menu/getRouters/A/2527`,{
-            params:{
-      
-            }
-          },(result)=>{
-            const {data=[]}=result;
-
-            that.setState({
-                modalVisible:false
-            })
-
-            if(data.length){
-                let _list=(data[0]["children"])||[];
-                AsyncStorage.setItem("menu_buffer_list",JSON.stringify(_list));
-                that.initMenu();
-            }      
-          })
-     }
- 
-
-    /**
-     * 
-     * @param {*} code 
-     */
-    onClose =()=> {
-        this.setState({
-            visible: false,
-        });
-    }
-
-    lanyard = async ()=>{
-
-
-       
-    }
-
-    /**
-     * 下载 最新版
-     * @param {*} code 
-     */
-    onDownload=()=>{
-        var downloadURL = 'http://www.baidu.com/';  // 下载页面         
-  
-        Linking.canOpenURL(downloadURL).then(supported => {         
-            if (!supported) {            
-                console.warn('Can\'t handle url: ' + downloadURL);            
-            } else {            
-                return Linking.openURL(downloadURL);            
-            }            
-        }).catch(err => console.error('An error occurred',downloadURL));           
-    }
 
 
     /**
@@ -343,83 +158,7 @@ class HomeScreen extends Component{
         return (
         <ScrollView style={styles.page}>
 
-            {/* <View style={{height:10}}></View>
-            <Button type="primary" onPress={this.lanyard}>测试蓝牙</Button> */}
-
-
-            {/* <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    console.log("2222")
-                }}
-            > */}
-
-            <Modal
-                animationType="slide"
-                title={`选择仓库 (${warehouseMap.length})`}
-                onClose={()=>{
-                    that.setState({modalVisible:false})
-                }}
-                visible={modalVisible}
-                closable
-                transparent
-            >
-                <View style={{paddingVertical: 20 }}>
-                    <ScrollView style={{height:300,}}>
-                        <View>
-                            { warehouseMap.map((o,i)=>{
-                                return (<Button onPress={()=> that.getMenuFunc(o) } key={String(i)} type="ghost" style={styles.warehouseButton}>
-                                <View style={styles.warehouseButtonBox}>
-                                    <View style={styles.warehouseButtonIcon} >
-                                        <Icon name="cloud" color="#ffad33"/>
-                                    </View>
-                                    <View >
-                                        <Text numberOfLines={1} style={styles.warehouseButtonText}>{o.storageName}</Text>
-                                    </View>
-                                </View>
-
-                                </Button>)
-                            })         
-                            }
-                        </View>
-                    </ScrollView>        
-                </View>
-            </Modal>
-
-
-
-
-
-            {/* <Modal
-            title="版本更新"
-            transparent
-            onClose={this.onClose}
-            maskClosable
-            visible={this.state.visible}
-            closable
-            //   footer={footerButtons}
-            >
-            <View style={{ paddingVertical: 20 }}>
-                <View style={styles.versionContent}>
-                    <Text style={{ fontSize:16 }}>当前版本1：</Text>
-                    <Text style={{ fontSize:16 }}>1.0.1</Text>
-                </View>
-                <View style={styles.versionContent}>
-                    <Text style={{ fontSize:16 }}>更新版本1：</Text>
-                    <Text style={{ fontSize:16 }}>1.0.3</Text>
-                </View>
-
-                <View style={{paddingTop:8}}>
-                    <Button type="primary" onPress={this.onDownload}>点击下载安装版</Button>
-                </View>
-            </View>
-            <Button type="ghost" onPress={this.onClose}>取消</Button>
-            </Modal> */}
-
-
-
+  
             <WingBlank size="md" style={styles.wingBlank}>
 
 
