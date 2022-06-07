@@ -69,14 +69,14 @@ class PageForm extends Component {
     console.log(row)
     this.setState({
       taskNo:row.taskNo,       
-      supplier:'3',    
-      supplierName:'3',  
-      part:'3',        
-      partName:'3',     
-      number:'3',     
-      boxNum:'3',     
-      storage:'3',   
-      storageAffirm:'3',   
+      supplier:'1',    
+      supplierName:'1',  
+      part:row.partNo,        
+      partName:row.partName,     
+      number:'1',     
+      boxNum:'1',     
+      storage:'1',   
+      storageAffirm:'1',   
     })
   }
 

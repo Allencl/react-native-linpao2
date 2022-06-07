@@ -47,7 +47,6 @@ class PageForm extends Component {
   componentDidMount(){
     let that=this;
 
-    // this.initFunc();
 
     this.getWarehouseFunc();  // 获取仓库
     this.reservoirFunc();     // 获取 库区
@@ -87,12 +86,12 @@ class PageForm extends Component {
   /**
    * 获取 库区
   */
-  reservoirFunc=()=>{
+  reservoirFunc=(params)=>{
     const that=this;
 
     WISHttpUtils.get('wms/dloc/list',{
       params:{
-
+        ...params
       }
     },(result)=>{
       const {rows=[]}=result;
@@ -109,35 +108,60 @@ class PageForm extends Component {
   /**
    * 获取 库位
   */
-    storageFunc=()=>{
-    const that=this;
+  storageFunc=(params)=>{
+      const that=this;
 
-    WISHttpUtils.get('wms/loc/list',{
-      params:{
+      WISHttpUtils.get('wms/loc/list',{
+        params:{
+          ...params
+        }
+      },(result)=>{
+        const {rows=[]}=result;
 
-      }
-    },(result)=>{
-      const {rows=[]}=result;
+        that.setState({
+          storageList:rows.map(o=>Object.assign({_name:o.locName,id:o.tmBasLocId}))
+        })
 
-      that.setState({
-        storageList:rows.map(o=>Object.assign({_name:o.locName,id:o.tmBasLocId}))
-      })
-
-      // console.log(result)
-    })    
+        // console.log(result)
+      })    
   }
   
 
 
   /**
-   * 初始化
+   * 仓库切换
    * @param {*} value 
    */
-  initFunc=()=>{
+  warehouseChange=(data=[])=>{
 
-    // console.log(row)
+    let _json={
+      storageId:data[0].id 
+    }
 
+    this.reservoirFunc(_json);
+
+    this.props.form.setFieldsValue({
+      "reservoir":[],
+      "storage":[]
+    });
   }
+
+
+  /**
+   * 库区切换
+   * @param {*} value 
+  */
+   reservoirChange=(data=[])=>{
+    let _json={
+      dlocId:data[0].id 
+    }
+
+    this.storageFunc(_json);
+
+    this.props.form.setFieldsValue({
+      "storage":[]
+    });
+   }
 
 
   /**
@@ -235,7 +259,7 @@ class PageForm extends Component {
             textFormat={o=>o._name}
             labelFormat={o=>o._name}
             onChangeValue={(_list)=>{
-              // that.productionChange(_list);
+              that.warehouseChange(_list);
             }}
             data={warehouseList}
           />
@@ -254,7 +278,7 @@ class PageForm extends Component {
             textFormat={o=>o._name}
             labelFormat={o=>o._name}
             onChangeValue={(_list)=>{
-              // that.productionChange(_list);
+              that.reservoirChange(_list);
             }}
             data={reservoirList}
           />

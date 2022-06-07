@@ -58,15 +58,15 @@ class PageForm extends Component {
    * @param {*} value 
    */
   initFunc=()=>{
-    const {row={}}=this.props.route.params.routeParams;
+    const {rows=[]}=this.props.route.params.routeParams;
 
-    console.log(row)
-    this.setState({
-      warehouse:"1", 
-      reservoir:"1",   
-      storage:"1",   
+    console.log(rows)
+    // this.setState({
+    //   warehouse:"1", 
+    //   reservoir:"1",   
+    //   storage:"1",   
  
-    })
+    // })
   }
 
 

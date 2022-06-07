@@ -99,16 +99,16 @@ class PageForm extends Component {
    * @returns 
    */
    putawayFunc=()=>{
+    const {navigation,form} = this.props;
     const _selectData=this.tableRef.getSelectData();
-
 
     if(!_selectData.length){
       Toast.fail('请至少选择一条数据！',1);
       return
     }
-    console.log("上架")
 
-    //  putawayDetailedAll
+    navigation.navigate('putawayDetailedAll',{rows:_selectData})
+
    }
 
 
@@ -122,8 +122,6 @@ class PageForm extends Component {
     
     return (
       <ScrollView style={{padding:8,backgroundColor:"#fff"}}>
-
-
 
         <View>
 
