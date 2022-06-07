@@ -112,6 +112,7 @@ class Page extends Component {
     let that=this;
     let {no}=this.state;
     let {navigation,form} = this.props;
+    const {width, height, scale} = Dimensions.get('window');
 
 
 
@@ -145,7 +146,7 @@ class Page extends Component {
           RequestURL="wms/packageTask/list"
           Parames={{taskStatus:0}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={420}
+          maxHeight={height-376}
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
