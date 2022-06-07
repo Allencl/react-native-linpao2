@@ -17,7 +17,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {origin} from '@wis_component/origin';     // 服务地址
 
 
-// ASN 收货单
+// 质检任务 详情
 class PageForm extends Component {
 
   constructor(props) {
@@ -95,7 +95,7 @@ class PageForm extends Component {
   /**
    * 提交
    */
-  passHandle=(value)=>{
+  passHandle=()=>{
     const that=this;
     const {navigation} = this.props;
     const {row={}}=this.props.route.params.routeParams;
@@ -114,10 +114,19 @@ class PageForm extends Component {
         // }
       } else{
 
+        let _checkQty=Number(value.inspectNum);   // 送检数量
+
         let _acceptsQty=Number((value.qualifiedNum).trim());   // 合格数
         let _concessionQty=Number((value.concessionNum).trim());   // 让步数
         let _unacceptsQty=Number((value.disqualificationNum).trim());  // 不合格数
 
+
+
+        // 让步接收时，合格品数量必须为 0
+        if(_acceptsQty && _concessionQty){
+          that.setState({visible3:true})
+          return
+        }
 
 
         // 让步说明不能为空
@@ -133,12 +142,10 @@ class PageForm extends Component {
         }
 
 
-        // 让步接收时，合格品数量必须为0
-
-
-        if(_acceptsQty && _concessionQty){
-            that.setState({visible3:true})
-            return
+        // 送检数量必须 = 合格数+让步数+不合格数
+        if(_checkQty != (_acceptsQty+_concessionQty+_unacceptsQty)){
+          that.setState({visible:true})
+          return
         }
 
 
@@ -151,26 +158,21 @@ class PageForm extends Component {
         })
 
 
-        console.log(_json)
-        return
         WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
-            params:_json
-            // hideLoading:true
+          params:_json
+          // hideLoading:true
         },(result) => {
-            let {data=[]}=result;
+          let {code}=result;
 
-            console.log('1111111111122222')
-            console.log(result)
-    
-            // console.log(result);
-            // that.setState({
-            //   cardList: data.map((o,i)=>Object.assign({},o,{name:`${o.trolleyName}[${o.trolleyCode}]`,id:i+1})),
-            // });
+          if(code==200){
+            Toast.success("检验完成！",1);
+
+            navigation.navigate("quality");
+            DeviceEventEmitter.emit('globalEmitter_update_quality_table');
+          }
+
         });  
 
-        
-
-         console.log(_json)
       }
   });
   }  
@@ -211,7 +213,7 @@ class PageForm extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=> that.batchTakeFunc() },
+            {text:'确认',onPress:()=> {} },
             {text:'取消',onPress:()=>{}}
           ]}
         >
@@ -397,7 +399,7 @@ class PageForm extends Component {
 
 
         <View style={{marginTop:32,marginBottom:50}}>
-          <Button type="ghost" onPress={this.passHandle}>提 交</Button>          
+          <Button type="ghost" onPress={()=> this.passHandle() }>提 交</Button>          
         </View>      
                 
       </ScrollView>

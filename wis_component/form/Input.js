@@ -79,7 +79,11 @@ class InputComponent extends Component{
                 }
 
                 onChange={(value)=>{
-                    that.onChange(value);
+                    if(type=="number"){
+                        that.onChange(String(Number(value)));
+                    }else{
+                        that.onChange(value);
+                    }
                 }}               
             >
                 { requiredSign ? 

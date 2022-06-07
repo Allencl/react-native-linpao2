@@ -43,6 +43,13 @@ class PageForm extends Component {
     let that=this;
 
 
+
+    // 获取菜单
+    this.update =DeviceEventEmitter.addListener('globalEmitter_update_quality_table',function(){
+      that.tableRef.initFunc();
+    });
+
+
     // 监听扫码枪
     this.honeyWell=DeviceEventEmitter.addListener('globalEmitter_honeyWell',function(key=""){
 
@@ -70,6 +77,7 @@ class PageForm extends Component {
 
   componentWillUnmount(){
     this.honeyWell.remove();
+    this.update.remove();
   }
 
 
@@ -80,14 +88,14 @@ class PageForm extends Component {
    searchFunc=()=>{
     const {odd}=this.state;
     
-    // console.log(odd)
+    console.log(odd)
     // console.log(  )
 
-    this.tableRef.initFunc({
-      params:{
-        lotNo:odd
-      }
-    })
+    // this.tableRef.initFunc({
+    //   params:{
+    //     lotNo:odd
+    //   }
+    // })
    }
 
 
@@ -164,7 +172,7 @@ class PageForm extends Component {
     let{odd,rowData,visible}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
-
+    const {width, height, scale} = Dimensions.get('window');
     
     return (
       <ScrollView style={{padding:8,backgroundColor:"#fff"}}>
@@ -287,45 +295,36 @@ class PageForm extends Component {
 
         <WisFlexTablePage
           RequestURL="wms/iqcTask/listNew"
+          Parames={{iqcStatus:'NA'}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={460}
+          maxHeight={height-260}
           onRowClick={(row)=> navigation.navigate('qualityDetailed',{row:row}) }
           renderBody={(row,index)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.iqcStatus}</Text>
+                  <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.iqcNo}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.iqcStatus}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>零件号</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.iqcStatus}</Text>
-                  </Flex.Item>       
                   <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'已完成'}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.checkQty}</Text>
+                  </Flex.Item>       
+                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lotNo}</Text>
                   </Flex.Item>                               
               </Flex>
               <View style={{height:6}}></View>
               <Flex>
-                  <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'送检:1'}</Text>
+                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
                   </Flex.Item>   
-                  <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'OK:1'}</Text>
+                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.orderNo}</Text>
                   </Flex.Item>  
-                  {/* <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'NG:20'}</Text>
-                  </Flex.Item>
-                  <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'RB:20'}</Text>
-                  </Flex.Item> */}
-                  <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:8,flexDirection:"row",justifyContent:'flex-end'}}>
-                    <TouchableOpacity onPress={() =>  that.clickRow(row,index) }>
-                      <View>
-                        <Icon style={{fontSize:24}} name="right" />
-                      </View>
-                    </TouchableOpacity>
+                  <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:8,flexDirection:"row",justifyContent:'flex-end'}}>
+                    <Icon style={{fontSize:24}} name="right" />
                   </Flex.Item>
               </Flex>
             </View>

@@ -153,7 +153,7 @@ class PageForm extends Component {
             })} 
             error={getFieldError('odd')}   
             placeholder="请扫描或输入单号"            
-            lableName="收货单号"
+            // lableName="收货单号"
           />  
 
 
