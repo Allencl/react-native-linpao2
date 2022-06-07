@@ -84,86 +84,31 @@ class PageForm extends Component {
     // console.log(odd)
     // console.log(  )
 
-    this.tableRef.initFunc({
-      params:{
-        lotNo:odd
-      }
-    })
+    // this.tableRef.initFunc({
+    //   params:{
+    //     lotNo:odd
+    //   }
+    // })
    }
 
 
-  /**
-   * 查看 行
-   * @param {*} value 
-   */
-   clickRow=(row)=>{
-
-    console.log(row)
-      this.setState({
-        visible:true,
-          rowData:row
-      })
-    // console.log(row)
-   }
-
-  /**
-   * 提交
-   */
-  passHandle=(value)=>{
-    const that=this;
-    const {navigation} = this.props;
-
-
-    this.props.form.validateFields((error, value) => {
-      // 表单 不完整
-      if(error){
-        // Toast.fail('必填字段未填！');
-        // console.log(error)
-
-
-        if(!value["odd"]){
-          Toast.fail('收货单号不能为空！');
-          return
-        }
-
-
-
-      } else{
-        let _odd=value["odd"].trim();
-
-
-        WISHttpUtils.get(`wms/poOrderPart/getOrderDetails/${_odd}`,{
-          params:{
-    
-          }
-        },(result)=>{
-          const {code,msg,data={}}=result;
-
-          if(code==200){         
-            navigation.navigate('takeDetailed',{
-              data:data
-            });       
-          }else{
-            Toast.offline(msg,1);
-          }
-
-        })
-
-
-
-
-      }
-  });
-  }  
-
 
 
   /**
-   * 上架
+   * 批量 上架
    * @returns 
    */
    putawayFunc=()=>{
-     console.log("上架")
+    const _selectData=this.tableRef.getSelectData();
+
+
+    if(!_selectData.length){
+      Toast.fail('请至少选择一条数据！',1);
+      return
+    }
+    console.log("上架")
+
+    //  putawayDetailedAll
    }
 
 
@@ -179,120 +124,6 @@ class PageForm extends Component {
       <ScrollView style={{padding:8,backgroundColor:"#fff"}}>
 
 
-        <Modal
-          title="批量上架"
-          transparent
-          onClose={()=>{
-            this.setState({visible2:false})
-          }}
-          maskClosable
-          visible={visible2}
-          closable
-          footer={[
-            {text:'批量上架',onPress:()=> {   } },
-            {text:'取消',onPress:()=>{}}
-          ]}
-        >
-          <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
-            <View style={{paddingTop:16}}>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>上架仓库:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>上架库区:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>    
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>上架库位:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>  
-              </Flex>
-            </View>
-          </ScrollView>
-        </Modal>
-
-
-
-        <Modal
-          title="待上架任务明细"
-          transparent
-          onClose={()=>{
-            this.setState({visible:false})
-          }}
-          maskClosable
-          visible={visible}
-          closable
-          footer={[
-            {text:'上架',onPress:()=> {  that.putawayFunc()  } },
-            {text:'取消',onPress:()=>{}}
-          ]}
-        >
-          <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
-            <View style={{paddingTop:16}}>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>任务号:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>供应商:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>供应商名:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>零件号:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>零件名称:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>上架数量:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>零件箱号:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>推存库位:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>    
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:4,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>确认库位:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{'未知'}</Text>
-                </Flex.Item>  
-              </Flex>
-            </View>
-          </ScrollView>
-        </Modal>
-       
 
         <View>
 
@@ -301,7 +132,7 @@ class PageForm extends Component {
               <TextInput
                 style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderBottomWidth:1}}
                 value={odd}
-                placeholder={"请输入批次号/零件号"}
+                placeholder={"请输入 批次号/零件号"}
                 onChangeText={text => that.setState({odd:text}) }
               /> 
             </Flex.Item>
@@ -320,9 +151,7 @@ class PageForm extends Component {
             <Button 
               style={{height:32}} 
               onPress={()=>{ 
-                that.setState({
-                  visible2:true
-                })
+                this.putawayFunc()
               }} 
               size="small" 
               type="ghost"
@@ -338,6 +167,7 @@ class PageForm extends Component {
           RequestURL="wms/mmTask/list"
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={460}
+          // onRowClick={(row)=> navigation.navigate('putawayDetailed',{row:row}) }
           renderHead={()=>{
             return (
               <Flex>
@@ -365,7 +195,7 @@ class PageForm extends Component {
             )
           }}
           renderBody={(row,index,callBack)=>{
-            return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
+            return (<View key={index} style={{paddingTop:4,paddingBottom:4,marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
                   <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <View>
@@ -379,14 +209,15 @@ class PageForm extends Component {
                       </Checkbox>
                     </View>
                   </Flex.Item>                
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:4,paddingRight:4}}>
+                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:4,paddingRight:4,borderRadius:4,borderWidth:1,borderColor:'#e6ebf1'}}>
                     <TouchableOpacity onPress={() =>{ 
-                      that.setState({
-                        visible:true,
-                        rowData:row
-                      })
+                      // that.setState({
+                      //   visible:true,
+                      //   rowData:row
+                      // })
+                      navigation.navigate('putawayDetailed',{row:row})
                     }}>
-                      <Text numberOfLines={1} style={{textAlign:'left',borderRadius:4,borderWidth:1,borderColor:'#e6ebf1'}}>{row.taskNo}</Text>
+                      <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                     </TouchableOpacity>
                     {/* <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text> */}
 

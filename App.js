@@ -30,6 +30,10 @@ import qualityDetailedScreen from './view_page/quality/detailed.js';   // 质检
 
 
 import putawayScreen from './view_page/putaway/index.js';   // 上架
+import putawayDetailedScreen from './view_page/putaway/detailed.js';   // 上架 详情
+import putawayDetailedAllScreen from './view_page/putaway/detailedAll.js';   // 批量上架 
+
+
 
 
 import packagesScreen from './view_page/packages/index.js';   // 包装
@@ -262,7 +266,7 @@ class App extends Component {
               )}            
             </Stack.Screen>
 
-            <Stack.Screen name="qualityDetailed" options={{title:'质检任务-详情',...headOption}}>
+            <Stack.Screen name="qualityDetailed" options={{title:'质检任务-明细',...headOption}}>
               {(TabProps) => (
                 <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
                   <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="qualityDetailed" component={qualityDetailedScreen} />
@@ -281,6 +285,24 @@ class App extends Component {
                 </Tab.Navigator>
               )}            
             </Stack.Screen>
+            <Stack.Screen name="putawayDetailed" options={{title:'上架任务-明细',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="putawayDetailed" component={putawayDetailedScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>
+            <Stack.Screen name="putawayDetailedAll" options={{title:'上架任务-批量上架',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="putawayDetailedAll" component={putawayDetailedAllScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>
+
+            
+
+            
 
 
 
@@ -291,7 +313,7 @@ class App extends Component {
                 </Tab.Navigator>
               )}            
             </Stack.Screen>
-            <Stack.Screen name="shiftingStandardDetailed" options={{title:'标准移库-详情',...headOption}}>
+            <Stack.Screen name="shiftingStandardDetailed" options={{title:'标准移库-明细',...headOption}}>
               {(TabProps) => (
                 <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
                   <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="shiftingStandardDetailed" component={shiftingStandardDetailedScreen} />
@@ -339,7 +361,7 @@ class App extends Component {
               )}            
             </Stack.Screen> */}
 
-            {/* <Stack.Screen name="awaitDetails" options={{title:'故障机明细-详情',...headOption}}>
+            {/* <Stack.Screen name="awaitDetails" options={{title:'故障机明细-明细',...headOption}}>
               {(TabProps) => (
                 <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
                   <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="awaitDetails" component={awaitDetailsScreen} />

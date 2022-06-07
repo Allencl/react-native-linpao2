@@ -17,31 +17,24 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {origin} from '@wis_component/origin';     // 服务地址
 
 
-// 质检任务 详情
+// 上架任务 详情
 class PageForm extends Component {
 
   constructor(props) {
     super(props);
 
     this.state={
-        visible:false,  
-        visible3:false,
 
-
-      taskNo:"",  // 任务号
-      asnNo:"",   // asn 号
-      batchNo:"",  // 批次号
-      supplier:"",  // 供应商
-      supplies:"",   // 物料
-      name:"",  // 名称
-      inspectNum:"",  // 送检数量
-
-      qualifiedNum:"",  // 合格数
-      concessionNum:"",  // 让步数
-      concessionText:"",  // 让步说明
-      disqualificationNum:"",  // 不合格数
-      disqualificationText:"",  // 不合格说明  
-      
+      taskNo:"3",        // 任务号
+      supplier:'3',     // 供应商
+      supplierName:'3',   // 供应商名
+      part:'3',         // 零件号
+      partName:'3',     // 零件名称
+      number:'3',      // 上架数量
+      boxNum:'3',      // 零件箱号
+      storage:'3',    // 推存库位
+      storageAffirm:'3',   // 确认库位
+ 
     }
   }
 
@@ -73,21 +66,17 @@ class PageForm extends Component {
   initFunc=()=>{
     const {row={}}=this.props.route.params.routeParams;
 
-    // console.log(row)
+    console.log(row)
     this.setState({
-        taskNo:row.iqcNo,
-        asnNo:row.orderNo,
-        batchNo:row.lotNo,
-        supplier:"",
-        supplies:"",
-        name:row.partName,
-        inspectNum:String(row.checkQty),
-    
-        qualifiedNum:String(row.acceptsQty),
-        concessionNum:String(row.concessionQty),
-        concessionText:'',
-        disqualificationNum:String(row.unacceptsQty),
-        disqualificationText:'',
+      taskNo:row.taskNo,       
+      supplier:'3',    
+      supplierName:'3',  
+      part:'3',        
+      partName:'3',     
+      number:'3',     
+      boxNum:'3',     
+      storage:'3',   
+      storageAffirm:'3',   
     })
   }
 
@@ -184,15 +173,16 @@ class PageForm extends Component {
 
   render() {
     let that=this;
-    let{taskNo,  
-        asnNo,   
-        batchNo,  
-        supplier, 
-        supplies,   
-        name,  
-        inspectNum,  
-        qualifiedNum,  
-        concessionNum,  concessionText,disqualificationNum,disqualificationText,  
+    let{
+      taskNo,       
+      supplier,     
+      supplierName,   
+      part,        
+      partName,     
+      number,      
+      boxNum,     
+      storage,   
+      storageAffirm,   
         }=this.state;
     let {visible,visible3}=this.state;
     let {navigation,form} = this.props;
@@ -201,50 +191,6 @@ class PageForm extends Component {
     
     return (
       <ScrollView style={{padding:8,backgroundColor:"#fff"}}>
-
-
-        <Modal
-          title={"错误提示"}
-          transparent
-          onClose={()=>{
-            this.setState({visible:false})
-          }}
-          maskClosable
-          visible={visible}
-          closable
-          footer={[
-            {text:'确认',onPress:()=> {} },
-            {text:'取消',onPress:()=>{}}
-          ]}
-        >
-          <View style={{paddingLeft:12,marginTop:38,marginBottom:22}}>
-            <Text style={{fontSize:18}}>送检数量必须等于</Text>
-            <Text style={{fontSize:18}}>合格数+让步数+不合格数</Text>
-          </View>
-        </Modal>
-
-
-
-        <Modal
-          title={"错误提示"}
-          transparent
-          onClose={()=>{
-            this.setState({visible3:false})
-          }}
-          maskClosable
-          visible={visible3}
-          closable
-          footer={[
-            {text:'确认',onPress:()=> {} },
-            {text:'取消',onPress:()=>{}}
-          ]}
-        >
-          <View style={{paddingLeft:12,marginTop:38,marginBottom:22}}>
-            <Text style={{fontSize:18}}>让步接收时，合格品数量必须为0！</Text>
-            <Text style={{fontSize:18}}>有合格品时，不能让步接收！</Text>
-          </View>
-        </Modal>
-
 
 
         <View style={{marginTop:22}}>
@@ -264,30 +210,6 @@ class PageForm extends Component {
             
             <WisInput  
                 form={form} 
-                name="asnNo"               
-                {...getFieldProps('asnNo',{
-                    rules:[{required:false}],
-                    initialValue:asnNo
-                })} 
-                error={getFieldError('asnNo')}               
-                lableName="ASN号"
-                disabled
-            />
-
-            <WisInput  
-                form={form} 
-                name="batchNo"               
-                {...getFieldProps('batchNo',{
-                    rules:[{required:false}],
-                    initialValue:batchNo
-                })} 
-                error={getFieldError('batchNo')}               
-                lableName="批次号"
-                disabled
-            />
-
-            <WisInput  
-                form={form} 
                 name="supplier"               
                 {...getFieldProps('supplier',{
                     rules:[{required:false}],
@@ -300,99 +222,88 @@ class PageForm extends Component {
 
             <WisInput  
                 form={form} 
-                name="supplies"               
-                {...getFieldProps('supplies',{
+                name="supplierName"               
+                {...getFieldProps('supplierName',{
                     rules:[{required:false}],
-                    initialValue:supplies
+                    initialValue:supplierName
                 })} 
-                error={getFieldError('supplies')}               
-                lableName="物料"
+                error={getFieldError('supplierName')}               
+                lableName="供应商名"
                 disabled
             />
 
             <WisInput  
                 form={form} 
-                name="name"               
-                {...getFieldProps('name',{
+                name="part"               
+                {...getFieldProps('part',{
                     rules:[{required:false}],
-                    initialValue:name
+                    initialValue:part
                 })} 
-                error={getFieldError('name')}               
-                lableName="名称"
+                error={getFieldError('part')}               
+                lableName="零件号"
                 disabled
             />
 
             <WisInput  
                 form={form} 
-                name="inspectNum"               
-                {...getFieldProps('inspectNum',{
+                name="partName"               
+                {...getFieldProps('partName',{
                     rules:[{required:false}],
-                    initialValue:inspectNum
+                    initialValue:partName
                 })} 
-                error={getFieldError('inspectNum')}               
-                lableName="送检数量"
+                error={getFieldError('partName')}               
+                lableName="零件名称"
+                disabled
+            />
+
+            <WisInput  
+                form={form} 
+                name="number"               
+                {...getFieldProps('number',{
+                    rules:[{required:false}],
+                    initialValue:number
+                })} 
+                error={getFieldError('number')}               
+                lableName="上架数量"
+                disabled
+            />
+
+            <WisInput  
+                form={form} 
+                name="boxNum"               
+                {...getFieldProps('boxNum',{
+                    rules:[{required:false}],
+                    initialValue:boxNum
+                })} 
+                error={getFieldError('boxNum')}               
+                lableName="零件箱号"
                 disabled
             />
 
 
             <WisInput  
                 form={form} 
-                name="qualifiedNum"     
+                name="storage"     
                 type="number"
-                {...getFieldProps('qualifiedNum',{
+                {...getFieldProps('storage',{
                     rules:[{required:false}],
-                    initialValue:qualifiedNum
+                    initialValue:storage
                 })} 
-                error={getFieldError('qualifiedNum')}               
-                lableName="合格数"
+                error={getFieldError('storage')}               
+                lableName="推荐库位"
             />     
 
 
             <WisInput  
                 form={form} 
-                name="concessionNum"   
-                type="number"
-                {...getFieldProps('concessionNum',{
+                name="storageAffirm"               
+                {...getFieldProps('storageAffirm',{
                     rules:[{required:false}],
-                    initialValue:concessionNum
+                    initialValue:storageAffirm
                 })} 
-                error={getFieldError('concessionNum')}               
-                lableName="让步数"
-            />    
-
-            <WisInput  
-                form={form} 
-                name="concessionText"               
-                {...getFieldProps('concessionText',{
-                    rules:[{required:false}],
-                    initialValue:concessionText
-                })} 
-                error={getFieldError('concessionText')}               
-                lableName="让步说明"
+                error={getFieldError('storageAffirm')}               
+                lableName="确认库位"
             /> 
-
-            <WisInput  
-                form={form} 
-                type="number"
-                name="disqualificationNum"               
-                {...getFieldProps('disqualificationNum',{
-                    rules:[{required:false}],
-                    initialValue:disqualificationNum
-                })} 
-                error={getFieldError('disqualificationNum')}               
-                lableName="不合格数"
-            />       
-
-            <WisInput  
-                form={form} 
-                name="disqualificationText"               
-                {...getFieldProps('disqualificationText',{
-                    rules:[{required:false}],
-                    initialValue:disqualificationText
-                })} 
-                error={getFieldError('disqualificationText')}               
-                lableName="不合格原因"
-            />  
 
 
         </View>
@@ -405,7 +316,7 @@ class PageForm extends Component {
               <Button type="ghost" onPress={()=> this.passHandle() }>提 交</Button>          
             </Flex.Item>
             <Flex.Item style={{paddingLeft:6}}>
-              <Button type="ghost" onPress={()=>{ navigation.navigate("quality") } }>取 消</Button>          
+              <Button type="ghost" onPress={()=>{ navigation.navigate("putaway") } }>取 消</Button>          
             </Flex.Item>
           </Flex>
              
