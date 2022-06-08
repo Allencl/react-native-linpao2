@@ -39,7 +39,7 @@ import putawayDetailedAllScreen from './view_page/putaway/detailedAll.js';   // 
 import packagesScreen from './view_page/packages/index.js';   // 包装
 import packagesDetailedScreen from './view_page/packages/detailed.js';   // 包装 移库
 
-
+import transportScreen from './view_page/transport/index.js';   // 发运
 
 
 
@@ -339,9 +339,15 @@ class App extends Component {
             </Stack.Screen>             
 
             
+            <Stack.Screen name="transport" options={{title:'发运',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="transport" component={transportScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>           
+
             
-
-
 
 
 
