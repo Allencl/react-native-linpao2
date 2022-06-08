@@ -88,7 +88,9 @@ class PageForm extends Component {
    searchFunc=()=>{
     const {odd}=this.state;
     
-    console.log(odd)
+    // console.log(odd)
+    this.tableRef.initFunc();
+
     // console.log(  )
 
     // this.tableRef.initFunc({
@@ -98,20 +100,6 @@ class PageForm extends Component {
     // })
    }
 
-
-  /**
-   * 查看 行
-   * @param {*} value 
-   */
-   clickRow=(row)=>{
-
-    console.log(row)
-      this.setState({
-        visible:true,
-          rowData:row
-      })
-    // console.log(row)
-   }
 
   /**
    * 提交
@@ -295,7 +283,7 @@ class PageForm extends Component {
 
         <WisFlexTablePage
           RequestURL="wms/iqcTask/listNew"
-          Parames={{iqcStatus:'NA'}}
+          Parames={{showStatus:'1'}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-260}
           onRowClick={(row)=> navigation.navigate('qualityDetailed',{row:row}) }
@@ -306,7 +294,7 @@ class PageForm extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.iqcNo}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>零件号</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partNo}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.checkQty}</Text>

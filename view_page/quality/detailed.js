@@ -78,8 +78,8 @@ class PageForm extends Component {
         taskNo:row.iqcNo,
         asnNo:row.orderNo,
         batchNo:row.lotNo,
-        supplier:"",
-        supplies:"",
+        supplier:row.supplName,
+        supplies:row.partNo,
         name:row.partName,
         inspectNum:String(row.checkQty),
     
