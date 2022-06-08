@@ -27,7 +27,7 @@ class PageForm extends Component {
       odd:"",   // 单号
       visible:false,
 
-      tableList:[{},{}],
+      tableList:[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
     }
   }
 
@@ -103,11 +103,17 @@ class PageForm extends Component {
     const that=this;
     const {navigation} = this.props;
 
-
+    console.log("eerrtt")
   }  
 
 
-
+  /**
+   * 取消
+   * @returns 
+  */
+   cancelFunc=()=>{
+     console.log(1223)
+   }
 
 
   render() {
@@ -146,7 +152,7 @@ class PageForm extends Component {
               <TextInput
                 style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderBottomWidth:1}}
                 value={odd}
-                placeholder={"扫描或输入 送货单/批次号"}
+                placeholder={"扫描或输入拣货单号"}
                 onChangeText={text => that.setState({odd:text}) }
               /> 
             </Flex.Item>
@@ -166,8 +172,31 @@ class PageForm extends Component {
 
         <WisFlexTable
           // title="待收货列表"
-          // maxHeight={360}
+          maxHeight={height-360}
           data={tableList||[]}
+          renderHead={()=>{
+            return (
+              <Flex>
+                <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text></Text>
+                </Flex.Item>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <View>
+                    <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>箱号</Text>
+                  </View>
+                </Flex.Item>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
+                </Flex.Item>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>发运数量</Text>
+                </Flex.Item>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>物流单号</Text>
+                </Flex.Item>               
+              </Flex>
+            )
+          }}
           renderBody={(row,index)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex >
@@ -187,7 +216,16 @@ class PageForm extends Component {
           }}
         />
 
-
+        <View style={{marginTop:32,marginBottom:50}}>
+          <Flex>
+            <Flex.Item style={{paddingRight:6}}>
+              <Button type="ghost" onPress={()=> this.passHandle() }>提 交</Button>          
+            </Flex.Item>
+            <Flex.Item style={{paddingLeft:6}}>
+              <Button type="ghost" onPress={()=>{ this.cancelFunc() }}>取 消</Button>          
+            </Flex.Item>
+          </Flex>
+        </View>  
 
 
 

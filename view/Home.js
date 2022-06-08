@@ -49,7 +49,7 @@ class HomeScreen extends Component{
         AsyncStorage.getItem("login_type").then((option)=>{
             // Toast.offline(option,1);
             if( option !="in" ){
-                navigation.navigate('Login');
+                // navigation.navigate('Login');
             }else{
              
 

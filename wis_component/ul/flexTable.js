@@ -30,7 +30,7 @@ class TableComponent extends Component {
 
     render() {
         let that=this;
-        let {title='',data,renderBody,maxHeight=0,onCheckedAll} = this.props;
+        let {title='',data,renderHead,renderBody,maxHeight=0,onCheckedAll} = this.props;
         let {dataList,checkboxValue}=this.state;
 
         return (
@@ -62,6 +62,9 @@ class TableComponent extends Component {
                     :
                     <View></View>                
                 }
+
+                { renderHead ? <View style={{marginBottom:6}}>{ renderHead() }</View> : <View></View> }
+
 
                 <ScrollView style={maxHeight?{maxHeight:maxHeight}:{}}>
                     { (data || dataList).map((o,i)=>{
