@@ -39,7 +39,6 @@ class TableComponent extends Component {
         const {pageSize,page}=this.state;
         const {RequestURL,Parames}=this.props
 
-
         WISHttpUtils.get(RequestURL,{
             params:{
                 pageNum:page,

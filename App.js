@@ -38,8 +38,11 @@ import putawayDetailedAllScreen from './view_page/putaway/detailedAll.js';   // 
 
 import packagesScreen from './view_page/packages/index.js';   // 包装
 import packagesDetailedScreen from './view_page/packages/detailed.js';   // 包装 移库
-
 import transportScreen from './view_page/transport/index.js';   // 发运
+
+
+import orderPickingScreen from './view_page/orderPicking/index.js';   // 拣货
+
 
 
 
@@ -347,8 +350,14 @@ class App extends Component {
               )}            
             </Stack.Screen>           
 
+            <Stack.Screen name="orderPicking" options={{title:'拣货',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="orderPicking" component={orderPickingScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>             
             
-
 
 
             {/* <Stack.Screen name="malfunction" options={{title:'屏幕绑定',...headOption}}>

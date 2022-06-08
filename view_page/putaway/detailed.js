@@ -69,14 +69,14 @@ class PageForm extends Component {
     console.log(row)
     this.setState({
       taskNo:row.taskNo,       
-      supplier:'1',    
-      supplierName:'1',  
+      supplier:row.supplNo,    
+      supplierName:row.supplName,  
       part:row.partNo,        
       partName:row.partName,     
-      number:'1',     
-      boxNum:'1',     
-      storage:'1',   
-      storageAffirm:'1',   
+      number:String(row.taskQty),     
+      boxNum:row.lpnId,     
+      storage:row.dLocName,   
+      storageAffirm:'',   
     })
   }
 
@@ -313,10 +313,10 @@ class PageForm extends Component {
 
           <Flex>
             <Flex.Item style={{paddingRight:6}}>
-              <Button type="ghost" onPress={()=> this.passHandle() }>提 交</Button>          
+              <Button type="ghost" onPress={()=> this.passHandle() }>上架</Button>          
             </Flex.Item>
             <Flex.Item style={{paddingLeft:6}}>
-              <Button type="ghost" onPress={()=>{ navigation.navigate("putaway") } }>取 消</Button>          
+              <Button type="ghost" onPress={()=>{ navigation.navigate("putaway") } }>取消</Button>          
             </Flex.Item>
           </Flex>
              

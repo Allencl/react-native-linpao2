@@ -81,7 +81,7 @@ class PageForm extends Component {
    searchFunc=()=>{
     const {odd}=this.state;
     
-    // console.log(odd)
+    console.log(odd)
     // console.log(  )
 
     // this.tableRef.initFunc({

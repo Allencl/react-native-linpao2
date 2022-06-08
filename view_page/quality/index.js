@@ -89,15 +89,12 @@ class PageForm extends Component {
     const {odd}=this.state;
     
     // console.log(odd)
-    this.tableRef.initFunc();
+    this.tableRef.initFunc({
+      params:{
+        lotOrOrder:odd
+      }
+    });
 
-    // console.log(  )
-
-    // this.tableRef.initFunc({
-    //   params:{
-    //     lotNo:odd
-    //   }
-    // })
    }
 
 
