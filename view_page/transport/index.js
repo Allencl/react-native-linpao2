@@ -27,7 +27,7 @@ class PageForm extends Component {
       odd:"",   // 单号
       visible:false,
 
-      tableList:[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
+      tableList:[{id:1111},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{id:8888},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{id:5555}],
     }
   }
 
@@ -123,11 +123,12 @@ class PageForm extends Component {
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
     const {width, height, scale} = Dimensions.get('window');
     
+
     return (
-      <ScrollView style={{padding:8,backgroundColor:"#fff"}}>
+      <View style={{padding:8,backgroundColor:"#fff"}}>
 
         <Modal
-          title="检验完成"
+          title="发运确认"
           transparent
           onClose={()=>{
             this.setState({visible:false})
@@ -136,12 +137,14 @@ class PageForm extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=> {} },
+            {text:'确认',onPress:()=> {  this.passHandle() } },
             {text:'取消',onPress:()=>{}}
           ]}
         >
           <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
-
+            <View style={{paddingLeft:12,marginTop:28,marginBottom:22}}>
+              <Text style={{fontSize:18}}>确认发运？</Text>
+            </View>
           </ScrollView>
         </Modal>
        
@@ -167,12 +170,9 @@ class PageForm extends Component {
         </View>
 
 
-
-
-
         <WisFlexTable
           // title="待收货列表"
-          maxHeight={height-360}
+          maxHeight={height-340}
           data={tableList||[]}
           renderHead={()=>{
             return (
@@ -201,7 +201,7 @@ class PageForm extends Component {
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex >
                   <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lineno}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.id}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
@@ -219,7 +219,7 @@ class PageForm extends Component {
         <View style={{marginTop:32,marginBottom:50}}>
           <Flex>
             <Flex.Item style={{paddingRight:6}}>
-              <Button type="ghost" onPress={()=> this.passHandle() }>提 交</Button>          
+              <Button type="ghost" onPress={()=> this.setState({visible:true}) }>发运</Button>          
             </Flex.Item>
             <Flex.Item style={{paddingLeft:6}}>
               <Button type="ghost" onPress={()=>{ this.cancelFunc() }}>取 消</Button>          
@@ -231,7 +231,7 @@ class PageForm extends Component {
 
 
                 
-      </ScrollView>
+      </View>
     );
   }
 }

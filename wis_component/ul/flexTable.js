@@ -30,7 +30,7 @@ class TableComponent extends Component {
 
     render() {
         let that=this;
-        let {title='',data,renderHead,renderBody,maxHeight=0,onCheckedAll} = this.props;
+        let {title='',data,renderHead,renderBody,maxHeight=0,onCheckedAll,onRowClick} = this.props;
         let {dataList,checkboxValue}=this.state;
 
         return (
@@ -68,8 +68,16 @@ class TableComponent extends Component {
 
                 <ScrollView style={maxHeight?{maxHeight:maxHeight}:{}}>
                     { (data || dataList).map((o,i)=>{
-                        return renderBody(o,i)
+                        return <TouchableOpacity key={i} disabled={!onRowClick} onPress={() =>{ 
+                            onRowClick && onRowClick(o)
+                        }}>
+                            { renderBody(o,i) }
+                        </TouchableOpacity>   
                     })}
+
+
+
+
                 </ScrollView>
             </View>
         );
