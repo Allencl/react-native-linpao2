@@ -103,64 +103,29 @@ class PageForm extends Component {
         // }
       } else{
 
-        let _checkQty=Number(value.inspectNum);   // 送检数量
 
-        let _acceptsQty=Number((value.qualifiedNum).trim());   // 合格数
-        let _concessionQty=Number((value.concessionNum).trim());   // 让步数
-        let _unacceptsQty=Number((value.disqualificationNum).trim());  // 不合格数
-
-
-
-        // 让步接收时，合格品数量必须为 0
-        if(_acceptsQty && _concessionQty){
-          that.setState({visible3:true})
-          return
-        }
-
-
-        // 让步说明不能为空
-        if(_concessionQty && !((value.concessionText).trim())){
-          Toast.fail('让步说明不能为空！',1);
-          return
-        }
-
-        // 不合格原因不能为空
-        if(_unacceptsQty && !((value.disqualificationText).trim())){
-          Toast.fail('不合格原因不能为空！',1);
-          return
-        }
-
-
-        // 送检数量必须 = 合格数+让步数+不合格数
-        if(_checkQty != (_acceptsQty+_concessionQty+_unacceptsQty)){
-          that.setState({visible:true})
-          return
-        }
 
 
         let _json=Object.assign(row,{
-            acceptsQty:_acceptsQty,
-            concessionQty:_concessionQty,
-            concessionReason:value.concessionText,
-            unacceptsQty:_unacceptsQty,
-            unacceptsReason:value.disqualificationText
+
         })
 
+        console.log(_json)
 
-        WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
-          params:_json
-          // hideLoading:true
-        },(result) => {
-          let {code}=result;
+        // WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
+        //   params:_json
+        //   // hideLoading:true
+        // },(result) => {
+        //   let {code}=result;
 
-          if(code==200){
-            Toast.success("检验完成！",1);
+        //   if(code==200){
+        //     Toast.success("检验完成！",1);
 
-            navigation.navigate("quality");
-            DeviceEventEmitter.emit('globalEmitter_update_quality_table');
-          }
+        //     navigation.navigate("quality");
+        //     DeviceEventEmitter.emit('globalEmitter_update_quality_table');
+        //   }
 
-        });  
+        // });  
 
       }
   });
