@@ -24,7 +24,10 @@ class Page extends Component {
 
 
     this.state={
-      visible:false
+      visible:false,
+      visible2:false,
+      visible3:false,
+
 
     }
 
@@ -55,26 +58,32 @@ class Page extends Component {
 
 
   /**
-   * 响应
+   * 拣货
    * @returns 
   */
-  responseFunc=()=>{
-    console.log('响应')
+  orderPickingFunc =()=>{
+    let {navigation,form} = this.props;
+
+    navigation.navigate("logisticWorker");
+    console.log('拣货')
   } 
 
 
   /**
-   * 刷新
+   * 取消响应
    * @returns 
   */
-  refreshFunc=()=>{
-    console.log('刷新')
+   responseCancel=()=>{
+    let {navigation,form} = this.props;
+
+    navigation.navigate("cancelResponse");
+
   }
 
 
   render() {
     let that=this;
-    let {visible}=this.state;
+    let {visible,visible2,visible3}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -95,16 +104,19 @@ class Page extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=> {  this.responseFunc()  } },
+            {text:'确认',onPress:()=> {  this.responseCancel()  } },
             {text:'取消',onPress:()=>{}}
           ]}
         >
           <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
             <View style={{paddingLeft:12,marginTop:18,marginBottom:22}}>
-              <Text style={{fontSize:18}}>确认进行响应操作？？</Text>
+              <Text style={{fontSize:18}}>确认取消响应操作？</Text>
             </View>
           </ScrollView>
         </Modal>
+
+
+
 
 
         <Flex>
@@ -112,13 +124,18 @@ class Page extends Component {
             <Text style={{fontSize:32,textAlign:'center'}}>278</Text>
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingRight:6}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> {} }><Text style={{fontSize:14}}>拣货</Text></Button>          
+            <Button style={{height:36}} type="ghost" onPress={()=> {
+              this.orderPickingFunc()
+
+            }}><Text style={{fontSize:14}}>拣货</Text></Button>          
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:6}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> {} }><Text style={{fontSize:14}}>小车拣货</Text></Button>          
+            <Button style={{height:36}} type="ghost" onPress={()=>{
+              navigation.navigate("carBinding");
+            }}><Text style={{fontSize:14}}>小车拣货</Text></Button>          
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:6}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> {} }><Text style={{fontSize:14}}>取消响应</Text></Button>          
+            <Button style={{height:36}} type="ghost" onPress={()=>{ this.setState({visible:true}) }}><Text style={{fontSize:14}}>取消响应</Text></Button>          
           </Flex.Item>
         </Flex>
 

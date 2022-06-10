@@ -112,10 +112,10 @@ class Page extends Component {
             <Text style={{fontSize:32,textAlign:'center'}}>278</Text>
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingRight:6}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> this.setState({visible:true}) }><Text style={{fontSize:14}}>响应</Text></Button>          
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible:true})  } }><Text style={{fontSize:14}}>响应</Text></Button>  
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:6}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> this.refreshFunc() }><Text style={{fontSize:14}}>刷新</Text></Button>          
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.refreshFunc()  } }><Text style={{fontSize:14}}>刷新</Text></Button>  
           </Flex.Item>
         </Flex>
 

@@ -107,11 +107,14 @@ class Page extends Component {
           </View>
           <View>
             <SoldOutPage 
+              navigation={navigation}
               onRef={(ref)=>{this.SoldOutPagePage=ref}}
             />
           </View>
           <View>
             <RecheckPage 
+              navigation={navigation}
+              onRef={(ref)=>{this.RecheckPage=ref}}
             />
           </View>
         </Tabs> 

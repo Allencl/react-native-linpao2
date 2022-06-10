@@ -15,7 +15,7 @@ import {WisTableCross,WisFlexTable} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
 
 
-// 拣货 下架
+// 小车拣货
 class Page extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +24,10 @@ class Page extends Component {
 
 
     this.state={
-      visible:false
+      visible:false,
+      visible2:false,
+      visible3:false,
+
 
     }
 
@@ -55,19 +58,26 @@ class Page extends Component {
 
 
   /**
-   * 移至复核区
+   * 响应
    * @returns 
   */
-  moveFunc=()=>{
-    console.log('移至复核区')
+  responseFunc=()=>{
+    console.log('响应')
   } 
 
 
+  /**
+   * 刷新
+   * @returns 
+  */
+  refreshFunc=()=>{
+    this.tableRef.initFunc();
+  }
 
 
   render() {
     let that=this;
-    let {visible}=this.state;
+    let {visible,visible2,visible3}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -75,7 +85,7 @@ class Page extends Component {
 
 
     return (
-      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:16}}>
+      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:16,backgroundColor:'#fff'}}>
 
 
         <Modal
@@ -88,22 +98,84 @@ class Page extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=> {  this.responseFunc()  } },
-            {text:'取消',onPress:()=>{}}
+            {text:'确认',onPress:()=> { }},
+            {text:'取消',onPress:()=>{ }}
           ]}
         >
           <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
             <View style={{paddingLeft:12,marginTop:18,marginBottom:22}}>
-              <Text style={{fontSize:18}}>确认进行响应操作？？</Text>
+              <Text style={{fontSize:18}}>开始拣货？</Text>
             </View>
           </ScrollView>
         </Modal>
 
 
+        <Modal
+          title="确认"
+          transparent
+          onClose={()=>{
+            this.setState({visible2:false})
+          }}
+          maskClosable
+          visible={visible2}
+          closable
+          footer={[
+            {text:'确认',onPress:()=> { }},
+            {text:'取消',onPress:()=>{ }}
+          ]}
+        >
+          <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
+            <View style={{paddingLeft:12,marginTop:18,marginBottom:22}}>
+              <Text style={{fontSize:18}}>切换小车？</Text>
+            </View>
+          </ScrollView>
+        </Modal>
 
+        <Modal
+          title="确认"
+          transparent
+          onClose={()=>{
+            this.setState({visible3:false})
+          }}
+          maskClosable
+          visible={visible3}
+          closable
+          footer={[
+            {text:'确认',onPress:()=> { }},
+            {text:'取消',onPress:()=>{ }}
+          ]}
+        >
+          <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
+            <View style={{paddingLeft:12,marginTop:18,marginBottom:22}}>
+              <Text style={{fontSize:18}}>移动至复核区？</Text>
+            </View>
+          </ScrollView>
+        </Modal>
+
+        <Flex style={{marginBottom:16}}>
+          <Flex.Item>
+            <Text>小车号或器具号: 0111</Text>
+          </Flex.Item>
+          <Flex.Item>
+            <Text style={{textAlign:'right'}}>已拣行数: 2</Text>
+          </Flex.Item>          
+        </Flex>
+
+
+        <Flex style={{marginBottom:12}}>
+          <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible:true})   }}><Text style={{fontSize:14}}>开始拣货</Text></Button>  
+          </Flex.Item>
+          <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible2:true})  }}><Text style={{fontSize:14}}>切换小车</Text></Button>  
+          </Flex.Item>
+          <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible3:true}) }}><Text style={{fontSize:14}}>移动至复核区</Text></Button>  
+          </Flex.Item>
+        </Flex>
 
         <WisFlexTable
-          title="已完成下架任务行记录"
+          title="待收货列表"
           // maxHeight={360}
           data={[{},{},{}]}
           onRef={(ref)=>{ this.tableRef=ref }}
@@ -122,7 +194,7 @@ class Page extends Component {
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
                 </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>计划数量</Text>
                 </Flex.Item>
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
@@ -134,7 +206,7 @@ class Page extends Component {
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
-                  <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <View>
                       <Checkbox
                         checked={row._checked}
@@ -147,42 +219,25 @@ class Page extends Component {
                     </View>
                   </Flex.Item>                
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.packageTaskNo}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
-                  </Flex.Item>       
-                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left',textAlign:'right'}}>{(row.taskStatus=="0")?'待移库':'未知'}</Text>
+                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'零件'}</Text>
+                  </Flex.Item>     
+                  <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskPickingNumber}</Text>
+                  </Flex.Item>    
+                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickingMsg}</Text>
                   </Flex.Item>                               
               </Flex>
-              <Flex>
-                <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{' '}</Text>
-                </Flex.Item>  
-                <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.qty}</Text>
-                </Flex.Item>   
-                <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.ddLoc}</Text>
-                </Flex.Item>  
-                <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.inboundBatch}</Text>
-                </Flex.Item>                                        
-                </Flex>
+
             </View>
             )
           }}
         />
 
-        <Flex style={{marginBottom:12}}>
-          <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> {  this.moveFunc()   }}><Text style={{fontSize:14}}>移至复核区</Text></Button>  
-          </Flex.Item>
-          <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> {   }}><Text style={{fontSize:14}}>取消</Text></Button>  
-          </Flex.Item>
-        </Flex>
+
 
 
       </ScrollView>

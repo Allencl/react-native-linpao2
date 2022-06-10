@@ -225,17 +225,6 @@ class HomeScreen extends Component{
 
                                 <View style={styles.flexBoxCol}>
                                     <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('transport') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
-                                                <Text style={styles.menu_child_text}>发运</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>  
-
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
                                         <TouchableOpacity onPress={() => this.authority('orderPicking') }>
                                             <View style={styles.menu_child}>
                                                 <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
@@ -245,7 +234,16 @@ class HomeScreen extends Component{
                                     </View>
                                 </View>
 
-                                
+                                <View style={styles.flexBoxCol}>
+                                    <View style={styles.flexBoxColChild}>
+                                        <TouchableOpacity onPress={() => this.authority('transport') }>
+                                            <View style={styles.menu_child}>
+                                                <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
+                                                <Text style={styles.menu_child_text}>发运</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>                                  
                                                                                         
                             </View>
                                  

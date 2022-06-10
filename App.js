@@ -42,6 +42,10 @@ import transportScreen from './view_page/transport/index.js';   // 发运
 
 
 import orderPickingScreen from './view_page/orderPicking/index.js';   // 拣货
+import logisticWorkerScreen from './view_page/orderPicking/logisticWorker.js';   // 配货员 拣货
+import carBindingScreen from './view_page/orderPicking/binding.js';   // 绑定小车
+import cardPickingScreen from './view_page/orderPicking/cardPicking.js';   // 小车拣货
+import cancelResponseScreen from './view_page/orderPicking/cancelResponse.js';   // 取消响应
 
 
 
@@ -356,8 +360,44 @@ class App extends Component {
                   <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="orderPicking" component={orderPickingScreen} />
                 </Tab.Navigator>
               )}            
-            </Stack.Screen>             
+            </Stack.Screen>       
+            <Stack.Screen name="logisticWorker" options={{title:'拣货-配货员拣货',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="logisticWorker" component={logisticWorkerScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>   
+            <Stack.Screen name="carBinding" options={{title:'小车拣货-绑定小车',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="carBinding" component={carBindingScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>   
+            <Stack.Screen name="cardPicking" options={{title:'小车拣货',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="cardPicking" component={cardPickingScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>   
+            <Stack.Screen name="cancelResponse" options={{title:'拣货下架-取消响应',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="cancelResponse" component={cancelResponseScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>  
             
+            
+
+            
+
+
+
+
+
 
 
             {/* <Stack.Screen name="malfunction" options={{title:'屏幕绑定',...headOption}}>

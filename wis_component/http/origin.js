@@ -3,7 +3,10 @@ module.exports = {
 
     // origin:"http://saimo-wms.natapp1.cc/",   // 零跑测试 服务器地址  
 
-    origin:"http://10.6.12.31/dev-api/",   // 零跑测试 服务器地址  2
+    // origin:"http://10.6.12.31/dev-api/",   // 零跑测试 服务器地址  2
+
+    origin:"http://101.34.72.122:8188/stage-api/",   // 零跑测试 服务器地址  3
+
 
 
     // origin:"http://58.34.47.130:10946/",   // 大金测试环境 服务器地址
