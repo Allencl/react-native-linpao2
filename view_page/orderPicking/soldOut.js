@@ -104,7 +104,7 @@ class Page extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=> {  this.responseCancel()  } },
+            {text:'确认',onPress:()=> {    } },
             {text:'取消',onPress:()=>{}}
           ]}
         >
@@ -135,7 +135,7 @@ class Page extends Component {
             }}><Text style={{fontSize:14}}>小车拣货</Text></Button>          
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:6}}>
-            <Button style={{height:36}} type="ghost" onPress={()=>{ this.setState({visible:true}) }}><Text style={{fontSize:14}}>取消响应</Text></Button>          
+            <Button style={{height:36}} type="ghost" onPress={()=>{ this.responseCancel() }}><Text style={{fontSize:14}}>取消响应</Text></Button>          
           </Flex.Item>
         </Flex>
 

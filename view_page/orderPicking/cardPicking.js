@@ -75,6 +75,39 @@ class Page extends Component {
   }
 
 
+  /**
+   * 开始拣货 
+   * @returns 
+   */
+  beginFunc=()=>{
+    const {navigation,form} = this.props;
+
+    navigation.navigate("logisticWorker2");
+  }
+
+  /**
+   * 切换 小车   
+   * @returns 
+   */
+   changeCardFunc=()=>{
+    const {navigation,form} = this.props;
+
+    navigation.navigate("carBinding");
+  }
+
+  /**
+   * 移动至  复核区
+   * @returns 
+  */
+  moveFunc=()=>{
+    const {navigation,form} = this.props;
+
+    navigation.navigate("orderPicking");
+    DeviceEventEmitter.emit('globalEmitter_orderPicking_change_tabsPage',2);
+
+  }
+
+
   render() {
     let that=this;
     let {visible,visible2,visible3}=this.state;
@@ -164,13 +197,13 @@ class Page extends Component {
 
         <Flex style={{marginBottom:12}}>
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible:true})   }}><Text style={{fontSize:14}}>开始拣货</Text></Button>  
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.beginFunc()   }}><Text style={{fontSize:14}}>开始拣货</Text></Button>  
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible2:true})  }}><Text style={{fontSize:14}}>切换小车</Text></Button>  
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.changeCardFunc()  }}><Text style={{fontSize:14}}>切换小车</Text></Button>  
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible3:true}) }}><Text style={{fontSize:14}}>移动至复核区</Text></Button>  
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.moveFunc() }}><Text style={{fontSize:14}}>移动至复核区</Text></Button>  
           </Flex.Item>
         </Flex>
 

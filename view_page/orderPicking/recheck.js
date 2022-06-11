@@ -88,13 +88,13 @@ class Page extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=> {  this.responseFunc()  } },
+            {text:'确认',onPress:()=> {   this.moveFunc()  } },
             {text:'取消',onPress:()=>{}}
           ]}
         >
           <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
             <View style={{paddingLeft:12,marginTop:18,marginBottom:22}}>
-              <Text style={{fontSize:18}}>确认进行响应操作？？</Text>
+              <Text style={{fontSize:18}}>确认移至复检区？</Text>
             </View>
           </ScrollView>
         </Modal>
@@ -177,7 +177,7 @@ class Page extends Component {
 
         <Flex style={{marginBottom:12}}>
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> {  this.moveFunc()   }}><Text style={{fontSize:14}}>移至复核区</Text></Button>  
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible:true})   }}><Text style={{fontSize:14}}>移至复核区</Text></Button>  
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
             <Button style={{height:36}} type="ghost" onPress={()=> {   }}><Text style={{fontSize:14}}>取消</Text></Button>  

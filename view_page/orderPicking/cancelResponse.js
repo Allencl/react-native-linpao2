@@ -62,8 +62,25 @@ class Page extends Component {
    * @returns 
   */
   responseFunc=()=>{
-    console.log('确定')
+    // console.log('确定')
+
+    this.setState({visible:true})
   } 
+
+
+  /**
+   * 确定 
+   * @returns 
+  */
+   responseSubmitFunc=()=>{
+    let {navigation,form} = this.props;
+
+    // console.log('确定')
+
+    // this.setState({visible:true})
+    navigation.navigate("orderPicking");
+
+  }   
 
 
   /**
@@ -99,13 +116,13 @@ class Page extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=> { }},
+            {text:'确认',onPress:()=> { this.responseSubmitFunc() }},
             {text:'取消',onPress:()=>{ }}
           ]}
         >
           <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
             <View style={{paddingLeft:12,marginTop:18,marginBottom:22}}>
-              <Text style={{fontSize:18}}>开始拣货？</Text>
+              <Text style={{fontSize:18}}>取消响应？</Text>
             </View>
           </ScrollView>
         </Modal>

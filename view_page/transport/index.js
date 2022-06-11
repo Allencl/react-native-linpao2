@@ -61,9 +61,7 @@ class PageForm extends Component {
       // }
 
       // console.log(_key)
-      that.props.form.setFieldsValue({
-        odd:key,
-      });
+      that.setState({odd:key})
 
     });
 

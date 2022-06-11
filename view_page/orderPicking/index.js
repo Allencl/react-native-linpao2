@@ -42,13 +42,23 @@ class Page extends Component {
 
   }
 
-  componentWillUnmount(){
-
-  }
 
   componentDidMount(){
-   
+    const that=this;
+
+
+    // 改变 tabs page
+    this.changeTabsPage =DeviceEventEmitter.addListener('globalEmitter_orderPicking_change_tabsPage',function(index){
+
+      index && that.setState({tabsPage:index})
+    });
   }
+
+  componentWillUnmount(){
+    this.changeTabsPage.remove();
+  }
+
+
 
 
 
@@ -60,19 +70,19 @@ class Page extends Component {
       const {baseCofig}=this.state;
 
       // console.log(index)
-      // // this.setState({
-      // //   tabsPage:index
-      // // });
+      this.setState({
+        tabsPage:index
+      });
 
-      // 待移库
-      if(index==0){
-        this.awaitPageRef.initPage();
-      }
+      // // 待移库
+      // if(index==0){
+      //   this.awaitPageRef.initPage();
+      // }
 
-      // 包装中
-      if(index==1){
-        this.SoldOutPagePage.initPage();
-      }
+      // // 包装中
+      // if(index==1){
+      //   this.SoldOutPagePage.initPage();
+      // }
 
    }
 
@@ -93,10 +103,12 @@ class Page extends Component {
 
     return ( show ?
       <View style={{height:height,backgroundColor:"#fff"}}>
-        <Tabs tabs={tabs} 
+        <Tabs 
+          page={tabsPage}
+          tabs={tabs} 
           animated={false}
           onChange={(obj,index)=>{
-            // this.tabsChange(index)
+            this.tabsChange(index)
           }}
         >
           <View>

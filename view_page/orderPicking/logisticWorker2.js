@@ -148,8 +148,8 @@ class PageForm extends Component {
     // console.log("下架完成")
     const {navigation,form} = this.props;
 
-    navigation.navigate("orderPicking");
-    DeviceEventEmitter.emit('globalEmitter_orderPicking_change_tabsPage',2);
+    navigation.navigate("cardPicking");
+    // DeviceEventEmitter.emit('globalEmitter_orderPicking_change_tabsPage',2);
 
    }
 
@@ -282,7 +282,7 @@ class PageForm extends Component {
               <Button type="ghost" onPress={()=> this.nextArticleHandle() }>下一条</Button>          
             </Flex.Item>
             <Flex.Item style={{paddingLeft:6}}>
-              <Button type="ghost" onPress={()=>{ this.accomplishFunc() }}>下架完成</Button>          
+              <Button type="ghost" onPress={()=>{ this.accomplishFunc() }}>小车拣配完成</Button>          
             </Flex.Item>
           </Flex>
              

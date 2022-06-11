@@ -42,13 +42,22 @@ class PageForm extends Component {
   componentDidMount(){
     let that=this;
 
-    // this.initFunc();
+
+    // 监听扫码枪
+    this.honeyWell=DeviceEventEmitter.addListener('globalEmitter_honeyWell',function(key=""){
+
+      // console.log(_key)
+      that.props.form.setFieldsValue({
+        code:_key,
+      });
+
+    });
 
   }
 
 
   componentWillUnmount(){
-
+    this.honeyWell.remove();
   }
 
 
