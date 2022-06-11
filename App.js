@@ -56,6 +56,12 @@ import shiftingStandardScreen from './view_page/shiftingStandard/index.js';   //
 import shiftingStandardDetailedScreen from './view_page/shiftingStandard/detailed.js';   // 标准移库 详情
 
 
+import examineScreen from './view_page/examine/index.js';   // 复核 
+import partScreen from './view_page/examine/part.js';   // 零件标签页 
+import logisticsScreen from './view_page/examine/logistics.js';   // 物料信息 
+import logisticsNumScreen from './view_page/examine/logisticsNum.js';   // 输入物流编号 
+import shipmentsScreen from './view_page/examine/shipments.js';   // 输入物流编号 
+
 
 
 
@@ -406,10 +412,44 @@ class App extends Component {
 
             
 
+            <Stack.Screen name="examine" options={{title:'复核',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="examine" component={examineScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>  
+            <Stack.Screen name="part" options={{title:'零件扫描',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="part" component={partScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>             
+            <Stack.Screen name="logistics" options={{title:'录入包装和物流信息',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="logistics" component={logisticsScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>   
+            <Stack.Screen name="logisticsNum" options={{title:'输入物流编号',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="logisticsNum" component={logisticsNumScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>   
+            <Stack.Screen name="shipments" options={{title:'请指定发货区存放库位',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="shipments" component={shipmentsScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>  
 
-
-
-
+            
+            
 
 
             {/* <Stack.Screen name="malfunction" options={{title:'屏幕绑定',...headOption}}>
