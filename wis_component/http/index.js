@@ -486,7 +486,7 @@ export default class WISHttpUtils extends Component{
 
 
                 fetch(origin+url,{
-                    method:'POST',
+                    method:option.method||'POST',
                     mode:"cors",
                     headers:{
                         'Content-Type': 'application/json',

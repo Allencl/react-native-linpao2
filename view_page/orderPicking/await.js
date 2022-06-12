@@ -24,7 +24,9 @@ class Page extends Component {
 
 
     this.state={
-      visible:false
+      visible:false,
+
+      pageTotal:0,   // 总数
 
     }
 
@@ -55,11 +57,36 @@ class Page extends Component {
 
 
   /**
+   * 获取 选中数据
+   */
+  getSelectTableData=()=>{
+    return this.tableRef.getSelectData();
+  }
+
+
+  /**
    * 响应
    * @returns 
   */
   responseFunc=()=>{
-    console.log('响应')
+    const that=this;
+    const _selectData=this.tableRef.getSelectData();
+
+
+    WISHttpUtils.post("wms/pickingTask/pickingTaskResponse",{
+      method:"PUT",
+      params:_selectData
+      // hideLoading:true
+    },(result) => {
+      let {code}=result;
+
+      if(code==200){
+        Toast.success("响应完成！",1);
+        that.tableRef.initFunc();
+      }
+
+    });  
+
   } 
 
 
@@ -74,7 +101,7 @@ class Page extends Component {
 
   render() {
     let that=this;
-    let {visible}=this.state;
+    let {visible,pageTotal}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -109,10 +136,17 @@ class Page extends Component {
 
         <Flex>
           <Flex.Item style={{flex:3}}>
-            <Text style={{fontSize:32,textAlign:'center'}}>278</Text>
+            <Text style={{fontSize:32,textAlign:'center'}}>{pageTotal}</Text>
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingRight:6}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible:true})  } }><Text style={{fontSize:14}}>响应</Text></Button>  
+            <Button style={{height:36}} type="ghost" onPress={()=> {   
+              const _selectData=this.tableRef.getSelectData();
+              if(!_selectData.length){
+                Toast.success("请选择数据！",1);
+                return
+              }
+              this.setState({visible:true})
+            }}><Text style={{fontSize:14}}>响应</Text></Button>  
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:6}}>
             <Button style={{height:36}} type="ghost" onPress={()=> { this.refreshFunc()  } }><Text style={{fontSize:14}}>刷新</Text></Button>  
@@ -124,6 +158,10 @@ class Page extends Component {
           Parames={{taskStatus:0}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-376}
+          onInitHandle={(result)=>{
+            this.setState({pageTotal:result.total})
+            // console.log(result.total)
+          }}
           renderHead={()=>{
             return (
               <Flex>
@@ -166,10 +204,10 @@ class Page extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'零件'}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
                   </Flex.Item>     
                   <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskPickingNumber}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{"未知"}</Text>
                   </Flex.Item>    
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickingMsg}</Text>

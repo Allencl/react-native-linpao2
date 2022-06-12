@@ -29,6 +29,10 @@ class Page extends Component {
       visible3:false,
 
 
+      pageTotal:0,   // 总数
+
+
+
     }
 
   }
@@ -52,7 +56,21 @@ class Page extends Component {
   /**
    * 初始化
    */
-   initPage=()=>{
+   initPage=(data=[])=>{
+    // let _json=data[0];
+
+    // WISHttpUtils.post("wms/pickingTask/selPickOffTheShelfStatus",{
+    //   params:_json
+    //   // hideLoading:true
+    // },(result) => {
+    //   let {code}=result;
+
+    //   if(code==200){
+    //     console.log(result)
+
+    //   }
+
+    // });  
 
    }
 
@@ -63,9 +81,37 @@ class Page extends Component {
   */
   orderPickingFunc =()=>{
     let {navigation,form} = this.props;
+    let _selectData= this.tableRef.getSelectData();
 
-    navigation.navigate("logisticWorker");
-    console.log('拣货')
+    if(!_selectData.length){
+      Toast.offline("未选择数据！",1);
+      return
+    }
+
+    if(_selectData.length>1){
+      Toast.offline("只能选择一条数据！",1);
+      return
+    }
+
+
+
+    WISHttpUtils.post("wms/pickingTask/selPickOffTheShelfStatus",{
+      params:_selectData[0]
+      // hideLoading:true
+    },(result) => {
+      let {code}=result;
+
+      if(code==200){
+        navigation.navigate("logisticWorker",{
+          row:_selectData[0]
+        });
+      }
+
+    });  
+
+    
+    
+
   } 
 
 
@@ -83,7 +129,7 @@ class Page extends Component {
 
   render() {
     let that=this;
-    let {visible,visible2,visible3}=this.state;
+    let {visible,visible2,visible3,pageTotal}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -121,7 +167,7 @@ class Page extends Component {
 
         <Flex>
           <Flex.Item style={{flex:3}}>
-            <Text style={{fontSize:32,textAlign:'center'}}>278</Text>
+            <Text style={{fontSize:32,textAlign:'center'}}>{pageTotal}</Text>
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingRight:6}}>
             <Button style={{height:36}} type="ghost" onPress={()=> {
@@ -138,12 +184,18 @@ class Page extends Component {
             <Button style={{height:36}} type="ghost" onPress={()=>{ this.responseCancel() }}><Text style={{fontSize:14}}>取消响应</Text></Button>          
           </Flex.Item>
         </Flex>
+        <View style={{height:12}}></View>
+
 
         <WisFlexTablePage
-          RequestURL="wms/packageTask/list"
-          Parames={{taskStatus:0}}
+          RequestURL="wms/pickingTask/list"
+          Parames={{taskStatus:10}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-376}
+          onInitHandle={(result)=>{
+            this.setState({pageTotal:result.total})
+            // console.log(result.total)
+          }}
           renderHead={()=>{
             return (
               <Flex>
@@ -158,11 +210,11 @@ class Page extends Component {
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
                 </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>计划数量</Text>
                 </Flex.Item>
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货单</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货库位</Text>
                 </Flex.Item>             
               </Flex>
             )
@@ -170,7 +222,7 @@ class Page extends Component {
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
-                  <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <View>
                       <Checkbox
                         checked={row._checked}
@@ -183,29 +235,19 @@ class Page extends Component {
                     </View>
                   </Flex.Item>                
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.packageTaskNo}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
-                  </Flex.Item>       
-                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left',textAlign:'right'}}>{(row.taskStatus=="0")?'待移库':'未知'}</Text>
+                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
+                  </Flex.Item>     
+                  <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{"未知"}</Text>
+                  </Flex.Item>    
+                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'未知'}</Text>
                   </Flex.Item>                               
               </Flex>
-              <Flex>
-                <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{' '}</Text>
-                </Flex.Item>  
-                <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.qty}</Text>
-                </Flex.Item>   
-                <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.ddLoc}</Text>
-                </Flex.Item>  
-                <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.inboundBatch}</Text>
-                </Flex.Item>                                        
-                </Flex>
+
             </View>
             )
           }}

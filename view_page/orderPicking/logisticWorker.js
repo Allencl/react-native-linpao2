@@ -62,16 +62,18 @@ class PageForm extends Component {
    * @param {*} value 
    */
   initFunc=()=>{
-    // const {}=this.props.route.params.routeParams;
+    const {row={}}=this.props.route.params.routeParams;
 
-    // console.log(row)
+    console.log(row)
     this.setState({
-      code:"1",  
-      name:"1",   
-      planNum:"1",  
-      orderNum:"1", 
-      storage:"1",  
-      realStorage:"1",  
+      code:row.partNo,  
+      name:row.partName,   
+      planNum:String(row.taskPickingNumber),  
+      orderNum:String(row.taskPickingNumber),  
+      storage:row.locPName,  
+      // realStorage:"", 
+      realStorage:row.locPName,  
+
     })
   }
 
@@ -145,11 +147,56 @@ class PageForm extends Component {
    * @returns 
   */
    accomplishFunc=()=>{
-    // console.log("下架完成")
     const {navigation,form} = this.props;
+    const {row={}}=this.props.route.params.routeParams;
 
-    navigation.navigate("orderPicking");
-    DeviceEventEmitter.emit('globalEmitter_orderPicking_change_tabsPage',2);
+
+    this.props.form.validateFields((error, value) => {
+      // 表单 不完整
+      if(error){
+        // Toast.fail('必填字段未填！');
+        // console.log(error)
+
+        if(!value["realStorage"]){
+          Toast.fail('实际拣货库位不能为空！',1);
+          return
+        }
+      } else{
+        let _realStorage=value["realStorage"].trim();
+
+        if(value.storage != _realStorage){
+          Toast.fail('实际拣货库位必须与推荐库位一致！',1);
+          return
+        }
+
+        let _json=Object.assign(row,{
+            confirmLoc:_realStorage,
+        })
+
+
+        WISHttpUtils.post("wms/pickingTask/updataPKOffTheShelf",{
+          params:_json
+          // hideLoading:true
+        },(result) => {
+          let {code}=result;
+
+          if(code==200){
+            Toast.success("下架完成！",1);
+
+            navigation.navigate("orderPicking");
+            DeviceEventEmitter.emit('globalEmitter_orderPicking_change_tabsPage',2);
+          }
+
+        });  
+
+
+
+
+      }
+    });
+
+
+
 
    }
 
@@ -263,7 +310,7 @@ class PageForm extends Component {
               requiredSign={true}
               name="realStorage"               
               {...getFieldProps('realStorage',{
-                  rules:[{required:false}],
+                  rules:[{required:true}],
                   initialValue:realStorage
               })} 
               error={getFieldError('realStorage')}               

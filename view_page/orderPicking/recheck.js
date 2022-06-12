@@ -11,7 +11,7 @@ import CheckBox from '@react-native-community/checkbox';
 
 
 import WISHttpUtils from '@wis_component/http'; 
-import {WisTableCross,WisFlexTable} from '@wis_component/ul';
+import {WisTableCross,WisFlexTablePage} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
 
 
@@ -102,10 +102,10 @@ class Page extends Component {
 
 
 
-        <WisFlexTable
+        <WisFlexTablePage
           title="已完成下架任务行记录"
-          // maxHeight={360}
-          data={[{},{},{}]}
+          RequestURL="wms/pickingTask/list"
+          Parames={{taskStatus:15}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-376}
           renderHead={()=>{
@@ -147,7 +147,7 @@ class Page extends Component {
                     </View>
                   </Flex.Item>                
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.packageTaskNo}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>

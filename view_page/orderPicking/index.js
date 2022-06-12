@@ -69,10 +69,28 @@ class Page extends Component {
    tabsChange=(index)=>{
       const {baseCofig}=this.state;
 
-      // console.log(index)
+
       this.setState({
         tabsPage:index
       });
+
+
+      // // 拣货下架
+      // if(index==1){
+      //   let _selectData=this.awaitPageRef.getSelectTableData();
+
+      //   if(!_selectData.length){
+      //     Toast.offline("拣货响应，未选择数据！",1);
+      //   }
+
+      //   if(_selectData.length>1){
+      //     Toast.offline("拣货响应，只能选择一条数据！",1);
+      //   }
+
+      //   if(_selectData.length==1){
+      //     this.SoldOutPagePage.initPage(_selectData)
+      //   }
+      // }
 
       // // 待移库
       // if(index==0){
@@ -107,8 +125,14 @@ class Page extends Component {
           page={tabsPage}
           tabs={tabs} 
           animated={false}
-          onChange={(obj,index)=>{
+          onTabClick={(obj,index)=>{
             this.tabsChange(index)
+          }}
+          onChange={(obj,index)=>{
+            // console.log(obj)
+            // console.log(index)
+
+            // this.tabsChange(index)
           }}
         >
           <View>

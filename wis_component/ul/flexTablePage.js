@@ -37,7 +37,15 @@ class TableComponent extends Component {
     initFunc=(option={})=>{
         const that=this;
         const {pageSize,page}=this.state;
-        const {RequestURL,Parames}=this.props
+        const {RequestURL,Parames,onInitHandle}=this.props
+
+
+        // console.log({
+        //     pageNum:page,
+        //     pageSize:pageSize,
+        //     ...Parames,
+        //     ...option.params
+        // })
 
         WISHttpUtils.get(RequestURL,{
             params:{
@@ -51,6 +59,7 @@ class TableComponent extends Component {
             const {total=0,rows=[]}=result;
 
             // console.log(result)
+            onInitHandle && onInitHandle(result);
 
             that.setState({
                 total:total,
