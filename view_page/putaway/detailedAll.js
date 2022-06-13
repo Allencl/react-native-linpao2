@@ -60,23 +60,21 @@ class PageForm extends Component {
   initFunc=()=>{
     const {rows=[]}=this.props.route.params.routeParams;
 
-    console.log(rows)
-    // this.setState({
-    //   warehouse:"1", 
-    //   reservoir:"1",   
-    //   storage:"1",   
- 
-    // })
+    this.setState({
+      warehouse:rows[0]["dBasStorageId"], 
+      reservoir:rows[0]["dBasDlocId"],  
+      storage:"",   
+    })
   }
 
 
   /**
    * 提交
    */
-  passHandle=()=>{
+   passHandle=()=>{
     const that=this;
     const {navigation} = this.props;
-    const {row={}}=this.props.route.params.routeParams;
+    const {rows=[]}=this.props.route.params.routeParams;
 
 
 
@@ -86,74 +84,45 @@ class PageForm extends Component {
         // Toast.fail('必填字段未填！');
         // console.log(error)
 
-        // if(!value["odd"]){
-        //   Toast.fail('收货单号不能为空！');
-        //   return
-        // }
+        if(!value["storage"]){
+          Toast.fail('上架库位不能为空！');
+          return
+        }
       } else{
 
-        let _checkQty=Number(value.inspectNum);   // 送检数量
 
-        let _acceptsQty=Number((value.qualifiedNum).trim());   // 合格数
-        let _concessionQty=Number((value.concessionNum).trim());   // 让步数
-        let _unacceptsQty=Number((value.disqualificationNum).trim());  // 不合格数
-
-
-
-        // 让步接收时，合格品数量必须为 0
-        if(_acceptsQty && _concessionQty){
-          that.setState({visible3:true})
-          return
-        }
-
-
-        // 让步说明不能为空
-        if(_concessionQty && !((value.concessionText).trim())){
-          Toast.fail('让步说明不能为空！',1);
-          return
-        }
-
-        // 不合格原因不能为空
-        if(_unacceptsQty && !((value.disqualificationText).trim())){
-          Toast.fail('不合格原因不能为空！',1);
-          return
-        }
+        let _jsonList=rows.map(o=>Object.assign({
+          ttMmTaskId:o.ttMmTaskId,
+          taskQty:o.taskQty,
+          ddStorageId:o.dBasStorageId,
+          ddBasDlocId:o.dBasDlocId,
+          ddBasLocId:o.dBasLocId,
+          aaStorageId:o.dBasStorageId,
+          aaBasDlocId:o.dBasDlocId,
+          aaBasLocId: value["storage"].trim(),
+          version:o.version
+        }));
 
 
-        // 送检数量必须 = 合格数+让步数+不合格数
-        if(_checkQty != (_acceptsQty+_concessionQty+_unacceptsQty)){
-          that.setState({visible:true})
-          return
-        }
-
-
-        let _json=Object.assign(row,{
-            acceptsQty:_acceptsQty,
-            concessionQty:_concessionQty,
-            concessionReason:value.concessionText,
-            unacceptsQty:_unacceptsQty,
-            unacceptsReason:value.disqualificationText
-        })
-
-
-        WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
-          params:_json
+        WISHttpUtils.post("wms/mmTask/moveTask",{
+          params:_jsonList
           // hideLoading:true
         },(result) => {
           let {code}=result;
 
           if(code==200){
-            Toast.success("检验完成！",1);
+            Toast.success("批量上架完成！",1);
 
-            navigation.navigate("quality");
-            DeviceEventEmitter.emit('globalEmitter_update_quality_table');
+            navigation.navigate("putaway");
+            DeviceEventEmitter.emit('globalEmitter_update_putaway_table');
           }
 
         });  
 
       }
-  });
+    });
   }  
+
 
 
 
@@ -206,9 +175,10 @@ class PageForm extends Component {
 
             <WisInput  
                 form={form} 
-                name="storage"               
+                name="storage"       
+                requiredSign={true}
                 {...getFieldProps('storage',{
-                    rules:[{required:false}],
+                    rules:[{required:true}],
                     initialValue:storage
                 })} 
                 error={getFieldError('storage')}               

@@ -37,25 +37,31 @@ class PageForm extends Component {
   }
 
   componentDidMount(){
-    let that=this;
+    const that=this;
 
 
     this.getWarehouseFunc();   // 获取仓库
-
-
-    that.getCompanyList()  // 获取所有公司
-    that.getOrderType()   // 获取所有 订单类型
-    that.getTakeType()   // 获取所有 收货类型
-    that.getUnits()      // 获取 所有单位
+    this.initFunc();
 
   }
 
 
   componentWillUnmount(){
 
+    this.getWarehouseFunc();   // 获取仓库
+    this.initFunc();
+
   }
 
-
+  /**
+   * 初始化
+   */
+  initFunc=()=>{
+    this.getCompanyList()  // 获取所有公司
+    this.getOrderType()   // 获取所有 订单类型
+    this.getTakeType()   // 获取所有 收货类型
+    this.getUnits()      // 获取 所有单位
+  }
 
 
     /**
@@ -77,9 +83,12 @@ class PageForm extends Component {
             // console.log(result)
 
             that.setState({
-                list:rows
+                list:[]
+            },()=>{
+                that.setState({
+                    list:rows
+                })
             })
-
         })
 
 
@@ -195,7 +204,7 @@ class PageForm extends Component {
             },
             // hideLoading:true
         },(result)=>{
-            // console.log(result)
+            console.log(result)
 
             const {rows=[]}=result;
             AsyncStorage.setItem("buffer_company_list",JSON.stringify(rows));     
@@ -244,7 +253,7 @@ class PageForm extends Component {
                             <Icon name="cloud" color="#ffad33"/>
                         </Flex.Item>
                         <Flex.Item style={{flex:6}}>
-                            <Text numberOfLines={1} style={{fontSize:15,paddingLeft:8}}>{o.storageName}</Text>
+                            <Text numberOfLines={1} style={{fontSize:15,paddingLeft:8}}>{`${o.storageNo}${o.storageName}`}</Text>
                         </Flex.Item>
                     </Flex>
                 </TouchableOpacity>

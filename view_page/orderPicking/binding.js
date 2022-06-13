@@ -81,7 +81,7 @@ class PageForm extends Component {
 
 
   /**
-   * 确定
+   * 绑定校验
   */
    confirmHandle=()=>{
     const that=this;
@@ -98,9 +98,9 @@ class PageForm extends Component {
           Toast.fail('小车编号不能为空！',1);
           return
         }
-      } else{
-
-        navigation.navigate("cardPicking");
+      } else{ 
+        
+        // navigation.navigate("cardPicking");
 
         // let _json=Object.assign(row,{
         //     acceptsQty:_acceptsQty,
@@ -110,28 +110,66 @@ class PageForm extends Component {
         //     unacceptsReason:value.disqualificationText
         // })
 
+        // console.log(55555);
 
-        // WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
-        //   params:_json
-        //   // hideLoading:true
-        // },(result) => {
-        //   let {code}=result;
+        WISHttpUtils.get(`wms/appliance/appBindingSelect/${value["code"].trim()}`,{
+          params:{
+            // carUtensilNo:value["code"].trim()
+          }
+          // hideLoading:true
+        },(result) => {
+          let {stateCode,data}=result;
 
-        //   if(code==200){
-        //     Toast.success("检验完成！",1);
 
-        //     navigation.navigate("quality");
-        //     DeviceEventEmitter.emit('globalEmitter_update_quality_table');
-        //   }
 
-        // });  
+
+
+          if(stateCode==20){
+            Toast.fail(`[${value["code"]}]已被其他人绑定了！`,1);
+          }
+
+          if(stateCode==10 || stateCode==30){
+            that.bindingCard(data);
+          }
+
+        });  
 
       }
     });
   }  
 
 
+  /**
+   * 绑定
+   * @returns 
+   */
+   bindingCard=(result={})=>{
+    const {data=[]}=this.props.route.params.routeParams;
+    let {navigation,form} = this.props;
 
+
+    
+    
+    WISHttpUtils.post("wms/pickingTask/bdApplianceSelect",{
+      method:"PUT",
+      params:{
+        pickings:data,  //[选中列表数据]
+        appliance:result,  // 返回的数据
+      }
+      // hideLoading:true
+    },(result) => {
+      let {code}=result;
+
+      // console.log(77777);
+      // console.log(result);
+
+      if(code==200){
+        Toast.success("绑定完成！",1);
+        navigation.navigate("cardPicking");
+      }
+
+    });     
+   }
 
 
   render() {
@@ -158,7 +196,7 @@ class PageForm extends Component {
                   rules:[{required:true}],
                   initialValue:code
               })} 
-              placeholder="扫描或录入编码"
+              placeholder="扫描或输入编码"
               error={getFieldError('code')}               
               lableName="小车号"
               

@@ -66,7 +66,7 @@ class PageForm extends Component {
   initFunc=()=>{
     const {row={}}=this.props.route.params.routeParams;
 
-    console.log(row)
+    // console.log(row)
     this.setState({
       taskNo:row.taskNo,       
       supplier:row.supplNo,    
@@ -97,38 +97,43 @@ class PageForm extends Component {
         // Toast.fail('必填字段未填！');
         // console.log(error)
 
-        // if(!value["odd"]){
-        //   Toast.fail('收货单号不能为空！');
-        //   return
-        // }
+        if(!value["storageAffirm"]){
+          Toast.fail('确认库位不能为空！');
+          return
+        }
       } else{
 
 
-
-
-        let _json=Object.assign(row,{
-
+        let _json=Object.assign({
+          ttMmTaskId:row.ttMmTaskId,
+          taskQty:row.taskQty,
+          ddStorageId:row.dBasStorageId,
+          ddBasDlocId:row.dBasDlocId,
+          ddBasLocId:row.dBasLocId,
+          aaStorageId:row.dBasStorageId,
+          aaBasDlocId:row.dBasDlocId,
+          aaBasLocId: value["storageAffirm"].trim(),
+          version:row.version
         })
 
-        console.log(_json)
 
-        // WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
-        //   params:_json
-        //   // hideLoading:true
-        // },(result) => {
-        //   let {code}=result;
+        WISHttpUtils.post("wms/mmTask/moveTask",{
+          params:[_json]
+          // hideLoading:true
+        },(result) => {
+          let {code}=result;
 
-        //   if(code==200){
-        //     Toast.success("检验完成！",1);
+          if(code==200){
+            Toast.success("上架完成！",1);
+            
+            navigation.navigate("putaway");
+            DeviceEventEmitter.emit('globalEmitter_update_putaway_table');
+          }
 
-        //     navigation.navigate("quality");
-        //     DeviceEventEmitter.emit('globalEmitter_update_quality_table');
-        //   }
-
-        // });  
+        });  
 
       }
-  });
+    });
   }  
 
 
@@ -261,11 +266,13 @@ class PageForm extends Component {
 
             <WisInput  
                 form={form} 
-                name="storageAffirm"               
+                name="storageAffirm" 
+                requiredSign={true}
                 {...getFieldProps('storageAffirm',{
-                    rules:[{required:false}],
+                    rules:[{required:true}],
                     initialValue:storageAffirm
                 })} 
+                placeholder="请输入或扫描"
                 error={getFieldError('storageAffirm')}               
                 lableName="确认库位"
             /> 

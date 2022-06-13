@@ -399,7 +399,7 @@ export default class WISHttpUtils extends Component{
                         }
 
 
-                        if(code==200){
+                        if(code==200 || code==undefined){
                             callback(json);
                         }else{
                             Toast.offline(`[${code}]${msg}`,1);
@@ -520,7 +520,7 @@ export default class WISHttpUtils extends Component{
                 .then((json) => {
                     const {code,msg}=json;
 
-                    // console.log(1111)
+                    // console.log(option["params"])
                     // console.log(json)
 
                     // 关闭 loding
@@ -551,7 +551,7 @@ export default class WISHttpUtils extends Component{
                 })
                 .catch(error => {
                     // console.log(error.message)
-                    Toast.offline('服务器响应失败！',1);
+                    // Toast.offline('服务器响应失败！',1);
                     // 关闭 loding
                     DeviceEventEmitter.emit('globalEmitter_toggle_loding',false);
                 });                

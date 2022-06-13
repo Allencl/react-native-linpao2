@@ -44,6 +44,12 @@ class PageForm extends Component {
     let that=this;
 
 
+    this.updateTable=DeviceEventEmitter.addListener('globalEmitter_update_putaway_table',function(key=""){
+      that.tableRef.initFunc();
+    });
+
+
+
     // 监听扫码枪
     this.honeyWell=DeviceEventEmitter.addListener('globalEmitter_honeyWell',function(key=""){
 
@@ -71,6 +77,8 @@ class PageForm extends Component {
 
   componentWillUnmount(){
     this.honeyWell.remove();
+    this.updateTable.remove();
+
   }
 
 
@@ -83,6 +91,7 @@ class PageForm extends Component {
     
     console.log(odd)
     // console.log(  )
+    this.tableRef.initFunc();
 
     // this.tableRef.initFunc({
     //   params:{
@@ -104,6 +113,14 @@ class PageForm extends Component {
 
     if(!_selectData.length){
       Toast.fail('请至少选择一条数据！',1);
+      return
+    }
+
+
+    let _dBasStorageId=_selectData.map(o=>o.dBasStorageId);
+
+    if(Array.from(new Set(_dBasStorageId)).length>1){
+      Toast.fail('必须是同一仓库！',1);
       return
     }
 

@@ -122,7 +122,29 @@ class Page extends Component {
    responseCancel=()=>{
     let {navigation,form} = this.props;
 
+    
     navigation.navigate("cancelResponse");
+
+  }
+
+
+  /**
+   * 小车 拣货
+   * @returns 
+   */
+  cardOrderPicking=()=>{
+    let {navigation,form} = this.props;
+    let _selectData= this.tableRef.getSelectData();
+
+
+    if(!_selectData.length){
+      Toast.offline("未选择数据！",1);
+      return
+    }
+
+    navigation.navigate("carBinding",{
+      data:_selectData
+    });
 
   }
 
@@ -177,7 +199,7 @@ class Page extends Component {
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:6}}>
             <Button style={{height:36}} type="ghost" onPress={()=>{
-              navigation.navigate("carBinding");
+              this.cardOrderPicking();
             }}><Text style={{fontSize:14}}>小车拣货</Text></Button>          
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:6}}>
