@@ -245,10 +245,10 @@ class PageForm extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.supplName}</Text>
                   </Flex.Item>       
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{''}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.dBasLocId}</Text>
                   </Flex.Item> 
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{''}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskQty}</Text>
                   </Flex.Item>                               
               </Flex>
             </View>
