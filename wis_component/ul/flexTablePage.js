@@ -157,12 +157,12 @@ class TableComponent extends Component {
                                 <Icon style={{fontSize:26}} name="left-circle" />
                             </TouchableOpacity>
                         </Flex.Item>
-                        <Flex.Item style={{flex:1}}>
+                        <Flex.Item style={{flex:1,paddingLeft:8}}>
                             <TouchableOpacity onPress={() =>  that.pageChange(true) }>
                                 <Icon style={{fontSize:26}} name="right-circle" />
                             </TouchableOpacity>
                         </Flex.Item>
-                        <Flex.Item style={{flex:10}}>
+                        <Flex.Item style={{flex:8,marginLeft:8}}>
                             <Text style={{fontSize:15}}>{` 第${page}页 共${total}条`}</Text>
                         </Flex.Item>                  
                     </Flex>

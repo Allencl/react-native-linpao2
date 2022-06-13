@@ -332,10 +332,10 @@ public class MainApplication extends Application implements ReactApplication {
     // }
 
     //构造BluetoothTransferClient实例
-    bluetoothTransferClient = new BluetoothTransferClient(this, clientProgressCallback);
+    // bluetoothTransferClient = new BluetoothTransferClient(this, clientProgressCallback);
 
     //构造获取BluetoothLEManager实例
-    bluetoothLEManager = BluetoothLEManager.getInstance(this);
+    // bluetoothLEManager = BluetoothLEManager.getInstance(this);
     // bluetoothLEManager.prepareForScanForDevices(this);
 
   }

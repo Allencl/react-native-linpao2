@@ -68,7 +68,7 @@ class CenterPage extends React.Component {
             </View>
           </View>
 
-          <View style={{paddingTop:12}}>
+          {/* <View style={{paddingTop:12}}>
             <TouchableOpacity onPress={()=>{
               navigation.navigate("password");
             }}>
@@ -77,7 +77,7 @@ class CenterPage extends React.Component {
                 <Icon style={styles.btnIcon} name="right" size="sm" />
               </View>
             </TouchableOpacity>        
-          </View>
+          </View> */}
 
 
           <View style={{paddingTop:12}}>
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
     flexDirection:'column',
     // justifyContent:'center',
     backgroundColor:"#1890ff",    
-    height:350,
-    paddingTop:39  
+    height:260,
+    // paddingTop:19  
   },
   imgBox:{
     flexDirection:'row',
