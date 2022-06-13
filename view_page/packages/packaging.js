@@ -250,24 +250,29 @@ class Page extends Component {
                       </Checkbox>
                     </View>
                   </Flex.Item>                
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:18,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.packageTaskNo}</Text>
-                  </Flex.Item>
-                  <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
-                  </Flex.Item>       
+                  </Flex.Item>      
                   <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left',textAlign:'right'}}>{(row.taskStatus=="5")?'包装中':'未知'}</Text>
                   </Flex.Item>                               
               </Flex>
               <Flex>
+                <Flex.Item style={{flex:2}}>
+                  <Text></Text>
+                </Flex.Item>
+                <Flex.Item style={{flex:19,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
+                </Flex.Item> 
+              </Flex>
+              <Flex>
                 <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{' '}</Text>
                 </Flex.Item>  
-                <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.qty}</Text>
+                <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.qty)}</Text>
                 </Flex.Item>   
-                <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.ddLoc}</Text>
                 </Flex.Item>  
                 <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
@@ -292,7 +297,7 @@ class Page extends Component {
               }}>包装完成</Button> 
             </Flex.Item>  
             <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-            <Button type="ghost" onPress={()=> this.setState({visible2:true}) }>标签打印</Button> 
+              <Button type="ghost" onPress={()=> this.setState({visible2:true}) }>标签打印</Button> 
             </Flex.Item>                                         
           </Flex>                 
         </View> 

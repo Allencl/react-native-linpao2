@@ -287,20 +287,23 @@ class PageForm extends Component {
           renderBody={(row,index)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
-                  <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:10,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.iqcNo}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:10,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partNo}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:4,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.checkQty}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'right'}}>{row.checkQty}</Text>
                   </Flex.Item>       
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lotNo}</Text>
-                  </Flex.Item>                               
+                             
               </Flex>
-              <View style={{height:6}}></View>
+              <Flex>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lotNo}</Text>
+                </Flex.Item>  
+              </Flex>
+
               <Flex>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
@@ -308,8 +311,8 @@ class PageForm extends Component {
                   <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.orderNo}</Text>
                   </Flex.Item>  
-                  <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:8,flexDirection:"row",justifyContent:'flex-end'}}>
-                    <Icon style={{fontSize:24}} name="right" />
+                  <Flex.Item style={{flex:1,flexDirection:'row-reverse',paddingBottom:5,paddingLeft:2,paddingRight:0}}>
+                      <Icon style={{fontSize:24}} name="right" />
                   </Flex.Item>
               </Flex>
             </View>
