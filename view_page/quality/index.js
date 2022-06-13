@@ -279,8 +279,8 @@ class PageForm extends Component {
 
 
         <WisFlexTablePage
-          RequestURL="mmTask/listByTaskStatus"
-          // Parames={{showStatus:'1'}}
+          RequestURL="wms/iqcTask/listNew"
+          Parames={{showStatus:'1'}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-260}
           onRowClick={(row)=> navigation.navigate('qualityDetailed',{row:row}) }
