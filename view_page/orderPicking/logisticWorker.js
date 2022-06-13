@@ -68,8 +68,8 @@ class PageForm extends Component {
     this.setState({
       code:row.partNo,  
       name:row.partName,   
-      planNum:String(row.taskPickingNumber),  
-      orderNum:String(row.taskPickingNumber),  
+      planNum:String(row.taskPickingNumber||0),  
+      orderNum:String(row.taskPickingNumber||0),  
       storage:row.locPName,  
       // realStorage:"", 
       realStorage:row.locPName,  
