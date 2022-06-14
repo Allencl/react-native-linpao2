@@ -24,8 +24,8 @@ class PageForm extends Component {
     super(props);
 
     this.state={
-        visible:false,  
-        visible3:false,
+      visible:false,  
+      visible3:false,
 
 
       taskNo:"",  // 任务号

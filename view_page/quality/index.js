@@ -262,16 +262,26 @@ class PageForm extends Component {
               <TextInput
                 style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderBottomWidth:1}}
                 value={odd}
-                placeholder={"扫描或输入 送货单/批次号"}
+                placeholder={"请扫描或输入 送货单/批次号"}
                 onChangeText={text => that.setState({odd:text}) }
               /> 
             </Flex.Item>
             <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
-
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({odd:""});
+                this.tableRef.initFunc({
+                  params:{
+                    lotOrOrder:""
+                  }
+                });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+            </Flex.Item>
+            <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
               <TouchableOpacity onPress={() =>  that.searchFunc() }>
                 <Icon style={{fontSize:22,color:'blue'}} name="search" />
               </TouchableOpacity>
-
             </Flex.Item>
           </Flex>
         </View>

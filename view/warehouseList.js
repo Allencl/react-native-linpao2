@@ -24,7 +24,7 @@ class PageForm extends Component {
     super(props);
 
     this.state={
-        list:[],  // 仓库
+      list:[],  // 仓库
     }
   }
 
@@ -48,8 +48,8 @@ class PageForm extends Component {
 
   componentWillUnmount(){
 
-    this.getWarehouseFunc();   // 获取仓库
-    this.initFunc();
+    // this.getWarehouseFunc();   // 获取仓库
+    // this.initFunc();
 
   }
 
@@ -204,7 +204,7 @@ class PageForm extends Component {
             },
             // hideLoading:true
         },(result)=>{
-            console.log(result)
+            // console.log(result)
 
             const {rows=[]}=result;
             AsyncStorage.setItem("buffer_company_list",JSON.stringify(rows));     
