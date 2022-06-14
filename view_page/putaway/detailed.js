@@ -272,7 +272,7 @@ class PageForm extends Component {
                     rules:[{required:true}],
                     initialValue:storageAffirm
                 })} 
-                placeholder="请输入或扫描"
+                placeholder="请输入或扫描 库位"
                 error={getFieldError('storageAffirm')}               
                 lableName="确认库位"
             /> 
