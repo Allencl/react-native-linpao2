@@ -74,7 +74,15 @@ class Page extends Component {
   searchFunc=()=>{
     const {no}=this.state;
     
-    console.log(no)
+    // console.log(123321)  // lotOrOrder
+    // console.log(no)
+
+    this.tableRef.initFunc({
+      params:{
+        lotOrOrder:no
+      }
+    });
+
   }
 
 

@@ -89,9 +89,16 @@ class PageForm extends Component {
    searchFunc=()=>{
     const {odd}=this.state;
     
-    console.log(odd)
+    // console.log(odd)
     // console.log(  )
-    this.tableRef.initFunc();
+    // this.tableRef.initFunc();
+
+    this.tableRef.initFunc({
+      params:{
+        lotAndPartNo:odd.trim()
+      }
+    });
+
 
     // this.tableRef.initFunc({
     //   params:{

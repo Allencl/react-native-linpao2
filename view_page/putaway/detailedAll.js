@@ -167,7 +167,8 @@ class PageForm extends Component {
                     rules:[{required:false}],
                     initialValue:reservoir
                 })} 
-                error={getFieldError('reservoir')}               
+                error={getFieldError('reservoir')}   
+                placeholder="请输入或扫描"
                 lableName="上架库区"
                 disabled
             />
