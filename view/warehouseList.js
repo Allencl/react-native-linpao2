@@ -79,9 +79,6 @@ class PageForm extends Component {
 
             const {rows=[],code}=result
 
-            // Toast.offline(code,1);
-            // console.log(result)
-
             that.setState({
                 list:[]
             },()=>{
@@ -130,7 +127,10 @@ class PageForm extends Component {
                     let _list=(data[0]["children"])||[];
                     AsyncStorage.setItem("menu_buffer_list",JSON.stringify(_list));
 
-                    navigation.navigate('Home');    
+                    Toast.success("进入首页！",1);
+                    setTimeout(()=>{
+                      navigation.navigate('Home'); 
+                    },500)   
                 }      
         })
     }

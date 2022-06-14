@@ -86,13 +86,16 @@ class InputComponent extends Component{
                     }
                 }}               
             >
-                { requiredSign ? 
-                    <Text>
-                        <Text style={{color:"#ed4014"}}>*</Text>
+                { lableName ?  
+                    requiredSign ? 
+                        <Text>
+                            <Text style={{color:"#ed4014"}}>*</Text>
+                            <Text style={{fontSize:15,color:"#000000d9"}}>{lableName}</Text>
+                        </Text>
+                        :
                         <Text style={{fontSize:15,color:"#000000d9"}}>{lableName}</Text>
-                    </Text>
                     :
-                    <Text style={{fontSize:15,color:"#000000d9"}}>{lableName}</Text>
+                    ""
                 }
             </InputItem>
         );

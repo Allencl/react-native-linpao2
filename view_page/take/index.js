@@ -151,9 +151,9 @@ class PageForm extends Component {
               rules:[{required:true }],
               initialValue:odd
             })} 
-            error={getFieldError('odd')}   
-            placeholder="请扫描或输入单号"            
-            lableName="收货单号"
+            error={getFieldError('odd')}  
+            placeholder="请扫描或输入 收货单号"            
+            // lableName="收货单号"
           />  
 
 

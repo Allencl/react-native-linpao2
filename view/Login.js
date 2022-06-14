@@ -111,8 +111,11 @@ class LoginScreenForm extends React.Component {
               AsyncStorage.setItem("login_type","in");
             });
 
+            Toast.success("登录成功！",1);
             
-            navigation.navigate('WarehouseList');    
+            setTimeout(()=>{
+              navigation.navigate('WarehouseList');    
+            },600)
 
             // navigation.navigate('Home');    
             // DeviceEventEmitter.emit('globalEmitter_get_menu');
