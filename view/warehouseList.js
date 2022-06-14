@@ -249,7 +249,7 @@ class PageForm extends Component {
             { (list||[]).map((o,i)=>{
                 return (<TouchableOpacity key={String(i)} onPress={() =>  this.getMenuFunc(o) }>
                     <Flex style={{marginTop:8,marginBottom:8,paddingTop:12,paddingBottom:12,borderColor:'#1890ff',borderWidth:1,borderRadius:4}}>
-                        <Flex.Item style={{flex:3,flexDirection:"row",justifyContent:'flex-end'}}>
+                        <Flex.Item style={{flex:1,flexDirection:"row",justifyContent:'flex-end'}}>
                             <Icon name="cloud" color="#ffad33"/>
                         </Flex.Item>
                         <Flex.Item style={{flex:6}}>

@@ -178,55 +178,55 @@ class PageForm extends Component {
             />
 
 
-            <View style={{paddingTop:15}}>
+            <View style={{paddingTop:2}}>
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
                   <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>ASN:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData._basicData?.asnNo}</Text>
+                  <Text style={{flex:6,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData._basicData?.asnNo}</Text>
                 </Flex.Item>
               </Flex>
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
                   <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>行号:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.lineno}</Text>
+                  <Text style={{flex:6,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.lineno}</Text>
                 </Flex.Item>
               </Flex>
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
                   <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>物料:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.partNo}</Text>
+                  <Text style={{flex:6,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.partNo}</Text>
                 </Flex.Item>
               </Flex>
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
                   <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>名称:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.partName}</Text>
+                  <Text style={{flex:6,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.partName}</Text>
                 </Flex.Item>
               </Flex>
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
                   <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>单位:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData._unitName}</Text>
+                  <Text style={{flex:6,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData._unitName}</Text>
                 </Flex.Item>
               </Flex>
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
                   <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>计划数量:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receiveQty}</Text>
+                  <Text style={{flex:6,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receiveQty}</Text>
                 </Flex.Item>
               </Flex>
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
                   <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>已收数量:</Text>
-                  <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receivedQty}</Text>
+                  <Text style={{flex:6,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receivedQty}</Text>
                 </Flex.Item>
               </Flex>
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>收货数量:</Text>
+                  <Text style={{flex:2,paddingRight:8,paddingTop:6,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>收货数量:</Text>
                   <TextInput
                     editable={!false}
-                    style={{flex:7,height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
+                    style={{flex:6,height:38,marginBottom:6,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
                     value={String(rowData._takeNumber)}
                     keyboardType={"numeric"}
                     onChangeText={text => that.takeChangeText(text)}
@@ -237,12 +237,12 @@ class PageForm extends Component {
               </Flex>
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>待检库位:</Text>
-                  <View style={{flex:7,}}>
+                  <Text style={{flex:2,paddingRight:8,marginTop:6,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>待检库位:</Text>
+                  <View style={{flex:6,marginBottom:5}}>
                     <TouchableOpacity onPress={() =>{ 
                       that.selectReservoirFunc()
                     }}>
-                      <Text style={{fontSize:16,paddingTop:2,paddingBottom:2,paddingLeft:6,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}} numberOfLines={1}>{rowData._reservoirName}</Text>
+                      <Text style={{fontSize:16,paddingTop:6,paddingBottom:6,paddingLeft:6,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}} numberOfLines={1}>{rowData._reservoirName}</Text>
                     </TouchableOpacity>
                   </View>
                 </Flex.Item>  
@@ -262,7 +262,7 @@ class PageForm extends Component {
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
                   <Text style={{flex:2,paddingRight:8,marginBottom:8,paddingTop:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>LPN:</Text>
-                  <View style={{flex:7,}}>
+                  <View style={{flex:6,marginBottom:4}}>
                     <TextInput
                       style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
                       value={rowData._LPN}
@@ -277,7 +277,7 @@ class PageForm extends Component {
             </View>
 
 
-            <Flex style={{marginBottom:12,marginTop:26}}>
+            <Flex style={{marginBottom:32,marginTop:26}}>
               <Flex.Item style={{flex:2}}>
                 <Button 
                   style={{height:46}} 

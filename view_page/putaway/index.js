@@ -204,7 +204,7 @@ class PageForm extends Component {
           RequestURL="wms/mmTask/list"
           Parames={{taskByStatus:'1'}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-326}
+          maxHeight={height-306}
           // onRowClick={(row)=> navigation.navigate('putawayDetailed',{row:row}) }
           // renderHead={()=>{
           //   return (
@@ -235,7 +235,7 @@ class PageForm extends Component {
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{paddingTop:4,paddingBottom:4,marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
-                  <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <View>
                       <Checkbox
                         checked={row._checked}
@@ -270,18 +270,13 @@ class PageForm extends Component {
               </Flex>
               <View style={{height:2}}></View>
               <Flex>
-                <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1}></Text>
-                </Flex.Item>
+
                 <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
                 </Flex.Item>
               </Flex>
               <View style={{height:2}}></View>
               <Flex>
-                <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1}></Text>
-                </Flex.Item>
                 <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.supplName}</Text>
                 </Flex.Item> 

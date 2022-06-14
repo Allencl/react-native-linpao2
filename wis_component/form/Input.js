@@ -51,13 +51,13 @@ class InputComponent extends Component{
     render() {
         let that=this;
         let {toggleEye,value}=this.state;
-        const {requiredSign=false,form={},name='',type="text",defaultValue='',onChangeValue,lableName,disabled,required=false}=this.props;
+        const {requiredSign=false,form={},labelNumber=5,name='',type="text",defaultValue='',onChangeValue,lableName,disabled,required=false}=this.props;
         let{getFieldError,getFieldValue}=form;
 
         return (
             <InputItem
                 value={(getFieldValue?getFieldValue(name):value) || defaultValue}
-                labelNumber={6}
+                labelNumber={labelNumber}
                 placeholder={disabled?"":"请输入..."}
    
                 {...this.props}

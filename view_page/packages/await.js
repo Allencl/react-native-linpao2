@@ -123,8 +123,7 @@ class Page extends Component {
 
 
     return (
-      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:16}}>
-
+      <View style={{paddingLeft:8,paddingRight:8,paddingTop:16}}>
         <View>
           <Flex>
             <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
@@ -162,11 +161,11 @@ class Page extends Component {
           RequestURL="wms/packageTask/list"
           Parames={{taskStatus:0}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-376}
+          // maxHeight={height-176}
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
-                  <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:4,paddingLeft:2,paddingRight:2}}>
                     <View>
                       <Checkbox
                         checked={row._checked}
@@ -182,35 +181,32 @@ class Page extends Component {
                     <Text>{row.sheetNo}</Text>
                   </Flex.Item> 
 
-                  <Flex.Item style={{flex:18,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:18,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.packageTaskNo}</Text>
                   </Flex.Item>
-      
-                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left',textAlign:'right'}}>{(row.taskStatus=="0")?'待移库':'未知'}</Text>
-                  </Flex.Item>                               
+                                
               </Flex>
               <Flex>
-                <Flex.Item style={{flex:2}}>
-                  <Text></Text>
-                </Flex.Item>
                 <Flex.Item style={{flex:19,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
                 </Flex.Item> 
               </Flex>
               <Flex>
-                <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{' '}</Text>
-                </Flex.Item>  
                 <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.qty)}</Text>
                 </Flex.Item>   
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.ddLoc}</Text>
                 </Flex.Item>  
+                                      
+                </Flex>
+                <Flex>
                 <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.inboundBatch}</Text>
-                </Flex.Item>                                        
+                </Flex.Item>  
+                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left',textAlign:'right'}}>{(row.taskStatus=="0")?'待移库':'未知'}</Text>
+                  </Flex.Item>   
                 </Flex>
             </View>
             )
@@ -222,7 +218,7 @@ class Page extends Component {
           <Button type="ghost" onPress={()=> this.passHandle() }>移 库</Button>          
         </View> 
 
-      </ScrollView>
+      </View>
     );
   }
 }

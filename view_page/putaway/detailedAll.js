@@ -85,7 +85,7 @@ class PageForm extends Component {
         // console.log(error)
 
         if(!value["storage"]){
-          Toast.fail('上架库位不能为空！');
+          Toast.fail('上架库位不能为空！',1);
           return
         }
       } else{
