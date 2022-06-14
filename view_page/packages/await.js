@@ -177,7 +177,11 @@ class Page extends Component {
                       >
                       </Checkbox>
                     </View>
-                  </Flex.Item>                
+                  </Flex.Item>  
+                  <Flex.Item style={{flex:12}}>
+                    <Text>{row.sheetNo}</Text>
+                  </Flex.Item> 
+
                   <Flex.Item style={{flex:18,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.packageTaskNo}</Text>
                   </Flex.Item>

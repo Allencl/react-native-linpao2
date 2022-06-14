@@ -24,6 +24,8 @@ class PageForm extends Component {
     super(props);
 
     this.state={
+      warehouseName:"",   // 仓库名
+
       warehouse:[],    // 仓库
       reservoir:[],    // 库区
       storage:[],     // 库位
@@ -66,6 +68,8 @@ class PageForm extends Component {
   */
   getWarehouseFunc=()=>{
     const that=this;
+    const {data=[]}=this.props.route.params.routeParams;
+
 
     WISHttpUtils.get('wms/storage/list',{
       params:{
@@ -74,10 +78,19 @@ class PageForm extends Component {
     },(result)=>{
       const {rows=[]}=result;
 
+      let _warehouse=rows.filter(o=> data[0]["sStorageId"]==o.tmBasStorageId)[0];
+
+
+      this.props.form.setFieldsValue({
+        "warehouse":[{_name:_warehouse.storageName,id:_warehouse.tmBasStorageId}],
+      });
+
       that.setState({
+        // warehouseName:_warehouse?.storageName,   
         warehouseList:rows.map(o=>Object.assign({_name:o.storageName,id:o.tmBasStorageId}))
       })
 
+      // console.log(data)
       // console.log(result)
     })
 
@@ -86,12 +99,14 @@ class PageForm extends Component {
   /**
    * 获取 库区
   */
-  reservoirFunc=(params)=>{
+  reservoirFunc=()=>{
     const that=this;
+    const {data=[]}=this.props.route.params.routeParams;
 
     WISHttpUtils.get('wms/dloc/list',{
       params:{
-        ...params
+        storageId:data[0]?.sStorageId,
+        dlocType:'4'
       }
     },(result)=>{
       const {rows=[]}=result;
@@ -138,7 +153,7 @@ class PageForm extends Component {
       storageId:data[0].id 
     }
 
-    this.reservoirFunc(_json);
+    // this.reservoirFunc(_json);
 
     this.props.form.setFieldsValue({
       "reservoir":[],
@@ -152,6 +167,7 @@ class PageForm extends Component {
    * @param {*} value 
   */
    reservoirChange=(data=[])=>{
+
     let _json={
       dlocId:data[0].id 
     }
@@ -165,12 +181,23 @@ class PageForm extends Component {
 
 
   /**
+    * 库区 清空
+  */
+  cleanReservoirChange=()=>{
+    this.props.form.setFieldsValue({
+      "storage":[]
+    });
+    this.storageFunc()
+  }
+
+
+  /**
    * 提交
    */
   passHandle=(value)=>{
     const that=this;
     const {navigation} = this.props;
-    const {data={}}=this.props.route.params.routeParams;
+    const {data=[]}=this.props.route.params.routeParams;
 
 
 
@@ -198,14 +225,26 @@ class PageForm extends Component {
 
       } else{
 
-        let _jsonList=data.map(o=>Object.assign(o,{
-          moveStorageQty:o.taskQty,
-          dStorageId:value.warehouse[0]['id'],
-          dBasDlocId:value.reservoir[0]['id'],
-          dBasLocId:value.storage[0]['id']
-        }))
+        let _jsonList=data.map(o=>Object.assign({
+          // moveStorageQty:o.taskQty,
+          // dStorageId:value.warehouse[0]['id'],
+          // dBasDlocId:value.reservoir[0]['id'],
+          // dBasLocId:value.storage[0]['id']
+
+          ttPackageTaskId:o.ttPackageTaskId,
+          taskQty:o.taskQty,
+          ddStorageId:o.dStorageId,
+          ddBasDlocId:o.dBasDlocId,
+          ddBasLocId:o.dBasLocId,
+          aaStorageId:value.warehouse[0]['id'],
+          aaBasDlocId:value.reservoir[0]['id'],
+          aaBasLocId:value.storage[0]['id'],
+          version:o.version
+        }));
 
 
+        // console.log(_jsonList)
+        // return
         WISHttpUtils.post("wms/packageTask/moveStorage",{
           params:_jsonList
           // hideLoading:true
@@ -214,7 +253,7 @@ class PageForm extends Component {
 
 
           if(code==200){
-            Toast.fail('移库成功！',1);
+            Toast.success('移库成功！',1);
             navigation.navigate('packages'); 
             DeviceEventEmitter.emit('globalEmitter_updata_packagesList');
           }
@@ -233,7 +272,7 @@ class PageForm extends Component {
   render() {
     let that=this;
     let{}=this.state;
-    const {warehouse,reservoir,storage}=this.state;
+    const {warehouse,reservoir,storage,warehouseName}=this.state;
     const {warehouseList=[],reservoirList=[],storageList=[]}=this.state;
 
     let {navigation,form} = this.props;
@@ -262,6 +301,7 @@ class PageForm extends Component {
               that.warehouseChange(_list);
             }}
             data={warehouseList}
+            disabled
           />
 
           <WisSelectFlex 
@@ -279,6 +319,9 @@ class PageForm extends Component {
             labelFormat={o=>o._name}
             onChangeValue={(_list)=>{
               that.reservoirChange(_list);
+            }}
+            onCleanValue={()=>{
+              this.cleanReservoirChange()
             }}
             data={reservoirList}
           />

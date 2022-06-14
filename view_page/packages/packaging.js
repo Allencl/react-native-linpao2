@@ -50,9 +50,9 @@ class Page extends Component {
 
     // 监听扫码枪
     this.honeyWellPrint=DeviceEventEmitter.addListener('globalEmitter_honeyWell',function(key=""){
-      this.setState({
-        no:key
-      })
+      // this.setState({
+      //   no:key
+      // })
     });
   }
 
@@ -110,7 +110,6 @@ class Page extends Component {
         Toast.success('包装完成！',1);
         that.tableRef.initFunc();
       }
-
     });  
     
    }
@@ -182,7 +181,7 @@ class Page extends Component {
                     <TextInput
                       editable={!false}
                       style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
-                      value={defaultNum }
+                      value={String(defaultNum)}
                       keyboardType={"numeric"}
                       onChangeText={text => this.setState({defaultNum:text}) }
                     />  
@@ -196,7 +195,7 @@ class Page extends Component {
                     <TextInput
                       editable={!false}
                       style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
-                      value={printNum }
+                      value={String(printNum)}
                       keyboardType={"numeric"}
                       onChangeText={text => this.setState({printNum:text}) }
                     />  

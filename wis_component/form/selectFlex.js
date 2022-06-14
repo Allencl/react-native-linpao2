@@ -76,7 +76,7 @@ class SelectComponent extends Component{
      */
     confirmHandle(){
         let {bufferData}=this.state;
-        let {onChangeValue}=this.props;
+        let {onChangeValue,onCleanValue}=this.props;
         let _selectData=JSON.parse(JSON.stringify(bufferData));
 
         let{name,form}=this.props;
@@ -88,13 +88,15 @@ class SelectComponent extends Component{
 
         if(bufferData["length"]){
             onChangeValue && onChangeValue(_selectData);
+        }else{
+            onCleanValue && onCleanValue()
         }
         this.setState({visible:false});
     }
     
     render() {
         let {bufferData=[],value}=this.state;
-        const {onSearchChange,data=[],title,form,name,textFormat=()=>{},requiredSign=false,labelFormat=()=>{},onChangeValue,lableName,disabled}=this.props;
+        const {onSearchChange,data=[],placeholder,title,form,name,textFormat=()=>{},requiredSign=false,labelFormat=()=>{},onChangeValue,lableName,disabled}=this.props;
        
 
         let _list=(form.getFieldValue(name)||[]).map(o=>{
@@ -180,7 +182,7 @@ class SelectComponent extends Component{
                         style={disabled?styles.isDisabled:styles.InputItem}
                         value={_list.join(",")}
                         labelNumber={6}
-                        placeholder={"请选择..."}
+                        placeholder={placeholder||"请选择..."}
                         editable={false}
                         extra={disabled?<Icon name="stop" />:<Icon name="down" />}
                         // onChangeText={(val)=>{

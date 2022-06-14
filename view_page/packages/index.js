@@ -105,6 +105,7 @@ class Page extends Component {
           </View>
           <View>
             <PackagingPage 
+              navigation={navigation}
               onRef={(ref)=>{this.packagingPageRef=ref}}
             />
           </View>
