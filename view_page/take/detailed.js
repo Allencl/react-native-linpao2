@@ -64,8 +64,8 @@ class PageForm extends Component {
 
 
     // 刷新
-    this.update =DeviceEventEmitter.addListener('globalEmitter_update_take_list',function(){
-      that.updateFunc()
+    this.update =DeviceEventEmitter.addListener('globalEmitter_update_take_list',function(option){
+      that.updateFunc(option._odd)
     });
 
   }
@@ -79,11 +79,11 @@ class PageForm extends Component {
   /**
    * 更新单据
    */
-   updateFunc=()=>{
+   updateFunc=(odd)=>{
     const that=this;
-    const {odd}=this.props.route.params.routeParams;
+    // const {odd}=this.props.route.params.routeParams;
 
-
+    console.log(odd)
     WISHttpUtils.get(`wms/poOrderPart/getOrderDetails/${odd}`,{
       params:{
 
@@ -106,11 +106,20 @@ class PageForm extends Component {
   initFunc=(_data)=>{
     const that=this;
     const {data}=this.props.route.params.routeParams;
-    const {poOrder={},poOrderPartList=[]}=_data || data;
+    const {poOrder={},poOrderPartList=[],msg}=_data || data;
 
     
     // console.log(23322)
     // console.log( data )
+    if(!poOrderPartList.length){
+      msg && Toast.info(`${msg}！`,1);
+      this.setState({
+        basicData:{},
+        waitReceivingList:[],
+        completeList:[]
+      })
+    }
+
 
 
     this.setState({
@@ -192,6 +201,7 @@ class PageForm extends Component {
             quarantineList:rows
           })
 
+          // console.log(1232211)
           // console.log(_newData)
           that.setState({
             basicData:poOrder,
@@ -241,12 +251,12 @@ class PageForm extends Component {
   onCheckedAll=(value)=>{
     const that=this;
     const {waitReceivingList}=this.state;
-
+    // console.log(value)
     this.setState({
-      waitReceivingList:waitReceivingList.map((o,i)=> Object.assign(o,{_checked:value}) )
+      waitReceivingList:waitReceivingList.map((o,i)=>{
+        return (o.canModifReceiptQty=="0") ? Object.assign(o,{_checked:false}) : Object.assign(o,{_checked:value})
+      })
     });
-
-
   }
 
 
@@ -358,6 +368,7 @@ class PageForm extends Component {
    */
   batchTakeFunc=()=>{
     const that=this;
+    const {odd}=this.props.route.params.routeParams;
     const {waitReceivingList,basicData}=this.state;
     let _list=waitReceivingList.filter(o=>o._checked)
 
@@ -371,7 +382,7 @@ class PageForm extends Component {
       parentVersion:basicData.version,
     }))
 
-
+    // console.log(_json)
     WISHttpUtils.post("wms/poOrderPart/receiveOrderParts",{
       params:_json
     },(result)=>{
@@ -380,7 +391,7 @@ class PageForm extends Component {
       // console.log(result)
       if(code==200){
         Toast.success("收货成功！",1);
-        that.updateFunc()
+        that.updateFunc(odd)
       }
  
     })
@@ -393,6 +404,8 @@ class PageForm extends Component {
     let{visible,visible2,visible3,basicData,rowData,_company,_orderType,_takeState,completeList=[],waitReceivingList=[],quarantineList=[]}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
+    const {odd}=this.props.route.params.routeParams;
+
 
     
     return (
@@ -507,10 +520,13 @@ class PageForm extends Component {
             <Flex.Item style={{paddingLeft:2,paddingRight:2}}>
               <Text numberOfLines={1} style={{textAlign:'left'}}>{_company}</Text>
             </Flex.Item>
+
+          </Flex> 
+          <Flex>
             <Flex.Item style={{paddingLeft:2,paddingRight:2}}>
-              <Text numberOfLines={1} style={{textAlign:'right'}}>收货行数：4/10未知</Text>
+              <Text numberOfLines={1} style={{textAlign:'left'}}>{`收货行数: ${waitReceivingList.length}/${completeList.length}`}</Text>
             </Flex.Item>
-          </Flex>   
+          </Flex>  
         </View>
 
         <View style={{height:12}}></View>
@@ -522,24 +538,33 @@ class PageForm extends Component {
           data={waitReceivingList||[]}
           onCheckedAll={(value)=> that.onCheckedAll(value) }
           renderBody={(row,index)=>{
-            return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
+            return (<View key={index} style={{marginBottom:16,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex >
-                  <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Checkbox
-                      checked={row._checked}
-                      onChange={event => {
-                        that.checkBoxFunc(event.target.checked,index)
-                      }}
-                    >
-                    </Checkbox>
+                  <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    { (row.canModifReceiptQty!="0") ? 
+                      <Checkbox
+                        checked={row._checked}
+                        onChange={event => {
+                          that.checkBoxFunc(event.target.checked,index)
+                        }}
+                      >
+                      </Checkbox>
+                      :
+                      <Text></Text>
+                    }
                   </Flex.Item>
                   <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lineno}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{''}</Text>
+                </Flex.Item>                
+                <Flex.Item style={{flex:10,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row._reservoirName}</Text>
                     {/* <TouchableOpacity onPress={() =>{ 
                         that.setState({
@@ -552,22 +577,22 @@ class PageForm extends Component {
                         <Text numberOfLines={1} style={{textAlign:'left'}}>{row._reservoirName}</Text>
                       </View>
                     </TouchableOpacity> */}
-                  </Flex.Item>
+                </Flex.Item>
               </Flex>
               <Flex>
-                <Flex.Item style={{flex:5,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text></Text>
                 </Flex.Item>                
                 <Flex.Item style={{flex:5,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <TextInput
-                    editable={!false}
+                    editable={( (row.canModifReceiptQty!="0")?true:false )}
                     style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
                     value={String(row._takeNumber)}
                     keyboardType={"numeric"}
                     onChangeText={text => that.takeChangeText(text,index,row)}
                   />               
                 </Flex.Item>
-                <Flex.Item style={{flex:18,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                <Flex.Item style={{flex:15,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{` ${row.receivedQty}/${row.baseQty} （${row._unitName}）`}</Text>
                 </Flex.Item>
               </Flex>
@@ -600,6 +625,7 @@ class PageForm extends Component {
                       // console.log(that.state.rowData)
                       navigation.navigate('singleTake',Object.assign(
                         that.state.rowData,{
+                          _odd:odd,
                           _basicData:basicData,
                           _quarantineList:quarantineList
                         }) );    
@@ -623,7 +649,7 @@ class PageForm extends Component {
 
         <WisFlexTable
           title="已收货"
-          data={completeList}
+          data={completeList||[]}
           renderBody={(row,index)=>{
             return (<View key={index}>
                 <Flex style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>

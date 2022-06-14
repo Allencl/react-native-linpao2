@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { TouchableOpacity,Dimensions,StyleSheet,DeviceEventEmitter, ScrollView, View,Text,TextInput, Image,NativeModules,PermissionsAndroid   } from 'react-native';
-import { Icon,InputItem,WingBlank, DatePicker, List, Tag, WhiteSpace, Toast,Button } from '@ant-design/react-native';
+import { Icon,Flex,InputItem,WingBlank, DatePicker, List, Tag, WhiteSpace, Toast,Button } from '@ant-design/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { createForm, formShape } from 'rc-form';
@@ -24,7 +24,6 @@ class PageForm extends Component {
     super(props);
 
     this.state={
-      // odd:"ASN0602074",   // 单号
       odd:"",   // 单号
 
     }
@@ -45,22 +44,7 @@ class PageForm extends Component {
     // 监听扫码枪
     this.honeyWell=DeviceEventEmitter.addListener('globalEmitter_honeyWell',function(key=""){
 
-      // 判断设备
-      // if( !(/^\d{2}\.\d{2}\.\d{2}\.\d{2}$/.test(key)) ){
-      //   Toast.fail('错误设备编号！');
-      //   return
-      // }
-      
 
-      // let _key=key;
-      // if(key&&key.length>11){
-      //   _key =(key.split("-")[0]).slice(3);
-      // }
-
-      // console.log(_key)
-      that.props.form.setFieldsValue({
-        odd:key,
-      });
 
     });
 
@@ -75,50 +59,84 @@ class PageForm extends Component {
   /**
    * 提交
    */
-  passHandle=(value)=>{
+  passHandle=()=>{
     const that=this;
     const {odd}=this.state;
     const {navigation} = this.props;
 
+    let _odd=odd.trim();
 
-    this.props.form.validateFields((error, value) => {
-      // 表单 不完整
-      if(error){
-        // Toast.fail('必填字段未填！');
-        // console.log(error)
+    if(!_odd){
+      Toast.fail('收货单号不能为空！',1);
+      return
+    }
 
-
-        if(!value["odd"]){
-          Toast.fail('收货单号不能为空！',1);
-          return
-        }
-
+    WISHttpUtils.get(`wms/poOrderPart/getOrderDetails/${_odd}`,{
+      params:{}
+    },(result)=>{
+      const {code,msg,data={}}=result;
 
 
-      } else{
-        let _odd=value["odd"].trim();
+      if(!data.poOrderPartList){
+        msg && Toast.info(`${msg}！`,1);
+        return
+      }
+
+      // if(!poOrderPartList.length){
+      //   // 
+      //   // this.setState({
+      //   //   basicData:{},
+      //   //   waitReceivingList:[],
+      //   //   completeList:[]
+      //   // })
+      // }      
+
+      navigation.navigate('takeDetailed',{
+        odd:_odd,
+        data:data
+      });    
+    });
 
 
-        WISHttpUtils.get(`wms/poOrderPart/getOrderDetails/${_odd}`,{
-          params:{
+
+    // this.props.form.validateFields((error, value) => {
+    //   // 表单 不完整
+    //   if(error){
+    //     // Toast.fail('必填字段未填！');
+    //     // console.log(error)
+
+
+    //     if(!value["odd"]){
+    //       Toast.fail('收货单号不能为空！',1);
+    //       return
+    //     }
+
+
+
+    //   } else{
+    //     let _odd=value["odd"].trim();
+
+
+    //     WISHttpUtils.get(`wms/poOrderPart/getOrderDetails/${_odd}`,{
+    //       params:{
     
-          }
-        },(result)=>{
-          const {code,msg,data={}}=result;
+    //       }
+    //     },(result)=>{
+    //       const {code,msg,data={}}=result;
 
           
-          navigation.navigate('takeDetailed',{
-            odd:odd,
-            data:data
-          });    
+    //       navigation.navigate('takeDetailed',{
+    //         odd:odd,
+    //         data:data
+    //       });    
 
-        })
-
-
+    //     })
 
 
-      }
-  });
+
+
+    //   }
+    // });
   }  
 
 
@@ -140,7 +158,7 @@ class PageForm extends Component {
           onRef={(ref)=>{this.bluetoothRef=ref}}
         />
        
-        <View style={{marginTop:22}}>
+        {/* <View style={{marginTop:22}}>
 
 
           <WisInput  
@@ -157,11 +175,33 @@ class PageForm extends Component {
           />  
 
 
-        </View>
+        </View> */}
+        <Flex style={{marginTop:12}}>
+          <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            <TextInput
+              style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderBottomWidth:1}}
+              value={odd}
+              placeholder={"请扫描或输入 收货单号"}
+              onChangeText={text => this.setState({odd:text}) }
+            /> 
+          </Flex.Item>
+
+          <Flex.Item style={{flex:1,paddingLeft:12,paddingRight:0}}>
+            <TouchableOpacity onPress={() =>{ 
+              this.setState({odd:""});
+              }}>
+              <Icon style={{fontSize:22}} name="delete" />
+            </TouchableOpacity>
+          </Flex.Item>
+        </Flex>
+
+
+
+
 
 
         <View style={{marginTop:32,marginBottom:50}}>
-          <Button type="ghost" onPress={this.passHandle}>确 定</Button>          
+          <Button type="ghost" onPress={()=> this.passHandle() }>确 定</Button>          
         </View>      
                 
       </ScrollView>

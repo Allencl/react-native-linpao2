@@ -58,7 +58,7 @@ class PageForm extends Component {
   initFunc=()=>{
     const {routeParams}=this.props.route.params;
 
-    // console.log(routeParams)
+    // console.log(routeParams._odd)
     this.setState({
       rowData:routeParams
     })
@@ -144,7 +144,9 @@ class PageForm extends Component {
       if(code==200){
         Toast.success("收货成功！",1);
         navigation.navigate('takeDetailed'); 
-        DeviceEventEmitter.emit('globalEmitter_update_take_list');
+        DeviceEventEmitter.emit('globalEmitter_update_take_list',{
+          _odd: routeParams._odd
+        });
       }
  
     })
