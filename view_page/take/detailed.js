@@ -652,19 +652,25 @@ class PageForm extends Component {
           data={completeList||[]}
           renderBody={(row,index)=>{
             return (<View key={index}>
-                <Flex style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
+              <Flex style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
                   <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lineno}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:15,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:5,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'center'}}>{` ${row.receivedQty}/${row.baseQty} (${row._unitName})`}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row._reservoirName}</Text>
-                  </Flex.Item>
+
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{''}</Text>
+                </Flex.Item>
+                <Flex.Item style={{flex:18,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row._reservoirName}</Text>
+                </Flex.Item>
               </Flex>
             </View>
             )
