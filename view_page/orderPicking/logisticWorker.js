@@ -26,6 +26,10 @@ class PageForm extends Component {
     this.state={
       visible:false,
 
+      freeze:'',   // 冻结数量
+      freezeText:"",   // 冻结 原因
+
+
       code:"",  // 零件编码
       name:"",   // 零件名称
       planNum:"",  // 计划数量
@@ -58,6 +62,40 @@ class PageForm extends Component {
 
 
   /**
+   * 修改 拣货数量
+   */
+   orderNumChange=(text)=>{
+    const {row={}}=this.props.route.params.routeParams;
+
+    console.log(text)
+
+
+    if(Number(text) >= Number(row.taskPickingNumber)){
+      Toast.fail('拣货数量不能大于计划数量！',1);
+      this.props.form.setFieldsValue({
+        freeze:"0",
+        "orderNum":String(row.taskPickingNumber)
+      });
+      return
+    }
+
+
+    this.props.form.setFieldsValue({
+      "freeze": String(Number(row.taskPickingNumber) - Number(text) )
+    });
+
+    // freeze
+
+    // let _text=
+
+
+    // this.props.form.setFieldsValue({
+    //   "freeze":''
+    // });
+
+   }
+
+  /**
    * 初始化
    * @param {*} value 
    */
@@ -69,11 +107,14 @@ class PageForm extends Component {
       code:row.partNo,  
       name:row.partName,   
       planNum:String(row.taskPickingNumber||0),  
-      orderNum:String(row.taskPickingNumber||0),  
+      orderNum:"",  
       storage:row.locPName,  
       // realStorage:"", 
       realStorage:row.locPName,  
 
+
+      freeze:row.holdQty,   // 冻结数量
+      freezeText:row.holdReason,   // 冻结 原因
     })
   }
 
@@ -209,6 +250,11 @@ class PageForm extends Component {
       orderNum, 
       storage,  
       realStorage,  
+
+
+      freeze,
+      freezeText,
+
     }=this.state;
     let {visible,visible3}=this.state;
     let {navigation,form} = this.props;
@@ -281,14 +327,43 @@ class PageForm extends Component {
 
             <WisInput  
               form={form} 
-              name="orderNum"               
+              name="freeze"               
+              {...getFieldProps('freeze',{
+                  rules:[{required:false}],
+                  initialValue:freeze
+              })} 
+              error={getFieldError('freeze')}               
+              lableName="冻结数量"
+              disabled
+            />
+
+
+            <WisInput  
+              form={form} 
+              name="freezeText"               
+              {...getFieldProps('freezeText',{
+                  rules:[{required:false}],
+                  initialValue:freezeText
+              })} 
+              error={getFieldError('freezeText')}               
+              lableName="冻结原因"
+                
+            />
+
+            <WisInput  
+              form={form} 
+              name="orderNum"      
+              type="number"         
               {...getFieldProps('orderNum',{
                   rules:[{required:false}],
                   initialValue:orderNum
               })} 
+              onChangeValue={(text)=>{
+                this.orderNumChange(text)
+              }}
               error={getFieldError('orderNum')}               
               lableName="拣货数量"
-              disabled
+              
             />
 
             <WisInput  

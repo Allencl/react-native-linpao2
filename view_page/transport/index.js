@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { TouchableOpacity,Dimensions,StyleSheet,DeviceEventEmitter, ScrollView, View,Text,TextInput, Image,NativeModules,PermissionsAndroid   } from 'react-native';
-import { Modal,Icon,InputItem,WingBlank, DatePicker, List, Tag, WhiteSpace,Flex, Toast,Button } from '@ant-design/react-native';
+import { Checkbox,Modal,Icon,InputItem,WingBlank, DatePicker, List, Tag, WhiteSpace,Flex, Toast,Button } from '@ant-design/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { createForm, formShape } from 'rc-form';
@@ -99,8 +99,31 @@ class PageForm extends Component {
   passHandle=(value)=>{
     const that=this;
     const {navigation} = this.props;
+    const _selectData=this.tableRef.getSelectData();
+    let _list=_selectData.map(o=>Object.assign({pickOrderNo:o.pickOrderNo}));
 
-    console.log("eerrtt")
+    if(!_selectData.length){
+      Toast.fail('请选择数据！',1);
+      return
+    }
+
+
+    WISHttpUtils.post("wms/pickOrder/shipment",{
+      params:_list
+      // hideLoading:true
+    },(result) => {
+      let {code}=result;
+
+      // console.log(result)
+      if(code==200){
+        Toast.success("发运完成！",1);
+        that.tableRef.initFunc();
+      }
+
+    });  
+
+
+
   }  
 
 
@@ -109,7 +132,7 @@ class PageForm extends Component {
    * @returns 
   */
    cancelFunc=()=>{
-     console.log(1223)
+    //  console.log(1223)
    }
 
 
@@ -181,45 +204,65 @@ class PageForm extends Component {
 
         <WisFlexTablePage
           RequestURL="wms/boxingInfo/list"
-          // Parames={{showStatus:'1'}}
+          Parames={{pickOrderStatus:'1'}}
+          maxHeight={200}
           onRef={(ref)=>{ this.tableRef=ref }}
-          renderHead={()=>{
-            return (
+          // renderHead={()=>{
+          //   return (
+          //     <Flex>
+          //       <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text></Text>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <View>
+          //           <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>箱号</Text>
+          //         </View>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>发运数量</Text>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>物流单号</Text>
+          //       </Flex.Item>               
+          //     </Flex>
+          //   )
+          // }}
+          renderBody={(row,index,callBack)=>{
+            return (<View key={index} style={{paddingTop:4,paddingBottom:4,marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
-                <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text></Text>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <View>
-                    <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>箱号</Text>
-                  </View>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>发运数量</Text>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>物流单号</Text>
-                </Flex.Item>               
+                  <Flex.Item style={{flex:3,paddingLeft:2,paddingRight:2}}>
+                    <View>
+                      <Checkbox
+                        checked={row._checked}
+                        onChange={event => {
+                          callBack && callBack(event.target.checked,index)
+                          // that.cheCkquarantineFunc(event.target.checked,i)
+                        }}
+                      >
+                      </Checkbox>
+                    </View>
+                  </Flex.Item>     
+                  <Flex.Item style={{flex:26}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.boxNo}</Text>
+                  </Flex.Item>                                       
               </Flex>
-            )
-          }}
-          renderBody={(row,index)=>{
-            return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
-              <Flex >
-                  <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.id}</Text>
-                  </Flex.Item>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
-                  </Flex.Item>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row._reservoirName}</Text>
-                  </Flex.Item>
+              <View style={{height:2}}></View>
+              <Flex>
+                <Flex.Item>
+                  <Text numberOfLines={1}>{row.part}</Text>
+                </Flex.Item>
               </Flex>
-
+              <Flex>
+                <Flex.Item>
+                  <Text numberOfLines={1}>{String(row.qty)}</Text>
+                </Flex.Item>
+                <Flex.Item>
+                  <Text numberOfLines={12}>{row.transfOrder}</Text>
+                </Flex.Item>
+              </Flex>
             </View>
             )
           }}
@@ -228,7 +271,7 @@ class PageForm extends Component {
         <View style={{marginTop:32,marginBottom:50}}>
           <Flex>
             <Flex.Item style={{paddingRight:6}}>
-              <Button type="ghost" onPress={()=> this.setState({visible:true}) }>发运</Button>          
+              <Button type="ghost" onPress={()=> this.passHandle() }>发运</Button>          
             </Flex.Item>
             {/* <Flex.Item style={{paddingLeft:6}}>
               <Button type="ghost" onPress={()=>{ this.cancelFunc() }}>取 消</Button>          

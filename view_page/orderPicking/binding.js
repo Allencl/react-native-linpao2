@@ -183,10 +183,12 @@ class PageForm extends Component {
       let {code}=result;
 
       // console.log(77777);
-      console.log(result);
+      // console.log(result);
       if(code==200){
         Toast.success("绑定完成！",1);
-        navigation.navigate("cardPicking");
+        navigation.navigate("cardPicking",{
+          list:data
+        });
       }
     }); 
    
