@@ -81,6 +81,30 @@ class PageForm extends Component {
 
 
   /**
+   * 刷新数据
+   */
+  updatePage=()=>{
+    const that=this;
+
+    WISHttpUtils.get("wms/pickingTask/list",{
+      params:{
+
+      },
+      // hideLoading:true
+    },(result) => {
+      let {code}=result;
+
+      // console.log(77777);
+      // console.log(result);
+      if(code==200){
+        that.confirmHandle()
+      }
+    }); 
+
+  }
+
+
+  /**
    * 绑定校验
   */
    confirmHandle=()=>{
@@ -148,12 +172,10 @@ class PageForm extends Component {
     let {navigation,form} = this.props;
 
 
-    
-    
     WISHttpUtils.post("wms/pickingTask/bdApplianceSelect",{
       method:"PUT",
       params:{
-        pickings:data,  //[选中列表数据]
+        pickings:data,     //[选中列表数据]
         appliance:result,  // 返回的数据
       }
       // hideLoading:true
@@ -161,15 +183,24 @@ class PageForm extends Component {
       let {code}=result;
 
       // console.log(77777);
-      // console.log(result);
-
+      console.log(result);
       if(code==200){
         Toast.success("绑定完成！",1);
         navigation.navigate("cardPicking");
       }
-
-    });     
+    }); 
+   
+   
    }
+
+
+   /**
+    * 绑定  小车
+    * @returns 
+    */
+  aaaaa=()=>{
+ 
+  } 
 
 
   render() {
@@ -208,7 +239,7 @@ class PageForm extends Component {
         <View style={{marginTop:32,marginBottom:50}}>
           <Flex>
             <Flex.Item style={{paddingRight:6}}>
-              <Button type="ghost" onPress={()=>{ this.confirmHandle() }}>确定</Button>          
+              <Button type="ghost" onPress={()=>{ this.updatePage() }}>确定</Button>          
             </Flex.Item>
             <Flex.Item style={{paddingLeft:6}}>
               <Button type="ghost" onPress={()=>{ 

@@ -208,7 +208,7 @@ class Page extends Component {
         </Flex>
 
         <WisFlexTable
-          title="待收货列表"
+          title="小车拣货记录行"
           // maxHeight={360}
           data={[{},{},{}]}
           onRef={(ref)=>{ this.tableRef=ref }}

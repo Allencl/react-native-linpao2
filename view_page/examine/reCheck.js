@@ -204,9 +204,9 @@ class Page extends Component {
           renderHead={()=>{
             return (
               <Flex>
-                <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                {/* <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text></Text>
-                </Flex.Item>
+                </Flex.Item> */}
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <View>
                     <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
@@ -227,7 +227,7 @@ class Page extends Component {
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
-                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  {/* <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <View>
                       <Checkbox
                         checked={row._checked}
@@ -238,7 +238,7 @@ class Page extends Component {
                       >
                       </Checkbox>
                     </View>
-                  </Flex.Item>                
+                  </Flex.Item> */}
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
