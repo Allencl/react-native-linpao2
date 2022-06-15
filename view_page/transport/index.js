@@ -80,14 +80,14 @@ class PageForm extends Component {
    searchFunc=()=>{
     const {odd}=this.state;
     
-    console.log(odd)
+    // console.log(odd)
     // console.log(  )
 
-    // this.tableRef.initFunc({
-    //   params:{
-    //     lotNo:odd
-    //   }
-    // })
+    this.tableRef.initFunc({
+      params:{
+        pickOrderNo:odd
+      }
+    })
    }
 
 
@@ -182,6 +182,14 @@ class PageForm extends Component {
             <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
               <TouchableOpacity onPress={() =>{ 
                 this.setState({odd:""});
+
+                this.tableRef.initFunc({
+                  params:{
+                    pickOrderNo:""
+                  }
+                })
+
+
                 // this.tableRef.initFunc({
                 //   params:{
                 //     lotAndPartNo:""
