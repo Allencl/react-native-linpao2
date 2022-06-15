@@ -56,6 +56,37 @@ class Page extends Component {
 
   }
 
+  /**
+   * 查询 单号
+   */
+   searchFunc=()=>{
+      const {odd}=this.state;
+
+      console.log(odd)
+   }
+
+
+  /**
+   * 查询 箱号
+   */
+  searchCtnFunc=()=>{
+    const {ctn}=this.state;
+
+    console.log(ctn)
+  }
+   
+
+  /**
+   * 查询 零件号
+   */
+   searchPartFunc=()=>{
+    const {part}=this.state;
+
+    console.log(part)
+  }
+   
+  
+
 
   /**
    * 拆箱
@@ -172,7 +203,7 @@ class Page extends Component {
         </Modal> */}
 
         <Flex>
-          <Flex.Item style={{borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
+          <Flex.Item style={{flex:8,borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
               <InputItem
                 value={odd}
                 onChange={(value) => {
@@ -180,14 +211,31 @@ class Page extends Component {
                     odd:value
                   })
                 }}
-                placeholder="扫描或输入拣货单号"
+                placeholder="请扫描或输入 拣货单号"
               >
-                拣货单
+                
               </InputItem>
           </Flex.Item>
+          <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({odd:""});
+                // this.tableRef.initFunc({
+                //   params:{
+                //     // lotOrOrder:""
+                //   }
+                // });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+          </Flex.Item>
+          <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+            <TouchableOpacity onPress={() =>  this.searchFunc() }>
+              <Icon style={{fontSize:22,color:'blue'}} name="search" />
+            </TouchableOpacity>
+          </Flex.Item>    
         </Flex>
         <Flex>
-          <Flex.Item style={{borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
+          <Flex.Item style={{flex:8,borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
               <InputItem
                 value={ctn}
                 onChange={(value) => {
@@ -195,16 +243,31 @@ class Page extends Component {
                     ctn:value
                   })
                 }}
-                placeholder="扫描或输入箱号"
+                placeholder="请扫描或输入 箱号"
               >
-                箱号
+                
               </InputItem>
           </Flex.Item>
+          <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({ctn:""});
+                // this.tableRef.initFunc({
+                //   params:{
+                //     // lotOrOrder:""
+                //   }
+                // });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+          </Flex.Item>
+          <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+            <TouchableOpacity onPress={() =>  this.searchCtnFunc() }>
+              <Icon style={{fontSize:22,color:'blue'}} name="search" />
+            </TouchableOpacity>
+          </Flex.Item>    
         </Flex>
-
-        
         <Flex>
-            <Flex.Item style={{borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
+          <Flex.Item style={{flex:8,borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
               <InputItem
                 value={part}
                 onChange={(value) => {
@@ -212,12 +275,29 @@ class Page extends Component {
                     part:value
                   })
                 }}
-                placeholder="扫描或输入零件号"
+                placeholder="请扫描或输入 零件号"
               >
-                零件
               </InputItem>
-            </Flex.Item>
+          </Flex.Item>
+          <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({part:""});
+                // this.tableRef.initFunc({
+                //   params:{
+                //     // lotOrOrder:""
+                //   }
+                // });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+          </Flex.Item>
+          <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+            <TouchableOpacity onPress={() =>  this.searchPartFunc() }>
+              <Icon style={{fontSize:22,color:'blue'}} name="search" />
+            </TouchableOpacity>
+          </Flex.Item>    
         </Flex>
+
 
         <View style={{height:12}}></View>          
 

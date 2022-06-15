@@ -196,9 +196,9 @@ class PageForm extends Component {
                   rules:[{required:true}],
                   initialValue:code
               })} 
-              placeholder="扫描或输入编码"
+              placeholder="扫描或输入 小车号"
               error={getFieldError('code')}               
-              lableName="小车号"
+              // lableName="小车号"
               
             /> 
             

@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { createForm, formShape } from 'rc-form';
 import { WisInput,WisSelect, WisFormHead, WisDatePicker, WisTextarea,WisCamera } from '@wis_component/form';   // form 
-import { WisTable,WisButtonFloat,WisFlexTable } from '@wis_component/ul';   // ul 
+import { WisTable,WisButtonFloat,WisFlexTablePage } from '@wis_component/ul';   // ul 
 import RNFS from "react-native-fs";
 
 
@@ -27,7 +27,6 @@ class PageForm extends Component {
       odd:"",   // 单号
       visible:false,
 
-      tableList:[{id:1111},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{id:8888},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{id:5555}],
     }
   }
 
@@ -61,7 +60,7 @@ class PageForm extends Component {
       // }
 
       // console.log(_key)
-      that.setState({odd:key})
+      // that.setState({odd:key})
 
     });
 
@@ -116,7 +115,7 @@ class PageForm extends Component {
 
   render() {
     let that=this;
-    let{odd,tableList,visible}=this.state;
+    let{odd,visible}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
     const {width, height, scale} = Dimensions.get('window');
@@ -153,10 +152,22 @@ class PageForm extends Component {
               <TextInput
                 style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderBottomWidth:1}}
                 value={odd}
-                placeholder={"扫描或输入拣货单号"}
+                placeholder={"扫描或输入 拣货单号"}
                 onChangeText={text => that.setState({odd:text}) }
               /> 
             </Flex.Item>
+            <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({odd:""});
+                // this.tableRef.initFunc({
+                //   params:{
+                //     lotAndPartNo:""
+                //   }
+                // });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+            </Flex.Item>            
             <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
 
               <TouchableOpacity onPress={() =>  that.searchFunc() }>
@@ -168,10 +179,10 @@ class PageForm extends Component {
         </View>
 
 
-        <WisFlexTable
-          // title="待收货列表"
-          maxHeight={height-340}
-          data={tableList||[]}
+        <WisFlexTablePage
+          RequestURL="wms/boxingInfo/list"
+          // Parames={{showStatus:'1'}}
+          onRef={(ref)=>{ this.tableRef=ref }}
           renderHead={()=>{
             return (
               <Flex>
@@ -219,9 +230,9 @@ class PageForm extends Component {
             <Flex.Item style={{paddingRight:6}}>
               <Button type="ghost" onPress={()=> this.setState({visible:true}) }>发运</Button>          
             </Flex.Item>
-            <Flex.Item style={{paddingLeft:6}}>
+            {/* <Flex.Item style={{paddingLeft:6}}>
               <Button type="ghost" onPress={()=>{ this.cancelFunc() }}>取 消</Button>          
-            </Flex.Item>
+            </Flex.Item> */}
           </Flex>
         </View>  
 

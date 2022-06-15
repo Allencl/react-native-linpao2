@@ -11,7 +11,7 @@ import CheckBox from '@react-native-community/checkbox';
 
 
 import WISHttpUtils from '@wis_component/http'; 
-import {WisTableCross,WisFlexTable} from '@wis_component/ul';
+import {WisTableCross,WisFlexTablePage} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
 
 
@@ -57,8 +57,41 @@ class Page extends Component {
 
    }
 
+  /**
+   * 查询 拣货单号
+   * @param {c} value 
+   */
+   searchFunc=()=>{
+    const {odd}=this.state;
+    
+    console.log(odd)
+    this.tableRef.initFunc({
+      params:{
+        // lotOrOrder:odd
+      }
+    });
+
+   }
+
+   /**
+    * 查询 零件
+    */
+   searchPartFunc=()=>{
+    const {part}=this.state;
+    let {navigation,form} = this.props;
+
+    
+    console.log(part)
+    this.tableRef.initFunc({
+      params:{
+        // lotOrOrder:odd
+      }
+    });
 
 
+    navigation.navigate("part");
+
+   }
 
 
   render() {
@@ -97,7 +130,7 @@ class Page extends Component {
 
 
         <Flex>
-          <Flex.Item style={{borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
+          <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
               <InputItem
                 value={odd}
                 onChange={(value) => {
@@ -105,38 +138,67 @@ class Page extends Component {
                     odd:value
                   })
                 }}
-                placeholder="扫描或输入拣货单号"
+                placeholder="请扫描或输入 拣货单号"
               >
-                拣货单
               </InputItem>
           </Flex.Item>
+          <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({odd:""});
+                this.tableRef.initFunc({
+                  params:{
+                    // lotOrOrder:""
+                  }
+                });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+          </Flex.Item>
+          <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+            <TouchableOpacity onPress={() =>  this.searchFunc() }>
+              <Icon style={{fontSize:22,color:'blue'}} name="search" />
+            </TouchableOpacity>
+          </Flex.Item>          
         </Flex>
         <Flex>
-            <Flex.Item style={{borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
-              <TouchableOpacity onPress={() =>{ 
-                navigation.navigate("part");
-              }}>
-                <InputItem
-                  value={part}
-                  onChange={(value) => {
-                    this.setState({
-                      part:value
-                    })
-                  }}
-                  placeholder="扫描零件标签"
-                >
-                  零件标签
-                </InputItem>
-              </TouchableOpacity>
+            <Flex.Item style={{flex:8,borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
+              <InputItem
+                value={part}
+                onChange={(value) => {
+                  this.setState({
+                    part:value
+                  })
+                }}
+                placeholder="请扫描或输入 零件标签"
+              >
+        
+              </InputItem>
             </Flex.Item>
+            <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({part:""});
+                this.tableRef.initFunc({
+                  params:{
+                    // lotOrOrder:""
+                  }
+                });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+          </Flex.Item>
+          <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+            <TouchableOpacity onPress={() =>  this.searchPartFunc() }>
+              <Icon style={{fontSize:22,color:'blue'}} name="search" />
+            </TouchableOpacity>
+          </Flex.Item>  
+
         </Flex>
 
         <View style={{height:12}}></View>          
 
-        <WisFlexTable
-          // title="待收货列表"
-          // maxHeight={360}
-          data={[{},{},{}]}
+        <WisFlexTablePage
+          RequestURL="wms/iqcTask/listNew"
+          // Parames={{showStatus:'1'}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-376}
           renderHead={()=>{

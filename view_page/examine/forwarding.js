@@ -49,6 +49,15 @@ class Page extends Component {
 
   }
 
+  /**
+   * 查询
+   */
+   searchFunc=()=>{
+    const {odd}=this.state;
+
+    console.log(odd)
+   }
+
 
   /**
    * 移库
@@ -78,7 +87,7 @@ class Page extends Component {
       <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:16}}>
 
         <Flex>
-          <Flex.Item style={{borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
+          <Flex.Item style={{flex:8,borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
               <InputItem
                 value={odd}
                 onChange={(value) => {
@@ -86,11 +95,30 @@ class Page extends Component {
                     odd:value
                   })
                 }}
-                placeholder="扫描或输入拣货单号"
+                placeholder="请扫描或输入 拣货单号"
               >
-                拣货单
+                
               </InputItem>
           </Flex.Item>
+          <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({odd:""});
+                // this.tableRef.initFunc({
+                //   params:{
+                //     // lotOrOrder:""
+                //   }
+                // });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+            </Flex.Item>
+            <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>  this.searchFunc() }>
+                <Icon style={{fontSize:22,color:'blue'}} name="search" />
+              </TouchableOpacity>
+            </Flex.Item>  
+
+
         </Flex>
 
 

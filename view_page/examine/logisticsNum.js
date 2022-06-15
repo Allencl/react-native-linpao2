@@ -173,7 +173,7 @@ class PageForm extends Component {
             </Flex.Item>
             <Flex.Item style={{paddingLeft:6}}>
               <Button type="ghost" onPress={()=>{ 
-                navigation.navigate("orderPicking");
+                navigation.navigate("examine");
                }}>取消</Button>          
             </Flex.Item>
           </Flex>

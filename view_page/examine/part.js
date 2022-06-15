@@ -24,7 +24,7 @@ class Page extends Component {
 
 
     this.state={
-
+      part:"",   // 零件
 
     }
 
@@ -52,6 +52,16 @@ class Page extends Component {
    initPage=()=>{
 
    }
+
+
+   /**
+    * 添加
+  */
+  addFunc=()=>{
+    const {part}=this.state;
+
+    console.log(part)
+  }
 
 
    /**
@@ -106,6 +116,43 @@ class Page extends Component {
                 </View>
             </ScrollView>
             </Modal> */}
+
+          <Flex>
+            <Flex.Item style={{flex:8,borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
+              <InputItem
+                value={part}
+                onChange={(value) => {
+                  this.setState({
+                    part:value
+                  })
+                }}
+                placeholder="请扫描或输入 零件标签"
+              >
+        
+              </InputItem>
+            </Flex.Item>
+            <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({part:""});
+                this.tableRef.initFunc({
+                  params:{
+                    // lotOrOrder:""
+                  }
+                });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+            </Flex.Item>
+            <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>  this.addFunc() }>
+                <Icon style={{fontSize:22,color:'blue'}} name="plus" />
+              </TouchableOpacity>
+            </Flex.Item>  
+          </Flex>
+
+        <View style={{height:16}}></View>
+
+
 
         <WisFlexTable
           // title="待收货列表"
