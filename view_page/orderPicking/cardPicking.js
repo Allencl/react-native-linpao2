@@ -57,7 +57,7 @@ class Page extends Component {
    initPage=()=>{
     const that=this;
     // 
-    console.log(555);
+    // console.log(555);
 
     WISHttpUtils.post("wms/pickingTask/selectByTaskStatus",{
       params:["0","10"]
@@ -65,8 +65,8 @@ class Page extends Component {
     },(result) => {
       let {code,rows}=result;
 
-      console.log(77777);
-      console.log(result);
+      // console.log(77777);
+      // console.log(result);
       if(code==200){
         that.setState({tableList:rows})
       }
@@ -103,8 +103,8 @@ class Page extends Component {
     const {list=[]}=this.props.route.params.routeParams;
 
 
-    // console.log("2222")
-    // console.log(list)
+    console.log("2222")
+    console.log(list)
     // console.log(JSON.stringify(list))
 
 
@@ -152,6 +152,8 @@ class Page extends Component {
     let {visible,visible2,visible3,tableList}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
+    const {odd}=this.props.route.params.routeParams;
+
 
 
 
@@ -226,7 +228,7 @@ class Page extends Component {
 
         <Flex style={{marginBottom:16}}>
           <Flex.Item>
-            <Text>小车号或器具号: 0111</Text>
+            <Text>{`小车号或器具号:${odd}`}</Text>
           </Flex.Item>
           <Flex.Item>
             <Text style={{textAlign:'right'}}>{`已拣行数:${tableList.length}`}</Text>

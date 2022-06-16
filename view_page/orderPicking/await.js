@@ -204,13 +204,13 @@ class Page extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
                   </Flex.Item>     
                   <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{"未知"}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskPickingNumber}</Text>
                   </Flex.Item>    
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickingMsg}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.locPName}</Text>
                   </Flex.Item>                               
               </Flex>
 

@@ -121,9 +121,18 @@ class Page extends Component {
   */
    responseCancel=()=>{
     let {navigation,form} = this.props;
+    const _selectData=this.tableRef.getSelectData();
 
-    
-    navigation.navigate("cancelResponse");
+    // console.log(_selectData)
+    // return
+    // if(!_selectData.length){
+    //   Toast.fail('请至少选择一条数据！',1);
+    //   return
+    // }
+    navigation.navigate("cancelResponse",{
+      data:_selectData
+    });
+
 
   }
 
@@ -260,14 +269,14 @@ class Page extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
                   </Flex.Item>     
                   <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{"未知"}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskPickingNumber}</Text>
                   </Flex.Item>    
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'未知'}</Text>
-                  </Flex.Item>                               
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.locPName}</Text>
+                  </Flex.Item>                                
               </Flex>
 
             </View>

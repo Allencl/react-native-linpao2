@@ -136,7 +136,9 @@ class PageForm extends Component {
 
         // console.log(55555);
 
-        WISHttpUtils.get(`wms/appliance/appBindingSelect/${value["code"].trim()}`,{
+        let _odd=value["code"].trim();
+
+        WISHttpUtils.get(`wms/appliance/appBindingSelect/${_odd}`,{
           params:{
             // carUtensilNo:value["code"].trim()
           }
@@ -153,7 +155,7 @@ class PageForm extends Component {
           }
 
           if(stateCode==10 || stateCode==30){
-            that.bindingCard(data);
+            that.bindingCard(data,_odd);
           }
 
         });  
@@ -167,11 +169,16 @@ class PageForm extends Component {
    * 绑定
    * @returns 
    */
-   bindingCard=(result={})=>{
+   bindingCard=(result={},_odd)=>{
     const {data=[]}=this.props.route.params.routeParams;
     let {navigation,form} = this.props;
 
-
+    // console.log(
+    //   {
+    //     pickings:data,     //[选中列表数据]
+    //     appliance:result,  // 返回的数据
+    //   }
+    // )
     WISHttpUtils.post("wms/pickingTask/bdApplianceSelect",{
       method:"PUT",
       params:{
@@ -187,6 +194,7 @@ class PageForm extends Component {
       if(code==200){
         Toast.success("绑定完成！",1);
         navigation.navigate("cardPicking",{
+          odd:_odd,
           list:data
         });
       }

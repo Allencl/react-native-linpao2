@@ -58,7 +58,7 @@ class Page extends Component {
 
     this.tableRef.initFunc({
       params:{
-        // lotOrOrder:odd
+        pickOrderNo:odd
       }
     });
    }
@@ -142,7 +142,7 @@ class Page extends Component {
         <View style={{height:12}}></View>          
 
         <WisFlexTablePage
-          RequestURL="wms/pickOrder/list"
+          RequestURL="wms/pickOrder/listMove"
           Parames={{pickOrderStatus:'60'}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-376}

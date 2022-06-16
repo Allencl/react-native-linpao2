@@ -48,6 +48,7 @@ import logisticWorkerScreen2 from './view_page/orderPicking/logisticWorker2.js';
 import carBindingScreen from './view_page/orderPicking/binding.js';   // 绑定小车
 import cardPickingScreen from './view_page/orderPicking/cardPicking.js';   // 小车拣货
 import cancelResponseScreen from './view_page/orderPicking/cancelResponse.js';   // 取消响应
+import recombinationScreen from './view_page/orderPicking/recombination.js';   // 移复核区 校验 
 
 
 
@@ -61,7 +62,6 @@ import partScreen from './view_page/examine/part.js';   // 零件标签页
 import logisticsScreen from './view_page/examine/logistics.js';   // 物料信息 
 import logisticsNumScreen from './view_page/examine/logisticsNum.js';   // 输入物流编号 
 import shipmentsScreen from './view_page/examine/shipments.js';   // 输入物流编号 
-
 
 
 
@@ -447,6 +447,14 @@ class App extends Component {
                 </Tab.Navigator>
               )}            
             </Stack.Screen>  
+            <Stack.Screen name="recombination" options={{title:'移复核区校验',...headOption}}>
+              {(TabProps) => (
+                <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
+                  <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="recombination" component={recombinationScreen} />
+                </Tab.Navigator>
+              )}            
+            </Stack.Screen>  
+            
 
             
             

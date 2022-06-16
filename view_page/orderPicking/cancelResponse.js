@@ -29,6 +29,9 @@ class Page extends Component {
       visible3:false,
 
 
+      data:[],
+
+
     }
 
   }
@@ -39,8 +42,14 @@ class Page extends Component {
 
   componentDidMount(){
     let that=this;
+    const {data=[]}=this.props.route.params.routeParams;
 
-
+    // console.log(data)
+    if(data.length){
+      this.setState({data:data.map(o=>Object.assign(o,{_checked:false}))})
+    }else{
+      this.initPage();
+    }
 
   }
 
@@ -53,7 +62,22 @@ class Page extends Component {
    * 初始化
    */
    initPage=()=>{
+    const that=this;
 
+    WISHttpUtils.post("wms/pickingTask/selectByTaskStatus",{
+      params:["10"]
+      // hideLoading:true
+    },(result) => {
+      let {code,rows}=result;
+
+      // console.log(77777);
+      // console.log(result);
+      if(code==200){
+        that.setState({
+          data:rows.map(o=>Object.assign(o,{_checked:false}))
+        })
+      }
+    });
    }
 
 
@@ -62,7 +86,6 @@ class Page extends Component {
    * @returns 
   */
   responseFunc=()=>{
-    // console.log('确定')
 
     this.setState({visible:true})
   } 
@@ -74,13 +97,44 @@ class Page extends Component {
   */
    responseSubmitFunc=()=>{
     let {navigation,form} = this.props;
+    let _selectData= this.state.data.filter(o=>o._checked);
 
-    // console.log('确定')
 
-    // this.setState({visible:true})
-    navigation.navigate("orderPicking");
 
+    if(!_selectData.length){
+      Toast.offline("未选择数据！",1);
+      return
+    }
+
+    // console.log( _selectData )
+    WISHttpUtils.post("wms/pickingTask/removePickingTaskResponse",{
+      method:"PUT",
+      params:_selectData
+      // hideLoading:true
+    },(result) => {
+      let {code}=result;
+
+      // console.log(5678);
+      // console.log(result);
+      if(code==200){
+        Toast.success("取消响应完成！",1);
+        navigation.navigate("orderPicking");
+      }
+    }); 
   }   
+
+  /**
+   * 选中
+   */
+   cheCkquarantineFunc=(action,index)=>{
+      const {data}=this.state;
+  
+      this.setState({
+        data:data.map((o,i)=>{
+          return Object.assign(o,{_checked:(i==index)?action:o._checked})
+        })
+      });
+   }
 
 
   /**
@@ -89,13 +143,14 @@ class Page extends Component {
   */
   refreshFunc=()=>{
     // this.tableRef.initFunc();
-    console.log("刷新")
+    // console.log("刷新")
+    this.initPage()
   }
 
 
   render() {
     let that=this;
-    let {visible,visible2,visible3}=this.state;
+    let {visible,visible2,visible3,data=[]}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -122,7 +177,7 @@ class Page extends Component {
         >
           <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
             <View style={{paddingLeft:12,marginTop:18,marginBottom:22}}>
-              <Text style={{fontSize:18}}>取消响应？</Text>
+              <Text style={{fontSize:18}}>确认取消响应？</Text>
             </View>
           </ScrollView>
         </Modal>
@@ -145,7 +200,7 @@ class Page extends Component {
         <WisFlexTable
           // title="待收货列表"
           // maxHeight={360}
-          data={[{},{},{}]}
+          data={data||[]}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-376}
           renderHead={()=>{
@@ -179,8 +234,8 @@ class Page extends Component {
                       <Checkbox
                         checked={row._checked}
                         onChange={event => {
-                          callBack && callBack(event.target.checked,index)
-                          // that.cheCkquarantineFunc(event.target.checked,i)
+                          // callBack && callBack(event.target.checked,index)
+                          that.cheCkquarantineFunc(event.target.checked,index)
                         }}
                       >
                       </Checkbox>
@@ -190,14 +245,14 @@ class Page extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'零件'}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
                   </Flex.Item>     
                   <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskPickingNumber}</Text>
                   </Flex.Item>    
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickingMsg}</Text>
-                  </Flex.Item>                               
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.locPName}</Text>
+                  </Flex.Item>                                 
               </Flex>
 
             </View>
