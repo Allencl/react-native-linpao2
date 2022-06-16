@@ -32,7 +32,7 @@ class PageForm extends Component {
       asnNo:"",   // asn 号
       batchNo:"",  // 批次号
       supplier:"",  // 供应商
-      supplies:"",   // 物料
+      supplies:"",   // 零件
       name:"",  // 名称
       inspectNum:"",  // 送检数量
 
@@ -306,7 +306,7 @@ class PageForm extends Component {
                     initialValue:supplies
                 })} 
                 error={getFieldError('supplies')}               
-                lableName="物料"
+                lableName="零件"
                 disabled
             />
 

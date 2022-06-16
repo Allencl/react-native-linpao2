@@ -193,7 +193,7 @@ class PageForm extends Component {
               </Flex>
               <Flex style={styles.flexRow}>
                 <Flex.Item style={{flexDirection:"row"}}>
-                  <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>物料:</Text>
+                  <Text style={{flex:2,paddingRight:8,marginBottom:8,fontSize:16,fontWeight:'bold',textAlign:'right'}}>零件:</Text>
                   <Text style={{flex:6,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.partNo}</Text>
                 </Flex.Item>
               </Flex>

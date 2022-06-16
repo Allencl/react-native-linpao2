@@ -189,12 +189,6 @@ class PageForm extends Component {
                   }
                 })
 
-
-                // this.tableRef.initFunc({
-                //   params:{
-                //     lotAndPartNo:""
-                //   }
-                // });
                }}>
                 <Icon style={{fontSize:22}} name="delete" />
               </TouchableOpacity>
