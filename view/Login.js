@@ -1,6 +1,6 @@
 import React from 'react';
 import { BackHandler,DeviceEventEmitter,window,TouchableOpacity,Text,Image, View, StyleSheet } from 'react-native';
-import { Icon,Button, Provider, InputItem, List, Toast } from '@ant-design/react-native';
+import { Icon,Button, Provider, InputItem, List, Toast, Flex } from '@ant-design/react-native';
 import { createForm, formShape } from 'rc-form';
 
 import WISHttpUtils from '@wis_component/http';   // http 
@@ -141,18 +141,23 @@ class LoginScreenForm extends React.Component {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >
+
+        <Flex style={{marginTop:90,marginBottom:22,paddingLeft:16}}>
+          <Flex.Item>
+            <Image
+              style={styles.img}
+              source={require('./img/logo3.png')}
+            /> 
+          </Flex.Item>
+        </Flex>
+
           <List>
-            <View style={styles.imgBox}>
-              <Image
-                style={styles.img}
-                source={require('./img/logo.png')}
-              />  
-            </View>
+
             {/* <View style={styles.headTitle}>
               <Text style={styles.headTitleText}>	盈合机器人</Text>
             </View> */}
 
-            <View style={{height:8}}></View>
+            {/* <View style={{height:8}}></View> */}
 
               <View style={{paddingRight:18}}>
                 <InputItem
@@ -209,7 +214,8 @@ class LoginScreenForm extends React.Component {
 const styles = StyleSheet.create({
   imgBox:{
     alignItems:"center",
-    marginTop:50
+    marginTop:50,
+    marginBottom:30
   },
   container:{
     flex: 1,    

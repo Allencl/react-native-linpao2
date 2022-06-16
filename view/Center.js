@@ -50,10 +50,10 @@ class CenterPage extends React.Component {
       <View style={styles.container}>
           <View style={styles.headContainer}>
             <View style={styles.imgBox}>
-              <Image
+              {/* <Image
                 style={styles.img}
                 source={require('./img/logo.png')}
-              />   
+              />    */}
             </View>
             <View style={styles.textBox}>
               <View style={{...styles.textDIV,marginBottom:8,paddingTop:26}}>
