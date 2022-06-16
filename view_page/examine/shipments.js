@@ -57,8 +57,13 @@ class PageForm extends Component {
    */
   initFunc=()=>{
     const {list=[]}=this.props.route.params.routeParams;
-
+    let _row=list[0];
     console.log(list)
+
+    this.setState({
+      code:_row.storageId,  // 待发运库位
+      storage:_row.storageId,  // 实际待发运库位
+    })
   }
 
 
@@ -67,7 +72,10 @@ class PageForm extends Component {
   */
    confirmHandle=()=>{
     const that=this;
+    const {check}=this.state;
     const {navigation} = this.props;
+    const {list=[]}=this.props.route.params.routeParams;
+
 
 
     this.props.form.validateFields((error, value) => {
@@ -85,36 +93,33 @@ class PageForm extends Component {
       } else{
 
   
-
+        let _json={
+            "deliveryLocid": value["storage"],
+            "ttMmPickOrderIds": [
+              "采购单id",
+              "采购单id"
+            ]
+          
+        }
 
         console.log(value)
 
-        navigation.navigate("examine");
+        return
+        WISHttpUtils.post("wms/pickOrder/moveLoc",{
+          params:_json
+          // hideLoading:true
+        },(result) => {
+          let {code}=result;
+
+          if(code==200){
+            Toast.success("检验完成！",1);
+
+          }
+
+        });  
 
 
-        // navigation.navigate("cardPicking");
 
-        // let _json=Object.assign(row,{
-        //     acceptsQty:_acceptsQty,
-        //     concessionQty:_concessionQty,
-        //     concessionReason:value.concessionText,
-        //     unacceptsQty:_unacceptsQty,
-        //     unacceptsReason:value.disqualificationText
-        // })
-
-
-        // WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
-        //   params:_json
-        //   // hideLoading:true
-        // },(result) => {
-        //   let {code}=result;
-
-        //   if(code==200){
-        //     Toast.success("检验完成！",1);
-
-        //   }
-
-        // });  
 
       }
     });
@@ -184,7 +189,7 @@ class PageForm extends Component {
                     checked={check}
                     // style={{marginTop:12}}
                     onChange={event => {
-                    this.setState({ check: event.target.checked });
+                      this.setState({ check: event.target.checked });
                     }}
                 >
                     <Text style={{fontSize:16,paddingLeft:6,color:"#000000d9"}}>是否自提</Text>

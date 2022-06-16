@@ -47,11 +47,7 @@ class Page extends Component {
     const that=this;
 
 
-    // 改变 tabs page
-    // this.changeTabsPage =DeviceEventEmitter.addListener('globalEmitter_orderPicking_change_tabsPage',function(index){
 
-    //   index && that.setState({tabsPage:index})
-    // });
   }
 
   componentWillUnmount(){

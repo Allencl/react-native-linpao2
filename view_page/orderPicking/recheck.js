@@ -11,7 +11,7 @@ import CheckBox from '@react-native-community/checkbox';
 
 
 import WISHttpUtils from '@wis_component/http'; 
-import {WisTableCross,WisFlexTablePage} from '@wis_component/ul';
+import {WisTableCross,WisFlexTable} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
 
 
@@ -24,7 +24,9 @@ class Page extends Component {
 
 
     this.state={
-      visible:false
+      visible:false,
+
+      dataList:[],
 
     }
 
@@ -37,7 +39,7 @@ class Page extends Component {
   componentDidMount(){
     let that=this;
 
-
+    this.initPage();
 
   }
 
@@ -50,7 +52,21 @@ class Page extends Component {
    * 初始化
    */
    initPage=()=>{
+    const that=this;
 
+    WISHttpUtils.get("wms/pickingTask/appSelectPickToStockDToTask",{
+      params:{}
+      // hideLoading:true
+    },(result) => {
+      let {code,rows=[]}=result;
+
+      // console.log(123221)
+      // console.log(result)
+      if(code==200){
+        that.setState({dataList:rows})
+      }
+
+    });  
    }
 
 
@@ -62,7 +78,7 @@ class Page extends Component {
     let {navigation,form} = this.props;
 
     // console.log('移至复核区')
-    navigation.navigate("recombination");
+    navigation.navigate("recombination",{});
 
     
   } 
@@ -72,7 +88,7 @@ class Page extends Component {
 
   render() {
     let that=this;
-    let {visible}=this.state;
+    let {visible,dataList}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -107,10 +123,10 @@ class Page extends Component {
 
 
 
-        <WisFlexTablePage
-          title="已完成下架任务行记录"
-          RequestURL="wms/pickingTask/list"
-          Parames={{taskStatus:15}}
+        <WisFlexTable
+          // title="待收货列表"
+          // maxHeight={360}
+          data={dataList||[]}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-376}
           renderHead={()=>{
@@ -182,7 +198,7 @@ class Page extends Component {
 
         <Flex style={{marginBottom:12}}>
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> { this.moveFunc()   }}><Text style={{fontSize:14}}>移至复核区</Text></Button>  
+            <Button style={{height:42}} type="ghost" onPress={()=> { this.moveFunc()   }}><Text style={{fontSize:14}}>移至复核区</Text></Button>  
           </Flex.Item>
           {/* <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
             <Button style={{height:36}} type="ghost" onPress={()=> {   }}><Text style={{fontSize:14}}>取消</Text></Button>  

@@ -148,7 +148,7 @@ class PageForm extends Component {
     const {navigation,form} = this.props;
 
     navigation.navigate("cardPicking");
-    // DeviceEventEmitter.emit('globalEmitter_orderPicking_change_tabsPage',2);
+
 
    }
 

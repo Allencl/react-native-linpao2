@@ -169,6 +169,7 @@ class PageForm extends Component {
    * @returns 
   */
    accomplishFunc=()=>{
+    const that=this;
     const {bufferRow}=this.state;
     const {navigation,form} = this.props;
     const {row={}}=this.props.route.params.routeParams;
@@ -223,9 +224,7 @@ class PageForm extends Component {
 
           if(code==200){
             Toast.success("下架完成！",1);
-
-            navigation.navigate("orderPicking");
-            DeviceEventEmitter.emit('globalEmitter_orderPicking_change_tabsPage',2);
+            that.nextArticleHandle()
           }
 
         });  
@@ -241,7 +240,17 @@ class PageForm extends Component {
 
    }
 
+   /**
+    * 下架完成
+    * @returns 
+  */
+  accomplishHandle=()=>{
+    let {navigation,form} = this.props;
 
+    navigation.navigate("orderPicking");
+    DeviceEventEmitter.emit('globalEmitter_orderPicking_change_tabsPage',2);
+
+  }
 
   render() {
     let that=this;
@@ -402,10 +411,10 @@ class PageForm extends Component {
 
           <Flex>
             <Flex.Item style={{paddingRight:6}}>
-              <Button type="ghost" onPress={()=> this.nextArticleHandle() }>下一条</Button>          
+              <Button type="ghost" onPress={()=> this.accomplishFunc() }>下一条</Button>          
             </Flex.Item>
             <Flex.Item style={{paddingLeft:6}}>
-              <Button type="ghost" onPress={()=>{ this.accomplishFunc() }}>下架完成</Button>          
+              <Button type="ghost" onPress={()=>{ this.accomplishHandle() }}>下架完成</Button>          
             </Flex.Item>
           </Flex>
              
