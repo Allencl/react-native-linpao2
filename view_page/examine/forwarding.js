@@ -11,7 +11,7 @@ import CheckBox from '@react-native-community/checkbox';
 
 
 import WISHttpUtils from '@wis_component/http'; 
-import {WisTableCross,WisFlexTable} from '@wis_component/ul';
+import {WisTableCross,WisFlexTablePage} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
 
 
@@ -49,13 +49,18 @@ class Page extends Component {
 
   }
 
+
   /**
    * 查询
    */
    searchFunc=()=>{
     const {odd}=this.state;
 
-    console.log(odd)
+    this.tableRef.initFunc({
+      params:{
+        // lotOrOrder:odd
+      }
+    });
    }
 
 
@@ -65,7 +70,17 @@ class Page extends Component {
    */
    moveFunc=()=>{
     let {navigation,form} = this.props;
-    navigation.navigate("shipments");
+    const _selectData=this.tableRef.getSelectData();
+
+    if(!_selectData["length"]){
+      Toast.fail('请选择数据！',1);
+      return
+    }
+
+
+    navigation.navigate("shipments",{
+      list:_selectData
+    });
 
     
    }
@@ -103,6 +118,8 @@ class Page extends Component {
           <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
               <TouchableOpacity onPress={() =>{ 
                 this.setState({odd:""});
+
+                this.tableRef.initFunc();
                 // this.tableRef.initFunc({
                 //   params:{
                 //     // lotOrOrder:""
@@ -124,10 +141,9 @@ class Page extends Component {
 
         <View style={{height:12}}></View>          
 
-        <WisFlexTable
-          // title="待收货列表"
-          // maxHeight={360}
-          data={[{},{},{}]}
+        <WisFlexTablePage
+          RequestURL="wms/pickOrder/list"
+          Parames={{pickOrderStatus:'60'}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-376}
           renderHead={()=>{
@@ -141,10 +157,10 @@ class Page extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货单号</Text>
                   </View>
                 </Flex.Item>
-                <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>复核完成时间</Text>
                 </Flex.Item>
-                <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>推荐发运区库位</Text>
                 </Flex.Item>          
               </Flex>
@@ -170,10 +186,7 @@ class Page extends Component {
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{'零件'}</Text>
-                  </Flex.Item>     
-                  <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskPickingNumber}</Text>
-                  </Flex.Item>    
+                  </Flex.Item>      
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickingMsg}</Text>
                   </Flex.Item>                               

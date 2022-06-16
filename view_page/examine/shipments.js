@@ -43,6 +43,7 @@ class PageForm extends Component {
   componentDidMount(){
     let that=this;
 
+    this.initFunc();
   }
 
 
@@ -51,6 +52,14 @@ class PageForm extends Component {
   }
 
 
+  /**
+   * 初始化
+   */
+  initFunc=()=>{
+    const {list=[]}=this.props.route.params.routeParams;
+
+    console.log(list)
+  }
 
 
   /**

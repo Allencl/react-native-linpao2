@@ -17,6 +17,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {origin} from '@wis_component/origin';     // 服务地址
 
 
+
 // 配货员 拣货
 class PageForm extends Component {
 
@@ -25,6 +26,8 @@ class PageForm extends Component {
 
     this.state={
       visible:false,
+
+      bufferRow:{},  // 行数据
 
       freeze:'',   // 冻结数量
       freezeText:"",   // 冻结 原因
@@ -67,9 +70,7 @@ class PageForm extends Component {
    orderNumChange=(text)=>{
     const {row={}}=this.props.route.params.routeParams;
 
-    console.log(text)
-
-
+    // console.log(text)
     if(Number(text) >= Number(row.taskPickingNumber)){
       Toast.fail('拣货数量不能大于计划数量！',1);
       this.props.form.setFieldsValue({
@@ -99,18 +100,25 @@ class PageForm extends Component {
    * 初始化
    * @param {*} value 
    */
-  initFunc=()=>{
-    const {row={}}=this.props.route.params.routeParams;
+  initFunc=(rowNow)=>{
 
-    console.log(row)
+    let row= rowNow || this.props.route.params.routeParams["row"];
+
+
     this.setState({
+      bufferRow:row
+    });
+
+    // console.log(row)
+
+    this.props.form.setFieldsValue({
       code:row.partNo,  
       name:row.partName,   
       planNum:String(row.taskPickingNumber||0),  
       orderNum:"",  
       storage:row.locPName,  
-      // realStorage:"", 
-      realStorage:row.locPName,  
+      realStorage:"", 
+      // realStorage:row.locPName,  
 
 
       freeze:row.holdQty,   // 冻结数量
@@ -127,57 +135,32 @@ class PageForm extends Component {
     const {navigation} = this.props;
 
 
-    this.props.form.validateFields((error, value) => {
-      // 表单 不完整
-      if(error){
-        // Toast.fail('必填字段未填！');
-        // console.log(error)
+    WISHttpUtils.get("wms/pickingTask/appNextTask",{
+      params:{}
+      // hideLoading:true
+    },(result) => {
+      let {code,data={}}=result;
 
-        // if(!value["odd"]){
-        //   Toast.fail('收货单号不能为空！');
-        //   return
-        // }
-      } else{
+      // console.log(result)
+      if(code==200){
+        Toast.success("获取到新数据！",1);
 
-        console.log(value.realStorage)
+        this.props.form.setFieldsValue({
+          code:'',  
+          name:'',  
+          planNum:'',
+          orderNum:'',
+          storage:'',
+          realStorage:'',
+          freeze:'',   // 冻结数量
+          freezeText:'',
+        });
 
-        // 不合格原因不能为空
-        if(!value.realStorage){
-          Toast.fail('实际拣货库位不能为空！',1);
-          return
-        }
-
-        if( value.storage != value.realStorage){
-          that.setState({visible:true})
-          return
-        }
-        
-
-
-        // let _json=Object.assign(row,{
-        //     acceptsQty:_acceptsQty,
-        //     concessionQty:_concessionQty,
-        //     concessionReason:value.concessionText,
-        //     unacceptsQty:_unacceptsQty,
-        //     unacceptsReason:value.disqualificationText
-        // })
-
-
-        // WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
-        //   params:_json
-        //   // hideLoading:true
-        // },(result) => {
-        //   let {code}=result;
-
-        //   if(code==200){
-        //     Toast.success("检验完成！",1);
-
-        //   }
-
-        // });  
-
+        that.initFunc(data)
       }
-    });
+
+    });  
+
   }  
 
 
@@ -186,6 +169,7 @@ class PageForm extends Component {
    * @returns 
   */
    accomplishFunc=()=>{
+    const {bufferRow}=this.state;
     const {navigation,form} = this.props;
     const {row={}}=this.props.route.params.routeParams;
 
@@ -196,10 +180,19 @@ class PageForm extends Component {
         // Toast.fail('必填字段未填！');
         // console.log(error)
 
+        if(!value["orderNum"]){
+          Toast.fail('拣货数量不能为空！',1);
+          return
+        }
+
         if(!value["realStorage"]){
           Toast.fail('实际拣货库位不能为空！',1);
           return
         }
+
+
+        
+
       } else{
         let _realStorage=value["realStorage"].trim();
 
@@ -208,12 +201,21 @@ class PageForm extends Component {
           return
         }
 
-        let _json=Object.assign(row,{
-            confirmLoc:_realStorage,
+        let _json=Object.assign({
+            "actualPickingNumber": bufferRow.actualPickingNumber,
+            "holdQty": Number(value.freeze||0),  // 冻结数量
+            "holdReason": value.freezeText||'',
+            // "locPName": value.storage,
+            "locPName": _realStorage,
+            "taskPickingNumber": Number(value.planNum),
+            "ttMmWmhPickingId": bufferRow.ttMmWmhPickingId,
+            "version": bufferRow.version
         })
 
-
-        WISHttpUtils.post("wms/pickingTask/updataPKOffTheShelf",{
+        // console.log(bufferRow)
+        // console.log(_json)
+        // return
+        WISHttpUtils.post("wms/pickingTask/newPickingOffTheShelf",{
           params:_json
           // hideLoading:true
         },(result) => {
@@ -315,7 +317,7 @@ class PageForm extends Component {
 
             <WisInput  
               form={form} 
-              name="planNum"               
+              name="planNum"    
               {...getFieldProps('planNum',{
                   rules:[{required:false}],
                   initialValue:planNum
@@ -353,9 +355,10 @@ class PageForm extends Component {
             <WisInput  
               form={form} 
               name="orderNum"      
-              type="number"         
+              type="number"  
+              requiredSign={true}           
               {...getFieldProps('orderNum',{
-                  rules:[{required:false}],
+                  rules:[{required:true}],
                   initialValue:orderNum
               })} 
               onChangeValue={(text)=>{

@@ -440,7 +440,7 @@ class App extends Component {
                 </Tab.Navigator>
               )}            
             </Stack.Screen>   
-            <Stack.Screen name="shipments" options={{title:'请指定发货区存放库位',...headOption}}>
+            <Stack.Screen name="shipments" options={{title:'拣货单移库发运区',...headOption}}>
               {(TabProps) => (
                 <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
                   <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="shipments" component={shipmentsScreen} />
