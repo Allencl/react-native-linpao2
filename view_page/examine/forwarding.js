@@ -43,7 +43,7 @@ class Page extends Component {
 
     this.updateTable=DeviceEventEmitter.addListener('globalEmitter_update_examineForwarding_table',function(key=""){
       that.tableRef.initFunc();
-      console.log("刷新了！！！")
+      // console.log("刷新了！！！")
     });
 
   }
