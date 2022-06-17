@@ -53,8 +53,14 @@ class PageForm extends Component {
 
   componentDidMount(){
     let that=this;
+    let active=this.props.route.params.routeParams["active"];
 
-    this.initFunc();
+    if(active=="startPicking"){
+      this.nextArticleHandle();
+    }else{
+      this.initFunc();
+    }
+    
 
   }
 
@@ -68,31 +74,24 @@ class PageForm extends Component {
    * 修改 拣货数量
    */
    orderNumChange=(text)=>{
-    const {row={}}=this.props.route.params.routeParams;
+    const {bufferRow}=this.state;
 
     // console.log(text)
-    if(Number(text) >= Number(row.taskPickingNumber)){
+    if(Number(text) >= Number(bufferRow.taskPickingNumber)){
       Toast.fail('拣货数量不能大于计划数量！',1);
       this.props.form.setFieldsValue({
         freeze:"0",
-        "orderNum":String(row.taskPickingNumber)
+        "orderNum":String(bufferRow.taskPickingNumber)
       });
       return
     }
 
 
     this.props.form.setFieldsValue({
-      "freeze": String(Number(row.taskPickingNumber) - Number(text) )
+      "freeze": String(Number(bufferRow.taskPickingNumber) - Number(text) )
     });
 
-    // freeze
 
-    // let _text=
-
-
-    // this.props.form.setFieldsValue({
-    //   "freeze":''
-    // });
 
    }
 
@@ -172,7 +171,7 @@ class PageForm extends Component {
     const that=this;
     const {bufferRow}=this.state;
     const {navigation,form} = this.props;
-    const {row={}}=this.props.route.params.routeParams;
+
 
 
     this.props.form.validateFields((error, value) => {
@@ -250,7 +249,24 @@ class PageForm extends Component {
     navigation.navigate("orderPicking");
     DeviceEventEmitter.emit('globalEmitter_orderPicking_change_tabsPage',2);
 
+    setTimeout(()=>{
+      DeviceEventEmitter.emit('globalEmitter_updata_orderPicking_recheck');
+    },200)
   }
+
+
+  /**
+   * 小测拣配完成
+   * @returns 
+   */
+   cardAccomplish=()=>{
+    let {navigation,form} = this.props;
+
+    navigation.navigate("cardPicking");
+
+    DeviceEventEmitter.emit('globalEmitter_update_cardPicking');
+   }
+
 
   render() {
     let that=this;
@@ -270,6 +286,7 @@ class PageForm extends Component {
     let {visible,visible3}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
+    const {active}=this.props.route.params.routeParams;
 
     
     return (
@@ -414,7 +431,12 @@ class PageForm extends Component {
               <Button type="ghost" onPress={()=> this.accomplishFunc() }>下一条</Button>          
             </Flex.Item>
             <Flex.Item style={{paddingLeft:6}}>
-              <Button type="ghost" onPress={()=>{ this.accomplishHandle() }}>下架完成</Button>          
+              { (active=="startPicking") ? 
+                <Button type="ghost" onPress={()=>{ this.cardAccomplish() }}>小车拣配完成</Button>
+                :
+                <Button type="ghost" onPress={()=>{ this.accomplishHandle() }}>下架完成</Button>
+              }
+                        
             </Flex.Item>
           </Flex>
              

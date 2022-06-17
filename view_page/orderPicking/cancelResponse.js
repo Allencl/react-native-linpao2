@@ -263,10 +263,14 @@ class Page extends Component {
         <Flex style={{marginBottom:12}}>
 
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> {  this.responseFunc()  }}><Text style={{fontSize:14}}>确定</Text></Button>  
+            <Button style={{height:36}} type="ghost" onPress={()=> {  this.responseFunc()  }}><Text>确定</Text></Button>  
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> {  navigation.navigate("orderPicking") }}><Text style={{fontSize:14}}>返回</Text></Button>  
+            <Button style={{height:36}} type="ghost" onPress={()=> {  
+              navigation.navigate("orderPicking");
+              DeviceEventEmitter.emit('globalEmitter_updata_orderPicking_soldOut_table');
+
+            }}><Text>返回</Text></Button>  
           </Flex.Item>
         </Flex>
 

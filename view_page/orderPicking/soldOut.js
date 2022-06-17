@@ -44,12 +44,15 @@ class Page extends Component {
   componentDidMount(){
     let that=this;
 
-
+    // 刷新table    
+    this.updataList =DeviceEventEmitter.addListener('globalEmitter_updata_orderPicking_soldOut_table',function(){
+      that.tableRef.initFunc();
+    });
 
   }
 
   componentWillUnmount(){
-
+    this.updataList.remove();
   }
 
 

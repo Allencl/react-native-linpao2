@@ -44,10 +44,16 @@ class Page extends Component {
 
     this.initPage();
 
+
+    this.updatePage=DeviceEventEmitter.addListener('globalEmitter_update_cardPicking',function(){
+      // console.log("刷新了2111！！！！")
+      that.initPage();
+    });
+
   }
 
   componentWillUnmount(){
-
+    this.updatePage.remove();
   }
 
 
@@ -103,8 +109,8 @@ class Page extends Component {
     const {list=[]}=this.props.route.params.routeParams;
 
 
-    console.log("2222")
-    console.log(list)
+    // console.log("2222")
+    // console.log(list)
     // console.log(JSON.stringify(list))
 
 
@@ -121,7 +127,9 @@ class Page extends Component {
 
     //   }
     // }); 
-    navigation.navigate("logisticWorker2");
+    navigation.navigate("logisticWorker",{
+      active:"startPicking"
+    });
   }
 
   /**
@@ -132,6 +140,7 @@ class Page extends Component {
     const {navigation,form} = this.props;
 
     navigation.navigate("carBinding");
+    DeviceEventEmitter.emit('globalEmitter_clean_cardValue');
   }
 
   /**
@@ -143,6 +152,10 @@ class Page extends Component {
 
     navigation.navigate("orderPicking");
     DeviceEventEmitter.emit('globalEmitter_orderPicking_change_tabsPage',2);
+
+    setTimeout(()=>{
+      DeviceEventEmitter.emit('globalEmitter_updata_orderPicking_recheck');
+    },200)
 
   }
 

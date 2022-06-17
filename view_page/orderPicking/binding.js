@@ -43,21 +43,18 @@ class PageForm extends Component {
     let that=this;
 
 
-    // 监听扫码枪
-    this.honeyWell=DeviceEventEmitter.addListener('globalEmitter_honeyWell',function(key=""){
 
-      // console.log(_key)
+    this.updateCard=DeviceEventEmitter.addListener('globalEmitter_clean_cardValue',function(){
       that.props.form.setFieldsValue({
-        code:_key,
+        "code":""
       });
-
     });
 
   }
 
 
   componentWillUnmount(){
-    this.honeyWell.remove();
+    this.updateCard.remove();
   }
 
 
@@ -254,6 +251,7 @@ class PageForm extends Component {
             <Flex.Item style={{paddingLeft:6}}>
               <Button type="ghost" onPress={()=>{ 
                 navigation.navigate("orderPicking");
+                DeviceEventEmitter.emit('globalEmitter_updata_orderPicking_soldOut_table');
                }}>取消</Button>          
             </Flex.Item>
           </Flex>
