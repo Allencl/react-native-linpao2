@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     paddingTop:60
   },
   footerBtn:{
-    backgroundColor:"#009",
+    backgroundColor:"#202123",
     borderWidth:0,
     borderRadius:6,
     fontSize:32
