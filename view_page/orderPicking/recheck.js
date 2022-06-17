@@ -63,11 +63,24 @@ class Page extends Component {
       // console.log(123221)
       // console.log(result)
       if(code==200){
-        that.setState({dataList:rows})
+        that.setState({dataList:rows.map(o=>Object.assign(o,{_checked:false})) })
       }
 
     });  
    }
+
+  /**
+   * 选中
+   */
+   cheCkquarantineFunc=(action,index)=>{
+    const {dataList}=this.state;
+
+    this.setState({
+      dataList:dataList.map((o,i)=>{
+        return Object.assign(o,{_checked:(i==index)?action:o._checked})
+      })
+    });
+ }
 
 
   /**
@@ -75,10 +88,29 @@ class Page extends Component {
    * @returns 
   */
   moveFunc=()=>{
-    let {navigation,form} = this.props;
 
-    // console.log('移至复核区')
-    navigation.navigate("recombination",{});
+    return
+    const {navigation}=this.props;
+    const _selectData=this.tableRef.getSelectData();
+    const _sStorageIdList=_selectData.map(o=>o.storageId)   // 仓库ID
+
+    if(!_selectData.length){
+      Toast.fail('请选择数据！',1);
+      return
+    }
+
+
+    // if(Array.from(new Set(_sStorageIdList)).length>1){
+    //   Toast.fail('多条移库，必须是同一个仓库！',2);
+    //   return
+    // }
+
+
+    navigation.navigate("recombination",{
+      list:_selectData
+    });
+
+
 
     
   } 
@@ -160,8 +192,8 @@ class Page extends Component {
                       <Checkbox
                         checked={row._checked}
                         onChange={event => {
-                          callBack && callBack(event.target.checked,index)
-                          // that.cheCkquarantineFunc(event.target.checked,i)
+                          // callBack && callBack(event.target.checked,index)
+                          that.cheCkquarantineFunc(event.target.checked,index)
                         }}
                       >
                       </Checkbox>

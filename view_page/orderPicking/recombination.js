@@ -68,26 +68,28 @@ class PageForm extends Component {
   */
   getWarehouseFunc=()=>{
     const that=this;
-    const {data=[]}=this.props.route.params.routeParams;
+    const {list=[]}=this.props.route.params.routeParams;
 
 
-    WISHttpUtils.get('wms/storage/list',{
+    WISHttpUtils.get('wms/storage/list?status=1',{
       params:{
 
       }
     },(result)=>{
       const {rows=[]}=result;
 
-      let _warehouse=rows.filter(o=> data[0]["sStorageId"]==o.tmBasStorageId)[0];
+      // let _warehouse=rows.filter(o=> data[0]["sStorageId"]==o.tmBasStorageId)[0];
 
 
-      this.props.form.setFieldsValue({
-        "warehouse":[{_name:_warehouse.storageName,id:_warehouse.tmBasStorageId}],
-      });
+      // this.props.form.setFieldsValue({
+      //   "warehouse":[{_name:_warehouse.storageName,id:_warehouse.tmBasStorageId}],
+      // });
+
+      let _rows=rows.map(o=>Object.assign({_name:o.storageName,id:o.tmBasStorageId}));
+      console.log(list)
 
       that.setState({
-        // warehouseName:_warehouse?.storageName,   
-        warehouseList:rows.map(o=>Object.assign({_name:o.storageName,id:o.tmBasStorageId}))
+        warehouseList:_rows
       })
 
       // console.log(data)
@@ -147,48 +149,48 @@ class PageForm extends Component {
    * 仓库切换
    * @param {*} value 
    */
-  warehouseChange=(data=[])=>{
+  // warehouseChange=(data=[])=>{
 
-    let _json={
-      storageId:data[0].id 
-    }
+  //   let _json={
+  //     storageId:data[0].id 
+  //   }
 
-    // this.reservoirFunc(_json);
+  //   // this.reservoirFunc(_json);
 
-    this.props.form.setFieldsValue({
-      "reservoir":[],
-      "storage":[]
-    });
-  }
+  //   this.props.form.setFieldsValue({
+  //     "reservoir":[],
+  //     "storage":[]
+  //   });
+  // }
 
 
   /**
    * 库区切换
    * @param {*} value 
   */
-   reservoirChange=(data=[])=>{
+  //  reservoirChange=(data=[])=>{
 
-    let _json={
-      dlocId:data[0].id 
-    }
+  //   let _json={
+  //     dlocId:data[0].id 
+  //   }
 
-    this.storageFunc(_json);
+  //   this.storageFunc(_json);
 
-    this.props.form.setFieldsValue({
-      "storage":[]
-    });
-   }
+  //   this.props.form.setFieldsValue({
+  //     "storage":[]
+  //   });
+  //  }
 
 
   /**
     * 库区 清空
   */
-  cleanReservoirChange=()=>{
-    this.props.form.setFieldsValue({
-      "storage":[]
-    });
-    this.storageFunc()
-  }
+  // cleanReservoirChange=()=>{
+  //   this.props.form.setFieldsValue({
+  //     "storage":[]
+  //   });
+  //   this.storageFunc()
+  // }
 
 
   /**
@@ -287,18 +289,17 @@ class PageForm extends Component {
           <WisSelectFlex 
             form={form} 
             name="warehouse"
-            requiredSign={true}
             {...getFieldProps('warehouse',{
-              rules:[{required:true }],
+              rules:[{required:false }],
               initialValue:[]
             })} 
             error={getFieldError('warehouse')}  
-            title="包装仓库（单选）"             
-            lableName="包装仓库"
+            title="仓库（单选）"             
+            lableName="仓库"
             textFormat={o=>o._name}
             labelFormat={o=>o._name}
             onChangeValue={(_list)=>{
-              that.warehouseChange(_list);
+              // that.warehouseChange(_list);
             }}
             data={warehouseList}
             disabled
@@ -307,23 +308,23 @@ class PageForm extends Component {
           <WisSelectFlex 
             form={form} 
             name="reservoir"
-            requiredSign={true}
             {...getFieldProps('reservoir',{
-              rules:[{required:true }],
+              rules:[{required:false }],
               initialValue:[]
             })} 
             error={getFieldError('reservoir')}  
-            title="包装库区（单选）"             
-            lableName="包装库区"
+            title="推荐库区（单选）"             
+            lableName="推荐库区"
             textFormat={o=>o._name}
             labelFormat={o=>o._name}
             onChangeValue={(_list)=>{
-              that.reservoirChange(_list);
+              // that.reservoirChange(_list);
             }}
             onCleanValue={()=>{
-              this.cleanReservoirChange()
+              // this.cleanReservoirChange()
             }}
             data={reservoirList}
+            disabled={true}
           />
 
           <WisSelectFlex 
@@ -335,14 +336,15 @@ class PageForm extends Component {
               initialValue:[]
             })} 
             error={getFieldError('storage')}  
-            title="包装库位（单选）"             
-            lableName="包装库位"
+            title="推荐库位（单选）"             
+            lableName="推荐库位"
             textFormat={o=>o._name}
             labelFormat={o=>o._name}
             onChangeValue={(_list)=>{
               // that.productionChange(_list);
             }}
             data={storageList}
+
           />
 
 

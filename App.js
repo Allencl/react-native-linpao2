@@ -447,7 +447,7 @@ class App extends Component {
                 </Tab.Navigator>
               )}            
             </Stack.Screen>  
-            <Stack.Screen name="recombination" options={{title:'移复核区校验',...headOption}}>
+            <Stack.Screen name="recombination" options={{title:'移复核区',...headOption}}>
               {(TabProps) => (
                 <Tab.Navigator screenOptions={{headerShown:false}} tabBar={() => <BarBottom TabProps={TabProps} /> }>
                   <Tab.Screen initialParams={{routeParams: TabProps.route.params}} name="recombination" component={recombinationScreen} />
