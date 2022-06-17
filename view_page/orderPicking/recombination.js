@@ -76,24 +76,29 @@ class PageForm extends Component {
 
       }
     },(result)=>{
-      const {rows=[]}=result;
-
-      // let _warehouse=rows.filter(o=> data[0]["sStorageId"]==o.tmBasStorageId)[0];
+      const {rows=[],code}=result;
 
 
-      // this.props.form.setFieldsValue({
-      //   "warehouse":[{_name:_warehouse.storageName,id:_warehouse.tmBasStorageId}],
-      // });
 
-      let _rows=rows.map(o=>Object.assign({_name:o.storageName,id:o.tmBasStorageId}));
-      console.log(list)
+      if(code==200){
+        let _rows=rows.map(o=>Object.assign({_name:`${o.storageNo}-${o.storageName}`,id:o.tmBasStorageId}));
+      
+        let _warehouse=_rows.filter(o=> list[0]["tmBasStorageDId"]==o.id);
+        
+        // console.log(_warehouse)
+        // console.log(result)
+        that.setState({
+          warehouseList:_rows
+        });
+  
+        that.props.form.setFieldsValue({
+          "warehouse":_warehouse
+        });
+      }
 
-      that.setState({
-        warehouseList:_rows
-      })
 
-      // console.log(data)
-      // console.log(result)
+
+
     })
 
   }
@@ -103,21 +108,33 @@ class PageForm extends Component {
   */
   reservoirFunc=()=>{
     const that=this;
-    const {data=[]}=this.props.route.params.routeParams;
+    const {list=[]}=this.props.route.params.routeParams;
+
 
     WISHttpUtils.get('wms/dloc/list',{
       params:{
-        storageId:data[0]?.sStorageId,
-        dlocType:'4'
+        storageId:list[0]["tmBasStorageDId"],
+        status:'1',
+        dlocType:'8'
       }
     },(result)=>{
-      const {rows=[]}=result;
+      const {rows=[],code}=result;
 
-      that.setState({
-        reservoirList:rows.map(o=>Object.assign({_name:o.dlocName,id:o.tmBasDlocId}))
-      })
 
       // console.log(result)
+      if(code==200){
+        let _row=rows.map(o=>Object.assign({_name:`${o.dlocNo}-${o.dlocName}`,id:o.tmBasDlocId}))
+
+        that.setState({
+          reservoirList:_row
+        })
+  
+        that.props.form.setFieldsValue({
+          "reservoir":_row
+        });        
+      }
+
+
     })    
   }
   
@@ -125,19 +142,39 @@ class PageForm extends Component {
   /**
    * 获取 库位
   */
-  storageFunc=(params)=>{
+  storageFunc=()=>{
       const that=this;
+      const {list=[]}=this.props.route.params.routeParams;
+
 
       WISHttpUtils.get('wms/loc/list',{
         params:{
-          ...params
+          dlocId: 'D27',
+          storageId: 'ST1',
+          status: '1'
         }
       },(result)=>{
-        const {rows=[]}=result;
+        const {rows=[],code}=result;
 
-        that.setState({
-          storageList:rows.map(o=>Object.assign({_name:o.locName,id:o.tmBasLocId}))
-        })
+
+
+        // console.log(list)
+        // console.log(rows)
+
+        if(code==200){
+          let _row=rows.map(o=>Object.assign({_name:`${o.locNo}-${o.locName}`,id:o.tmBasLocId}))
+          let _storage=_row.filter(o=> list[0]["tmBasLocDId"]==o.id);
+
+
+          that.setState({
+            storageList:_row
+          });
+
+          that.props.form.setFieldsValue({
+            "storage":_storage
+          });  
+        }
+
 
         // console.log(result)
       })    
@@ -199,8 +236,7 @@ class PageForm extends Component {
   passHandle=(value)=>{
     const that=this;
     const {navigation} = this.props;
-    const {data=[]}=this.props.route.params.routeParams;
-
+    const {list=[]}=this.props.route.params.routeParams;
 
 
     this.props.form.validateFields((error, value) => {
@@ -209,45 +245,29 @@ class PageForm extends Component {
         // Toast.fail('必填字段未填！');
         // console.log(error)
 
-        if(!value["warehouse"]["length"]){
-          Toast.fail('包装仓库未选择！',1);
-          return
-        }
-
-        if(!value["reservoir"]["length"]){
-          Toast.fail('包装库区未选择！',1);
-          return
-        }
 
         if(!value["storage"]["length"]){
-          Toast.fail('包装库位未选择！',1);
+          Toast.fail('推荐库位未选择！',1);
           return
         }
 
 
       } else{
 
-        let _jsonList=data.map(o=>Object.assign({
-          // moveStorageQty:o.taskQty,
-          // dStorageId:value.warehouse[0]['id'],
-          // dBasDlocId:value.reservoir[0]['id'],
-          // dBasLocId:value.storage[0]['id']
-
-          ttPackageTaskId:o.ttPackageTaskId,
-          taskQty:o.taskQty,
-          ddStorageId:o.dStorageId,
-          ddBasDlocId:o.dBasDlocId,
-          ddBasLocId:o.dBasLocId,
-          aaStorageId:value.warehouse[0]['id'],
-          aaBasDlocId:value.reservoir[0]['id'],
-          aaBasLocId:value.storage[0]['id'],
-          version:o.version
+        let _jsonList=list.map(o=>Object.assign({
+          pickDlocAId: o.tmBasDlocDId,
+          pickDlocDId: value["reservoir"][0].id,
+          pickLocAId: o.tmBasLocDId,
+          pickLocDId: value["storage"][0].id,
+          pickStorageAId:o.tmBasStorageDId,
+          pickStorageDId: o.tmBasStorageDId,
+          ttMmWmhPickingId: o.ttMmWmhPickingId,
+          version: o.version
         }));
 
 
-        // console.log(_jsonList)
-        // return
-        WISHttpUtils.post("wms/packageTask/moveStorage",{
+        WISHttpUtils.post("wms/pickingTask/pickToStockDToTask",{
+          method:"PUT",
           params:_jsonList
           // hideLoading:true
         },(result) => {
@@ -256,8 +276,8 @@ class PageForm extends Component {
 
           if(code==200){
             Toast.success('移库成功！',1);
-            navigation.navigate('packages'); 
-            DeviceEventEmitter.emit('globalEmitter_updata_packagesList');
+            navigation.navigate('orderPicking'); 
+            DeviceEventEmitter.emit('globalEmitter_updata_orderPicking_recheck');
           }
 
         });  
@@ -342,6 +362,11 @@ class PageForm extends Component {
             labelFormat={o=>o._name}
             onChangeValue={(_list)=>{
               // that.productionChange(_list);
+            }}
+            onCleanValue={()=>{
+              this.props.form.setFieldsValue({
+                "storage":[]
+              }); 
             }}
             data={storageList}
 

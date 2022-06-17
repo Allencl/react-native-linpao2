@@ -15,7 +15,7 @@ import {WisTableCross,WisFlexTable} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
 
 
-// 拣货 下架
+// 移复检区
 class Page extends Component {
   constructor(props) {
     super(props);
@@ -41,10 +41,17 @@ class Page extends Component {
 
     this.initPage();
 
+
+    // 刷新table  
+    this.updataList =DeviceEventEmitter.addListener('globalEmitter_updata_orderPicking_recheck',function(){
+      that.initPage();
+      // console.log("刷新了11211！")
+    });
+
   }
 
   componentWillUnmount(){
-
+    this.updataList.remove();
   }
 
 
@@ -88,11 +95,10 @@ class Page extends Component {
    * @returns 
   */
   moveFunc=()=>{
-
-    return
+    const {dataList}=this.state;
     const {navigation}=this.props;
-    const _selectData=this.tableRef.getSelectData();
-    const _sStorageIdList=_selectData.map(o=>o.storageId)   // 仓库ID
+    const _selectData=dataList.filter(o=>o._checked);
+    const _sStorageIdList=_selectData.map(o=>o.tmBasStorageDId)   // 仓库ID 
 
     if(!_selectData.length){
       Toast.fail('请选择数据！',1);
@@ -100,10 +106,10 @@ class Page extends Component {
     }
 
 
-    // if(Array.from(new Set(_sStorageIdList)).length>1){
-    //   Toast.fail('多条移库，必须是同一个仓库！',2);
-    //   return
-    // }
+    if(Array.from(new Set(_sStorageIdList)).length>1){
+      Toast.fail('多条移库，必须是同一个仓库！',2);
+      return
+    }
 
 
     navigation.navigate("recombination",{
@@ -176,11 +182,17 @@ class Page extends Component {
                   <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
                 </Flex.Item>
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>计划数量</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货数量</Text>
                 </Flex.Item>
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货单</Text>
-                </Flex.Item>             
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货库位</Text>
+                </Flex.Item>    
+                {/* <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>推荐库区</Text>
+                </Flex.Item>       */}
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>推荐库位</Text>
+                </Flex.Item>               
               </Flex>
             )
           }}
@@ -203,26 +215,19 @@ class Page extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
                   </Flex.Item>       
                   <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left',textAlign:'right'}}>{(row.taskStatus=="0")?'待移库':'未知'}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.actualPickingNumber}</Text>
+                  </Flex.Item>  
+                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.locPName}</Text>
+                  </Flex.Item>  
+                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.dlocDName}</Text>
                   </Flex.Item>                               
               </Flex>
-              <Flex>
-                <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{' '}</Text>
-                </Flex.Item>  
-                <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.qty}</Text>
-                </Flex.Item>   
-                <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.ddLoc}</Text>
-                </Flex.Item>  
-                <Flex.Item style={{flex:9,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.inboundBatch}</Text>
-                </Flex.Item>                                        
-                </Flex>
+
             </View>
             )
           }}
