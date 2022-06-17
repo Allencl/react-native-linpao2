@@ -409,7 +409,7 @@ export default class WISHttpUtils extends Component{
                 })
                 .catch(error => {
                     // console.log(error.message)
-                    Toast.offline('服务器响应失败！',1);
+                    // Toast.offline('服务器响应失败！',1);
                     // 关闭 loding
                     DeviceEventEmitter.emit('globalEmitter_toggle_loding',false);
                 });                

@@ -61,8 +61,25 @@ class PageForm extends Component {
     this.getOrderType()   // 获取所有 订单类型
     this.getTakeType()   // 获取所有 收货类型
     this.getUnits()      // 获取 所有单位
+
+    this.boxPileFunc();  // 获取箱型
   }
 
+  /**
+   * 箱型
+   */
+   boxPileFunc=()=>{
+    WISHttpUtils.get("system/dict/data/type/boxing_type",{
+      params:{
+  
+      },
+        // hideLoading:true
+    },(result)=>{
+        // console.log(result)
+        const {data=[]}=result;
+        AsyncStorage.setItem("buffer_boxing_type",JSON.stringify(data));     
+    })    
+  }
 
     /**
      * 获取 仓库

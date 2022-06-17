@@ -13,6 +13,7 @@ import CheckBox from '@react-native-community/checkbox';
 import WISHttpUtils from '@wis_component/http'; 
 import {WisTableCross,WisFlexTable} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // 装箱信息
@@ -28,11 +29,15 @@ class Page extends Component {
       visible2:false,
       visible3:false,
 
+      pickOrder:{},   //  base
+      pickOrderdList:[],   // table
+      pickOrderBoxingList:[],   
 
+      bufferPickOrderBoxingList:[], // 缓存
 
-      odd:"",  // 拣货单号
-      ctn:"",   // 箱号
-      part:"",  // 零件号
+      odd:"P202206120060",  // 拣货单号
+      ctn:"P2022061200602206170046",   // 箱号
+      part:"1001550-CA03",  // 零件号
 
 
       num:"",  // 物流单号
@@ -48,7 +53,7 @@ class Page extends Component {
   componentDidMount(){
     let that=this;
 
-
+    this.initFunc();
 
   }
 
@@ -62,7 +67,7 @@ class Page extends Component {
    searchFunc=()=>{
       const {odd}=this.state;
 
-      console.log(odd)
+      this.initFunc()
    }
 
 
@@ -70,9 +75,16 @@ class Page extends Component {
    * 查询 箱号
    */
   searchCtnFunc=()=>{
-    const {ctn}=this.state;
+    const {ctn,bufferPickOrderBoxingList}=this.state;
+    let _text=ctn.trim();
+    let _list=bufferPickOrderBoxingList.filter(o=>o.boxNo==_text);
 
-    console.log(ctn)
+    if(!_list.length){
+      Toast.offline("无数据！",1);
+    }
+    this.setState({
+      pickOrderBoxingList:_list
+    });
   }
    
 
@@ -80,12 +92,93 @@ class Page extends Component {
    * 查询 零件号
    */
    searchPartFunc=()=>{
-    const {part}=this.state;
+    const {part,bufferPickOrderBoxingList}=this.state;
+    let _text=part.trim();
+    let _list=bufferPickOrderBoxingList.filter(o=>o.partNo==_text);
 
-    console.log(part)
+    if(!_list.length){
+      Toast.offline("无数据！",1);
+    }
+    this.setState({
+      pickOrderBoxingList:_list
+    });
+
+
+
   }
    
   
+  /**
+   * 初始化
+  */
+  initFunc=()=>{
+    const that=this;
+    const {odd}=this.state;
+
+    this.setState({
+      pickOrder:{}, 
+      pickOrderdList:[],   
+      pickOrderBoxingList:[]  
+    });
+
+    // console.log(odd)
+    WISHttpUtils.get(`wms/pickOrderd/getOrderDetails/${odd.trim()}`,{
+      params:{}
+      // hideLoading:true
+    },(result) => {
+      let {code,data}=result;
+      // console.log(result)
+
+
+      if(!data){
+        Toast.offline("无数据！",1);
+        return
+      }
+
+      if(!data.pickOrderBoxingList){
+        Toast.offline("无数据！",1);
+        return
+      }
+
+      if(code==200){
+        Toast.success(`${data.message}`,1);
+
+        // 装箱类型
+        AsyncStorage.getItem("buffer_boxing_type").then((option)=>{
+          let _boxingTypeData=JSON.parse(option);
+
+          that.setState({
+            pickOrder:data.pickOrder, 
+            pickOrderdList:data.pickOrderdList,   
+            pickOrderBoxingList:data.pickOrderBoxingList.map(k=>Object.assign(k,{
+              _checked:false,
+              _boxingTypeValue:_boxingTypeData.filter(j=>j.dictValue==k.boxingType)[0]["dictLabel"]
+            })),   
+          },()=>{
+            that.setState({
+              bufferPickOrderBoxingList:that.state.pickOrderBoxingList
+            })
+          })
+        })
+
+      }
+
+    });  
+  }
+
+
+  /**
+   * 选中
+  */
+  cheCkquarantineFunc=(action,index)=>{
+    const {pickOrderBoxingList}=this.state;
+
+    this.setState({
+      pickOrderBoxingList:pickOrderBoxingList.map((o,i)=>{
+        return Object.assign(o,{_checked:(i==index)?action:o._checked})
+      })
+    });
+  }
 
 
   /**
@@ -93,7 +186,48 @@ class Page extends Component {
    * @returns 
    */
    separateFunc=()=>{
-    console.log("才开")
+    const {pickOrderBoxingList}=this.state;
+    let _selectData=pickOrderBoxingList.filter(o=>o._checked);
+
+    if( !_selectData.length ){
+      Toast.offline("未选择数据！",1);
+      return
+    }
+
+    if( _selectData.length>1 ){
+      Toast.offline("只能选择一条数据！",1);
+      return
+    }
+
+
+
+    // wms/boxingInfo/unboxing
+    // console.log(_selectData)
+    // console.log("才开")
+
+    let _json={
+      boxNo: _selectData[0]["boxNo"],
+      ttMmBoxingInfoId: _selectData[0]["ttMmBoxingInfoId"],
+      version: _selectData[0]["version"],
+    }
+
+    console.log(_json)
+    return
+    WISHttpUtils.post("wms/boxingInfo/unboxing",{
+      params: _json
+      // hideLoading:true
+    },(result) => {
+      let {code,msg}=result;
+
+      // console.log(result)
+      if(code==200){
+        Toast.success(`${msg}`,1);
+      }
+
+    });  
+
+
+
    }
 
 
@@ -120,6 +254,7 @@ class Page extends Component {
   render() {
     let that=this;
     let {visible,visible2,visible3,odd,ctn,part,num}=this.state;
+    const {pickOrderBoxingList,bufferPickOrderBoxingList}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -140,7 +275,7 @@ class Page extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=> { this.separateFunc()   } },
+            {text:'确认',onPress:()=> {    } },
             {text:'取消',onPress:()=>{}}
           ]}
         >
@@ -218,12 +353,9 @@ class Page extends Component {
           </Flex.Item>
           <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
               <TouchableOpacity onPress={() =>{ 
-                this.setState({odd:""});
-                // this.tableRef.initFunc({
-                //   params:{
-                //     // lotOrOrder:""
-                //   }
-                // });
+                  this.setState({odd:""},()=>{
+                    that.initFunc()
+                  });
                }}>
                 <Icon style={{fontSize:22}} name="delete" />
               </TouchableOpacity>
@@ -250,7 +382,11 @@ class Page extends Component {
           </Flex.Item>
           <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
               <TouchableOpacity onPress={() =>{ 
-                this.setState({ctn:""});
+                this.setState({ctn:""},()=>{
+                  this.setState({
+                    pickOrderBoxingList:bufferPickOrderBoxingList
+                  })
+                });
                 // this.tableRef.initFunc({
                 //   params:{
                 //     // lotOrOrder:""
@@ -281,7 +417,11 @@ class Page extends Component {
           </Flex.Item>
           <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
               <TouchableOpacity onPress={() =>{ 
-                this.setState({part:""});
+                this.setState({part:""},()=>{
+                  this.setState({
+                    pickOrderBoxingList:bufferPickOrderBoxingList
+                  })
+                });
                 // this.tableRef.initFunc({
                 //   params:{
                 //     // lotOrOrder:""
@@ -303,7 +443,7 @@ class Page extends Component {
 
         <Flex>
           <Flex.Item style={{flex:3,paddingRight:6}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible:true})  } }><Text style={{fontSize:14}}>拆箱</Text></Button>  
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.separateFunc()  } }><Text style={{fontSize:14}}>拆箱</Text></Button>  
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
             <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible2:true})  } }><Text style={{fontSize:14}}>打印装箱清单</Text></Button>  
@@ -319,7 +459,7 @@ class Page extends Component {
         <WisFlexTable
           // title="待收货列表"
           // maxHeight={360}
-          data={[{},{},{}]}
+          data={pickOrderBoxingList||[]}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-376}
           renderHead={()=>{
@@ -330,17 +470,17 @@ class Page extends Component {
                 </Flex.Item>
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <View>
-                    <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货单号</Text>
                   </View>
                 </Flex.Item>
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货数量</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>箱号</Text>
                 </Flex.Item>
                 <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>已复核数量</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>装箱类型</Text>
                 </Flex.Item>
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>箱号</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件明细</Text>
                 </Flex.Item>             
               </Flex>
             )
@@ -353,27 +493,32 @@ class Page extends Component {
                       <Checkbox
                         checked={row._checked}
                         onChange={event => {
-                          callBack && callBack(event.target.checked,index)
-                          // that.cheCkquarantineFunc(event.target.checked,i)
+                          // callBack && callBack(event.target.checked,index)
+                          that.cheCkquarantineFunc(event.target.checked,index)
                         }}
                       >
                       </Checkbox>
                     </View>
                   </Flex.Item>                
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
-                  </Flex.Item>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'零件'}</Text>
-                  </Flex.Item>     
-                  <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskPickingNumber}</Text>
-                  </Flex.Item>    
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickingMsg}</Text>
-                  </Flex.Item>                               
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickOrderNo}</Text>
+                  </Flex.Item>                             
               </Flex>
-
+              <Flex>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.boxNo}</Text>
+                </Flex.Item>  
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row._boxingTypeValue}</Text>
+                </Flex.Item>   
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
+                </Flex.Item>  
+              </Flex>
             </View>
             )
           }}
