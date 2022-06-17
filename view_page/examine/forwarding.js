@@ -73,11 +73,18 @@ class Page extends Component {
    * @returns 
    */
    moveFunc=()=>{
-    let {navigation,form} = this.props;
+    const {navigation}=this.props;
     const _selectData=this.tableRef.getSelectData();
+    const _sStorageIdList=_selectData.map(o=>o.storageId)   // 仓库ID
 
-    if(!_selectData["length"]){
+    if(!_selectData.length){
       Toast.fail('请选择数据！',1);
+      return
+    }
+
+
+    if(Array.from(new Set(_sStorageIdList)).length>1){
+      Toast.fail('多条移库，必须是同一个仓库！',2);
       return
     }
 
@@ -86,7 +93,6 @@ class Page extends Component {
       list:_selectData
     });
 
-    
    }
 
 
