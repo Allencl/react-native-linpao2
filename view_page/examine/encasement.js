@@ -118,7 +118,8 @@ class Page extends Component {
     this.setState({
       pickOrder:{}, 
       pickOrderdList:[],   
-      pickOrderBoxingList:[]  
+      pickOrderBoxingList:[],
+      bufferPickOrderBoxingList:[]
     });
 
     // console.log(odd)
