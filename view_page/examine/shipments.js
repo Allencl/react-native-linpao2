@@ -25,6 +25,15 @@ class PageForm extends Component {
 
     this.state={
 
+      storageList:[],  //库位
+      realStorageList:[],  // 实际库位
+
+      
+
+      storageForm:[],  // 库位表单值
+      realStorageForm:[],  // 库位表单值
+
+
         code:"1",  // 待发运库位
         storage:"",  // 实际待发运库位
 
@@ -43,7 +52,9 @@ class PageForm extends Component {
   componentDidMount(){
     let that=this;
 
-    this.initFunc();
+    // this.initFunc();
+    this.getStorageListFunc()
+    
   }
 
 
@@ -56,14 +67,50 @@ class PageForm extends Component {
    * 初始化
    */
   initFunc=()=>{
-    const {list=[]}=this.props.route.params.routeParams;
-    let _row=list[0];
-    console.log(list)
+    // const {list=[]}=this.props.route.params.routeParams;
+    // let _row=list[0];
+    // console.log(list)
 
-    this.setState({
-      code:_row.storageId,  // 待发运库位
-      storage:_row.storageId,  // 实际待发运库位
+    // this.setState({
+    //   code:_row.locNo,  // 待发运库位
+    //   storage:_row.locNo,  // 实际待发运库位
+    // })
+  }
+
+
+  /**
+   * 获取 库位
+  */
+  getStorageListFunc=()=>{
+    const that=this;
+    const {list=[]}=this.props.route.params.routeParams;
+    let _json=list[0];
+
+    WISHttpUtils.get('wms/loc/list',{
+      params:{
+        // storageId:list[0]["deliveryLocId"],
+        storageId:_json["storageId"],
+        status:"1",
+        dlocType:"9"
+      }
+    },(result)=>{
+      const {rows=[]}=result;
+      let _row=rows.map(o=>Object.assign({_name:`${o.locNo}-${o.locName}`,id:o.tmBasLocId}));
+      let _formValue=_row.filter(k=>k.id==_json.deliveryLocId);
+
+
+      that.setState({
+        storageList:_row,
+        realStorageList:_row
+      });
+
+      that.props.form.setFieldsValue({
+        "storageForm":_formValue,
+        "realStorageForm":_formValue,
+      });
+
     })
+
   }
 
 
@@ -85,41 +132,39 @@ class PageForm extends Component {
         // console.log(error)
 
           
-        if(!value["storage"]){
-            Toast.fail('实际待发运库位不能为空！',1);
+        if(!value["realStorageForm"].length){
+            Toast.fail('实际待发运库位为空！',1);
             return
           }
 
       } else{
-
+        let _ids=list.map(k=>k.ttMmPickOrderId);
   
         let _json={
-            "deliveryLocid": value["storage"],
-            "ttMmPickOrderIds": [
-              "采购单id",
-              "采购单id"
-            ]
-          
+          "deliveryLocid": value["realStorageForm"][0].id,
+          "ttMmPickOrderIds": _ids
         }
 
-        console.log(value)
 
-        return
+        // console.log(_json)
+
         WISHttpUtils.post("wms/pickOrder/moveLoc",{
           params:_json
           // hideLoading:true
         },(result) => {
           let {code}=result;
 
+          // console.log(result)
           if(code==200){
             Toast.success("检验完成！",1);
-
+            navigation.navigate("examine");
+            DeviceEventEmitter.emit('globalEmitter_update_examineForwarding_table');
           }
 
         });  
 
 
-
+        
 
       }
     });
@@ -137,12 +182,15 @@ class PageForm extends Component {
 
    }
 
-
   render() {
     let that=this;
     const {
-        code,  
-        storage,
+      storageList,
+      realStorageList,
+
+      storageForm,
+      realStorageForm,
+
         check
     }=this.state;
 
@@ -158,33 +206,54 @@ class PageForm extends Component {
         <View style={{marginTop:22}}>
 
 
+          <WisSelectFlex 
+            form={form} 
+            name="storageForm"
+            {...getFieldProps('storageForm',{
+              rules:[{required:false }],
+              initialValue:[]
+            })} 
+            error={getFieldError('storageForm')}  
+            title="待发运库位（单选）"             
+            lableName="待发运库位"
+            textFormat={o=>o._name}
+            labelFormat={o=>o._name}
+            onChangeValue={(_list)=>{
+              // that.reservoirChange(_list);
+            }}
+            onCleanValue={()=>{
+              // this.cleanReservoirChange()
+            }}
+            data={storageList}
+            disabled
+          />
 
-            <WisInput  
-              form={form} 
-              name="code"   
-              {...getFieldProps('code',{
-                  rules:[{required:false}],
-                  initialValue:code
-              })} 
-              error={getFieldError('code')}               
-              lableName="待发运库位"
-              disabled
-            />   
+          <WisSelectFlex 
+            form={form} 
+            name="realStorageForm"
+            requiredSign={true}
+            {...getFieldProps('realStorageForm',{
+              rules:[{required:true }],
+              initialValue:[]
+            })} 
+            error={getFieldError('realStorageForm')}  
+            title="实际待发运库位（单选）"             
+            lableName="实际待发运库位"
+            textFormat={o=>o._name}
+            labelFormat={o=>o._name}
+            onChangeValue={(_list)=>{
+              // that.reservoirChange(_list);
+            }}
+            onCleanValue={()=>{
+              this.props.form.setFieldsValue({
+                "realStorageForm":[]
+              });
+            }}
+            data={realStorageList}
+            
+          />         
 
-
-            <WisInput  
-              form={form} 
-              name="storage"   
-              requiredSign={true}
-              {...getFieldProps('storage',{
-                  rules:[{required:true}],
-                  initialValue:storage
-              })} 
-              error={getFieldError('storage')}               
-              lableName="实际待发运库位"
-            />           
-
-            <View style={{marginTop:18}}>
+            {/* <View style={{marginTop:18}}>
                 <Checkbox
                     checked={check}
                     // style={{marginTop:12}}
@@ -194,7 +263,7 @@ class PageForm extends Component {
                 >
                     <Text style={{fontSize:16,paddingLeft:6,color:"#000000d9"}}>是否自提</Text>
                 </Checkbox>
-            </View>
+            </View> */}
             
         </View>
 
@@ -202,7 +271,7 @@ class PageForm extends Component {
         <View style={{marginTop:32,marginBottom:50}}>
           <Flex>
             <Flex.Item style={{paddingRight:6}}>
-              <Button type="ghost" onPress={()=>{ this.confirmHandle() }}>确认移动</Button>          
+              <Button type="ghost" onPress={()=>{ this.confirmHandle() }}>确认移库</Button>          
             </Flex.Item>
             <Flex.Item style={{paddingRight:6}}>
               <Button type="ghost" onPress={()=>{ this.cancelFunc() }}>取消</Button>          

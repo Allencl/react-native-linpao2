@@ -41,11 +41,15 @@ class Page extends Component {
   componentDidMount(){
     let that=this;
 
-
+    this.updateTable=DeviceEventEmitter.addListener('globalEmitter_update_examineForwarding_table',function(key=""){
+      that.tableRef.initFunc();
+      console.log("刷新了！！！")
+    });
 
   }
 
   componentWillUnmount(){
+    this.updateTable.remove();
 
   }
 
@@ -182,13 +186,13 @@ class Page extends Component {
                     </View>
                   </Flex.Item>                
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickOrderNo }</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'零件'}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.reviewEndDate}</Text>
                   </Flex.Item>      
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickingMsg}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.locNo}</Text>
                   </Flex.Item>                               
               </Flex>
 
