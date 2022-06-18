@@ -66,16 +66,16 @@ class PageForm extends Component {
   initFunc=()=>{
     const {row={}}=this.props.route.params.routeParams;
 
-    // console.log(row)
+    console.log(row)
     this.setState({
-      taskNo:row.taskNo,       
-      supplier:row.supplNo,    
-      supplierName:row.supplName,  
-      part:row.partNo,        
-      partName:row.partName,     
-      number:String(row.taskQty),     
-      boxNum:row.lpnId,     
-      storage:row.dLocName,   
+      taskNo:row.taskNo||'',       
+      supplier:row.supplNo||'',    
+      supplierName:row.supplName||'',  
+      part:row.partNo||'',        
+      partName:row.partName||'',     
+      number:String(row.taskQty||''),     
+      boxNum:row.lpnId||'',     
+      storage:row.dLocName||'',   
       storageAffirm:'',   
     })
   }

@@ -247,7 +247,7 @@ class PageForm extends Component {
 
 
 
-        <View style={{marginTop:22}}>
+        <View style={{marginTop:2}}>
 
 
             <WisInput  
