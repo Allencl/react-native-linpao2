@@ -145,7 +145,7 @@ class PageForm extends Component {
       <ScrollView style={{padding:8,backgroundColor:"#fff"}}>
 
 
-        <View style={{marginTop:22}}>
+        <View style={{marginTop:2}}>
 
 
             <WisInput  
@@ -190,7 +190,7 @@ class PageForm extends Component {
         </View>
 
 
-        <View style={{marginTop:32,marginBottom:50}}>
+        <View style={{marginTop:12,marginBottom:50}}>
 
           <Flex>
             <Flex.Item style={{paddingRight:6}}>

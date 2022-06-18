@@ -155,13 +155,15 @@ class Page extends Component {
           </Flex>
         </View>
 
-
+        <View style={{marginTop:2,marginBottom:0}}>
+          <Button style={{height:36}} type="ghost" onPress={()=> this.passHandle() }>移 库</Button>          
+        </View> 
 
         <WisFlexTablePage
           RequestURL="wms/packageTask/list"
           Parames={{taskStatus:0}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          // maxHeight={height-176}
+          maxHeight={height-340}
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
@@ -214,9 +216,7 @@ class Page extends Component {
         />
 
 
-        <View style={{marginTop:16,marginBottom:50}}>
-          <Button type="ghost" onPress={()=> this.passHandle() }>移 库</Button>          
-        </View> 
+
 
       </View>
     );

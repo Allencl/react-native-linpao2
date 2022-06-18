@@ -243,12 +243,29 @@ class Page extends Component {
         </View>
 
 
+        <View style={{marginTop:2,marginBottom:0}}>
+          <Flex>
+            <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              <Button style={{height:36}} type="ghost" onPress={()=> { 
+                if(!this.tableRef.getSelectData().length){
+                  Toast.fail('请选择数据！',1);
+                  return
+                }
+                
+                this.passHandle();
+              }}>包装完成</Button> 
+            </Flex.Item>  
+            <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              <Button style={{height:36}} type="ghost" onPress={()=> this.setState({visible2:true}) }>标签打印</Button> 
+            </Flex.Item>                                         
+          </Flex>                 
+        </View> 
 
         <WisFlexTablePage
           RequestURL="wms/packageTask/list"
           Parames={{taskStatus:5}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          // maxHeight={height-380}
+          maxHeight={height-340}
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
@@ -301,22 +318,6 @@ class Page extends Component {
         />
 
 
-        <View style={{marginTop:16,marginBottom:50}}>
-          <Flex>
-            <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-              <Button type="ghost" onPress={()=> { 
-                if(!this.tableRef.getSelectData().length){
-                  Toast.fail('请选择数据！',1);
-                  return
-                }
-                this.setState({visible:true}) 
-              }}>包装完成</Button> 
-            </Flex.Item>  
-            <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-              <Button type="ghost" onPress={()=> this.setState({visible2:true}) }>标签打印</Button> 
-            </Flex.Item>                                         
-          </Flex>                 
-        </View> 
 
       </View>
     );

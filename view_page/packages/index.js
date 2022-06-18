@@ -97,22 +97,19 @@ class Page extends Component {
             // this.tabsChange(index)
           }}
         >
-          <ScrollView>
-            <View style={{height:1400}}>
+      
+            <View >
               <AwaitPage 
                 navigation={navigation}
                 onRef={(ref)=>{this.awaitPageRef=ref}}
               />
             </View>
-          </ScrollView>
-          <ScrollView>
-            <View style={{height:1400}}>
+            <View >
               <PackagingPage 
                 navigation={navigation}
                 onRef={(ref)=>{this.packagingPageRef=ref}}
               />
             </View>
-          </ScrollView>
         </Tabs> 
       </View>
       :
