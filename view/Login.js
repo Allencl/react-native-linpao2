@@ -142,16 +142,19 @@ class LoginScreenForm extends React.Component {
           showsVerticalScrollIndicator={false}
         >
 
-        <Flex style={{marginTop:90,marginBottom:22,paddingLeft:16}}>
+        <Flex style={{marginTop:50,marginBottom:12,paddingLeft:16}}>
           <Flex.Item>
             <Image
-              style={styles.img}
+
               source={require('./img/logo3.png')}
             /> 
           </Flex.Item>
         </Flex>
+        <View style={{marginTop:8,marginBottom:28,paddingLeft:16}}>
+              <Text style={{fontWeight:'bold',color:'#202123',fontSize:18}}>售后备件 WMS</Text>
+            </View>
 
-          <List>
+          <View >
 
             {/* <View style={styles.headTitle}>
               <Text style={styles.headTitleText}>	盈合机器人</Text>
@@ -166,9 +169,9 @@ class LoginScreenForm extends React.Component {
                     initialValue:userName
                   })}
                   error={getFieldError('userName')}
-                  placeholder=""
+                  placeholder="请输入手机号"
                 >
-                  用户名
+                  手机号
                 </InputItem>
 
                 <InputItem
@@ -188,12 +191,13 @@ class LoginScreenForm extends React.Component {
                     </TouchableOpacity>
                   
                   }
-                  placeholder=""
+                  placeholder="请输入密码"
+
                 >
                   密码
                 </InputItem>
               </View>
-              <List.Item style={styles.footerBox}>
+              <View style={styles.footerBox}>
                 <Button
                   style={styles.footerBtn}
                   onPress={this.submit}
@@ -201,8 +205,17 @@ class LoginScreenForm extends React.Component {
                 >
                   <Text style={{fontSize:22,color:"#fff"}}>登 录</Text>
                 </Button>
-              </List.Item>
-          </List>
+              </View>
+          </View>
+
+           <View style={{paddingLeft:16}}>
+              <View style={{marginTop:80}}> 
+                <Text style={{fontSize:16}}>问题支持电话</Text>
+              </View>
+              <View>
+                <Text>611007/19906781007</Text>
+              </View>
+            </View>         
         </View>
       </Provider>
     );
@@ -218,6 +231,8 @@ const styles = StyleSheet.create({
     marginBottom:30
   },
   container:{
+    paddingLeft:8,
+    paddingRight:8,
     flex: 1,    
     flexDirection: 'column',
     backgroundColor:"#fff"
