@@ -55,10 +55,16 @@ class Page extends Component {
 
     this.initFunc();
 
+
+    // 刷新页面   C:\codeAllen\react-native-linpao2\view_page\examine\encasement.js
+    this.updatePage=DeviceEventEmitter.addListener('globalEmitter_examine_update_table',function(){
+      that.searchFunc()
+    });
+
   }
 
   componentWillUnmount(){
-
+    this.updatePage.remove();
   }
 
   /**
@@ -67,6 +73,7 @@ class Page extends Component {
    searchFunc=()=>{
       const {odd}=this.state;
 
+      // console.log("刷新了啊啊啊啊")
       this.initFunc()
    }
 
@@ -187,6 +194,7 @@ class Page extends Component {
    * @returns 
    */
    separateFunc=()=>{
+    const that=this;
     const {pickOrderBoxingList}=this.state;
     let _selectData=pickOrderBoxingList.filter(o=>o._checked);
 
@@ -212,8 +220,7 @@ class Page extends Component {
       version: _selectData[0]["version"],
     }
 
-    console.log(_json)
-    return
+    // console.log(_json)
     WISHttpUtils.post("wms/boxingInfo/unboxing",{
       params: _json
       // hideLoading:true
@@ -223,6 +230,7 @@ class Page extends Component {
       // console.log(result)
       if(code==200){
         Toast.success(`${msg}`,1);
+        that.searchFunc()
       }
 
     });  
@@ -247,7 +255,18 @@ class Page extends Component {
    */
    importLogisticsNum=()=>{
     let {navigation,form} = this.props;
-    navigation.navigate('logisticsNum'); 
+    const {pickOrderBoxingList}=this.state;
+    let _selectData=pickOrderBoxingList.filter(o=>o._checked);
+
+    if(!_selectData.length){
+      Toast.fail('请选择数据！',1);
+      return
+    }
+
+
+    navigation.navigate('logisticsNum',{
+      list:_selectData
+    }); 
     
    }
   

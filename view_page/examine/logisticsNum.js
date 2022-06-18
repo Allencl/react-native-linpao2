@@ -86,6 +86,7 @@ class PageForm extends Component {
    confirmHandle=()=>{
     const that=this;
     const {navigation} = this.props;
+    const {list=[]}=this.props.route.params.routeParams;
 
 
     this.props.form.validateFields((error, value) => {
@@ -100,30 +101,31 @@ class PageForm extends Component {
         }
       } else{
 
-        navigation.navigate("examine");
+        let _json=list.map(o=>Object.assign({
+          "boxNo": o.boxNo,
+          // "carInfo": "string",
+          // "driverInfo": "string",
+          "pickOrderNo": o.pickOrderNo,
+          "transfOrder": value["code"].trim(),
+          "ttMmBoxingInfoId": o.ttMmBoxingInfoId,
+          "ttMmPickOrderId": o.ttMmPickOrderId,
+          "version": o.version
+        }));
 
-        // let _json=Object.assign(row,{
-        //     acceptsQty:_acceptsQty,
-        //     concessionQty:_concessionQty,
-        //     concessionReason:value.concessionText,
-        //     unacceptsQty:_unacceptsQty,
-        //     unacceptsReason:value.disqualificationText
-        // })
+        WISHttpUtils.post("wms/boxingInfo/logisticsInfoInput",{
+          params:_json
+          // hideLoading:true
+        },(result) => {
+          let {code}=result;
 
+          // console.log(result)
+          if(code==200){
+            Toast.success("操作成功！",2);
+            navigation.navigate("examine");
+            DeviceEventEmitter.emit('globalEmitter_examine_update_table');
+          }
 
-        // WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
-        //   params:_json
-        //   // hideLoading:true
-        // },(result) => {
-        //   let {code}=result;
-
-        //   if(code==200){
-        //     Toast.success("检验完成！",1);
-
-
-        //   }
-
-        // });  
+        });  
 
       }
     });
