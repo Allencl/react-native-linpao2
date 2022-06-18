@@ -255,9 +255,9 @@ class Page extends Component {
                 this.passHandle();
               }}>包装完成</Button> 
             </Flex.Item>  
-            <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            {/* <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
               <Button style={{height:36}} type="ghost" onPress={()=> this.setState({visible2:true}) }>标签打印</Button> 
-            </Flex.Item>                                         
+            </Flex.Item>                                          */}
           </Flex>                 
         </View> 
 
