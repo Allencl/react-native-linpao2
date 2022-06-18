@@ -207,7 +207,7 @@ class PageForm extends Component {
         <WisFlexTablePage
           RequestURL="wms/boxingInfo/list"
           Parames={{pickOrderStatus:'1'}}
-          maxHeight={200}
+          maxHeight={height-310}
           onRef={(ref)=>{ this.tableRef=ref }}
           // renderHead={()=>{
           //   return (
@@ -270,7 +270,7 @@ class PageForm extends Component {
           }}
         />
 
-        <View style={{marginTop:32,marginBottom:50}}>
+        <View style={{marginTop:12,marginBottom:50}}>
           <Flex>
             <Flex.Item style={{paddingRight:6}}>
               <Button type="ghost" onPress={()=> this.passHandle() }>发运</Button>          
