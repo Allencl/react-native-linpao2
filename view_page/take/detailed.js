@@ -81,6 +81,8 @@ class PageForm extends Component {
    */
    updateFunc=(odd)=>{
     const that=this;
+    let {navigation,form} = this.props;
+
     // const {odd}=this.props.route.params.routeParams;
 
     // console.log(odd)
@@ -97,6 +99,14 @@ class PageForm extends Component {
       }
     },(result)=>{
       const {code,msg,data={}}=result;
+
+
+      if(code==210){
+        // console.log("2222-111")
+        // navigation.navigate('take'); 
+        // Toast.fail(`${msg}!`,1);
+        // return
+      }
 
       that.initFunc(data)
       // console.log(result)

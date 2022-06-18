@@ -399,7 +399,7 @@ export default class WISHttpUtils extends Component{
                         }
 
 
-                        if(code==200 || code==undefined){
+                        if(code==200 || code==210 || code==undefined){
                             callback(json);
                         }else{
                             Toast.offline(`[${code}]${msg}`,1);
