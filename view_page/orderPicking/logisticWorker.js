@@ -186,7 +186,7 @@ class PageForm extends Component {
         }
 
         if(!value["realStorage"]){
-          Toast.fail('实际拣货库位不能为空！',1);
+          Toast.fail('实际库位不能为空！',1);
           return
         }
 
@@ -197,7 +197,7 @@ class PageForm extends Component {
         let _realStorage=value["realStorage"].trim();
 
         if(value.storage != _realStorage){
-          Toast.fail('实际拣货库位必须与推荐库位一致！',1);
+          Toast.fail('实际库位必须与推荐库位一致！',1);
           return
         }
 
@@ -416,7 +416,7 @@ class PageForm extends Component {
                   initialValue:realStorage
               })} 
               error={getFieldError('realStorage')}               
-              lableName="实际拣货库位"
+              lableName="实际库位"
                 
             />
 
