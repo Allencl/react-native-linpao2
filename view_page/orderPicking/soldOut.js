@@ -203,29 +203,29 @@ class Page extends Component {
           <Flex.Item style={{flex:3}}>
             <Text style={{fontSize:32,textAlign:'center'}}>{pageTotal}</Text>
           </Flex.Item>
-          <Flex.Item style={{flex:3,paddingRight:6}}>
-            <Button style={{height:46}} type="ghost" onPress={()=> {
+          <Flex.Item style={{flex:3,paddingRight:0}}>
+            <Button style={{height:36,paddingLeft:2,paddingRight:2}} type="ghost" onPress={()=> {
               this.orderPickingFunc()
 
             }}><Text style={{fontSize:14}}>拣货</Text></Button>          
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:6}}>
-            <Button style={{height:46}} type="ghost" onPress={()=>{
+            <Button style={{height:36,paddingLeft:2,paddingRight:2}} type="ghost" onPress={()=>{
               this.cardOrderPicking();
             }}><Text style={{fontSize:14}}>小车拣货</Text></Button>          
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:6}}>
-            <Button style={{height:46}} type="ghost" onPress={()=>{ this.responseCancel() }}><Text style={{fontSize:14}}>取消响应</Text></Button>          
+            <Button style={{height:36,paddingLeft:2,paddingRight:2}} type="ghost" onPress={()=>{ this.responseCancel() }}><Text style={{fontSize:14}}>取消响应</Text></Button>          
           </Flex.Item>
         </Flex>
-        <View style={{height:12}}></View>
+        {/* <View style={{height:2}}></View> */}
 
 
         <WisFlexTablePage
           RequestURL="wms/pickingTask/list"
           Parames={{taskStatus:10}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-320}
+          maxHeight={height-306}
           onInitHandle={(result)=>{
             this.setState({pageTotal:result.total})
             // console.log(result.total)

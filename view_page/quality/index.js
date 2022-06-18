@@ -298,25 +298,25 @@ class PageForm extends Component {
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
                   <Flex.Item style={{flex:15,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.iqcNo}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.iqcNo||''}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:15,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partNo}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partNo||''}</Text>
                   </Flex.Item>
                   <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'right'}}>{row.checkQty}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'right'}}>{String(row.checkQty||'')}</Text>
                   </Flex.Item>       
                              
               </Flex>
               <Flex>
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lotNo}</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.lotNo||''}</Text>
                 </Flex.Item>  
               </Flex>
 
               <Flex>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName||''}</Text>
                   </Flex.Item>   
                   <Flex.Item style={{flex:1,flexDirection:'row-reverse',paddingBottom:5,paddingLeft:2,paddingRight:0}}>
                     <Icon style={{fontSize:24}} name="right" />

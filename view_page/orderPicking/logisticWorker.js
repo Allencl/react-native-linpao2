@@ -314,7 +314,7 @@ class PageForm extends Component {
         </Modal>
 
 
-        <View style={{marginTop:22}}>
+        <View style={{marginTop:2}}>
 
 
             <WisInput  
@@ -424,8 +424,7 @@ class PageForm extends Component {
         </View>
 
 
-        <View style={{marginTop:32,marginBottom:50}}>
-
+        <View style={{marginTop:12,marginBottom:30}}>
           <Flex>
             <Flex.Item style={{paddingRight:6}}>
               <Button type="ghost" onPress={()=> this.accomplishFunc() }>下一条</Button>          

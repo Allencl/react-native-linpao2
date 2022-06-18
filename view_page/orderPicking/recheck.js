@@ -163,7 +163,7 @@ class Page extends Component {
         <Flex>
 
           <Flex.Item style={{flex:6,paddingRight:6}}>
-            <Text>已完成下架任务行记录</Text>
+            <Text style={{paddingLeft:1}}>已完成下架任务行记录</Text>
           </Flex.Item>
           <Flex.Item style={{flex:3,paddingLeft:6}}>
             <Button style={{height:36}} type="ghost" onPress={()=> { this.initPage()  } }><Text style={{fontSize:14}}>刷新</Text></Button>  

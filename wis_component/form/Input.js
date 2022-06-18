@@ -51,7 +51,7 @@ class InputComponent extends Component{
     render() {
         let that=this;
         let {toggleEye,value}=this.state;
-        const {requiredSign=false,form={},labelNumber=5,name='',type="text",defaultValue='',onChangeValue,lableName,disabled,required=false}=this.props;
+        const {requiredSign=false,form={},labelNumber=4,name='',type="text",defaultValue='',onChangeValue,lableName,disabled,required=false}=this.props;
         let{getFieldError,getFieldValue}=form;
 
         return (

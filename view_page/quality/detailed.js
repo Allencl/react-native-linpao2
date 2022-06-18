@@ -75,18 +75,18 @@ class PageForm extends Component {
 
     // console.log(row)
     this.setState({
-        taskNo:row.iqcNo,
-        asnNo:row.orderNo,
-        batchNo:row.lotNo,
-        supplier:row.supplName,
-        supplies:row.partNo,
-        name:row.partName,
-        inspectNum:String(row.checkQty),
+        taskNo:row.iqcNo||'',
+        asnNo:row.orderNo||'',
+        batchNo:row.lotNo||'',
+        supplier:row.supplName||'',
+        supplies:row.partNo||'',
+        name:row.partName||'',
+        inspectNum:String(row.checkQty||''),
     
-        qualifiedNum:String(row.acceptsQty),
-        concessionNum:String(row.concessionQty),
+        qualifiedNum:String(row.acceptsQty||''),
+        concessionNum:String(row.concessionQty||''),
         concessionText:'',
-        disqualificationNum:String(row.unacceptsQty),
+        disqualificationNum:String(row.unacceptsQty||''),
         disqualificationText:'',
     })
   }

@@ -250,14 +250,14 @@ class Page extends Component {
 
 
         <Flex style={{marginBottom:12}}>
-          <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
+          <Flex.Item style={{flex:10,paddingLeft:3,paddingRight:3}}>
             <Button style={{height:36}} type="ghost" onPress={()=> { this.beginFunc()   }}><Text style={{fontSize:14}}>开始拣货</Text></Button>  
           </Flex.Item>
-          <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
+          <Flex.Item style={{flex:10,paddingLeft:3,paddingRight:3}}>
             <Button style={{height:36}} type="ghost" onPress={()=> { this.changeCardFunc()  }}><Text style={{fontSize:14}}>切换小车</Text></Button>  
           </Flex.Item>
-          <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> { this.moveFunc() }}><Text style={{fontSize:14}}>移动至复核区</Text></Button>  
+          <Flex.Item style={{flex:12,paddingLeft:3,paddingRight:3}}>
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.moveFunc() }}><Text style={{fontSize:14}}>移至复核区</Text></Button>  
           </Flex.Item>
         </Flex>
 
@@ -266,7 +266,7 @@ class Page extends Component {
           // maxHeight={360}
           data={tableList||[]}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-376}
+          // maxHeight={height-376}
           // renderHead={()=>{
           //   return (
           //     <Flex>
@@ -305,23 +305,22 @@ class Page extends Component {
                       </Checkbox>
                     </View>
                   </Flex.Item>                 */}
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
+                  <Flex.Item style={{flex:20,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo||''}</Text>
                   </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
+                  <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.taskPickingNumber||'')}</Text>
                 </Flex.Item>  
               </Flex>
               <Flex>
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.taskPickingNumber)}</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part||''}</Text>
                 </Flex.Item>  
               </Flex>
+
               <Flex>
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.pickingTaskCreateTime)}</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.pickingTaskCreateTime||'')}</Text>
                 </Flex.Item>  
               </Flex>
             </View>
@@ -330,7 +329,9 @@ class Page extends Component {
         />
 
 
-
+        <View heigh={{height:20}}>
+          <Text></Text>
+        </View>
 
       </ScrollView>
     );

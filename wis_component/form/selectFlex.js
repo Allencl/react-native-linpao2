@@ -96,7 +96,7 @@ class SelectComponent extends Component{
     
     render() {
         let {bufferData=[],value}=this.state;
-        const {onSearchChange,data=[],placeholder,title,form,name,textFormat=()=>{},requiredSign=false,labelFormat=()=>{},onChangeValue,lableName,disabled}=this.props;
+        const {onSearchChange,data=[],placeholder,labelNumber=4,title,form,name,textFormat=()=>{},requiredSign=false,labelFormat=()=>{},onChangeValue,lableName,disabled}=this.props;
        
 
         let _list=(form.getFieldValue(name)||[]).map(o=>{
@@ -181,7 +181,7 @@ class SelectComponent extends Component{
                     <InputItem
                         style={disabled?styles.isDisabled:styles.InputItem}
                         value={_list.join(",")}
-                        labelNumber={6}
+                        labelNumber={labelNumber}
                         placeholder={placeholder||"请选择..."}
                         editable={false}
                         extra={disabled?<Icon name="stop" />:<Icon name="down" />}

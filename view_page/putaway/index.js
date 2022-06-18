@@ -255,30 +255,29 @@ class PageForm extends Component {
                       // })
                       navigation.navigate('putawayDetailed',{row:row})
                     }}>
-                      <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
+                      <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo||''}</Text>
                     </TouchableOpacity>
                     {/* <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text> */}
 
                   </Flex.Item>
                   <Flex.Item style={{flex:1}}></Flex.Item> 
                   <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.dBasLocId}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.dBasLocId||''}</Text>
                   </Flex.Item> 
                   <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.taskQty)}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.taskQty||'')}</Text>
                   </Flex.Item>                               
               </Flex>
-              <View style={{height:2}}></View>
+              {/* <View style={{height:2}}></View> */}
               <Flex>
-
                 <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName||''}</Text>
                 </Flex.Item>
               </Flex>
-              <View style={{height:2}}></View>
+              {/* <View style={{height:2}}></View> */}
               <Flex>
                 <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.supplName}</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.supplName||''}</Text>
                 </Flex.Item> 
               </Flex>
             </View>

@@ -281,7 +281,7 @@ class PageForm extends Component {
         </View>
 
 
-        <View style={{marginTop:32,marginBottom:50}}>
+        <View style={{marginTop:12,marginBottom:20}}>
 
           <Flex>
             <Flex.Item style={{paddingRight:6}}>
