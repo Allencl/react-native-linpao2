@@ -83,7 +83,14 @@ class PageForm extends Component {
     const that=this;
     // const {odd}=this.props.route.params.routeParams;
 
-    console.log(odd)
+    // console.log(odd)
+    this.setState({
+      basicData:{},
+      waitReceivingList:[],
+      completeList:[]
+    });
+
+
     WISHttpUtils.get(`wms/poOrderPart/getOrderDetails/${odd}`,{
       params:{
 
@@ -92,7 +99,7 @@ class PageForm extends Component {
       const {code,msg,data={}}=result;
 
       that.initFunc(data)
-      console.log(result)
+      // console.log(result)
 
     })     
    }
@@ -108,6 +115,7 @@ class PageForm extends Component {
     const {data}=this.props.route.params.routeParams;
     const {poOrder={},poOrderPartList=[],msg}=_data || data;
 
+
     
     // console.log(23322)
     // console.log( data )
@@ -117,7 +125,8 @@ class PageForm extends Component {
         basicData:{},
         waitReceivingList:[],
         completeList:[]
-      })
+      });
+      return
     }
 
 
@@ -441,7 +450,7 @@ class PageForm extends Component {
 
 
         <Modal
-          title={`批量收货 (${waitReceivingList.filter(o=>o._checked).length})`}
+          title={"批量收货"}
           transparent
           onClose={()=>{
             this.setState({visible:false})
@@ -450,7 +459,7 @@ class PageForm extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=> that.batchTakeFunc() },
+            {text:'确认',onPress:()=> this.batchTakeFunc() },
             {text:'取消',onPress:()=>{}}
           ]}
         >
@@ -683,7 +692,9 @@ class PageForm extends Component {
           }}
         />
 
-
+        <View style={{height:60}}>
+          <Text>{" "}</Text>
+        </View>
       </ScrollView>
     );
   }
