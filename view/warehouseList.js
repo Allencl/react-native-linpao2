@@ -139,6 +139,8 @@ class PageForm extends Component {
             }
             },(result)=>{
                 const {data=[]}=result;
+
+                // console.log(result)
               
                 if(data.length){
                     let _list=(data[0]["children"])||[];

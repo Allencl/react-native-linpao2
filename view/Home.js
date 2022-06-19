@@ -12,6 +12,9 @@ class HomeScreen extends Component{
         super(props);
     
         this.state={
+
+            showMenu:false,
+
             modalVisible:false,
             warehouseMap:[],  // 仓库
             menuList:[],  // 菜单数据
@@ -150,10 +153,54 @@ class HomeScreen extends Component{
         
     }
 
+    /**
+     * 路由跳转  动态
+     * @returns 
+     */
+     authorityDynamic=(option)=>{
+        const {navigation} = this.props;
+        const {path}=option;
+
+        if(!path){
+            Toast.offline("菜单不存在！",1);
+            return
+        }
+
+        switch (path) {
+            case "receipt":  // 收货
+                navigation.navigate("take");
+                break;
+            case "iqcTask":  // 质检任务
+                navigation.navigate("quality");
+                break; 
+            case "packageTask":  // 包装
+                navigation.navigate("packages");
+                break;                
+            case "mmTask":  // 上架
+                navigation.navigate("putaway");
+                break;                 
+
+            case "out":  // 拣货
+                navigation.navigate("orderPicking");
+                break;  
+            case "reviewBoxing":  // 装箱
+                navigation.navigate("examine");
+                break;  
+            case "shipment":  // 发运
+                navigation.navigate("transport");
+                break;  
+
+            default:
+                break;
+        }
+
+        console.log(option)
+     }
+
     render() {
         const that=this;
         const {navigation} = this.props;
-        const {menuList,modalVisible,warehouseMap=[],isProcurement,lanyaStatus,isFinancing,version,numberConfig}=this.state;
+        const {showMenu,menuList,modalVisible,warehouseMap=[],isProcurement,lanyaStatus,isFinancing,version,numberConfig}=this.state;
 
         return (
         <ScrollView style={styles.page}>
@@ -161,96 +208,98 @@ class HomeScreen extends Component{
   
             <WingBlank size="md" style={styles.wingBlank}>
 
+                { showMenu ? 
+                    <Card style={styles.card}>
+                        <Card.Header
+                            title="测试页面-在这里"
+                            thumb={<Icon name="audit" size="md" color="#1890ff" style={{marginRight:6}} />}
+                        />
+                        <Card.Body>
+                            <View style={styles.cardContent}>
+                                <View style={styles.flexBox}>
+                                    <View style={styles.flexBoxCol}>
+                                        <View style={styles.flexBoxColChild}>
+                                            <TouchableOpacity onPress={() => this.authority('take') }>
+                                                <View style={styles.menu_child}>
+                                                    <Icon style={styles.menu_child_icon} name="folder-add" size="lg" color="#1890ff" />
+                                                    <Text style={styles.menu_child_text}>ASN收货</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>  
+                                    <View style={styles.flexBoxCol}>
+                                        <View style={styles.flexBoxColChild}>
+                                            <TouchableOpacity onPress={() => this.authority('quality') }>
+                                                <View style={styles.menu_child}>
+                                                    <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
+                                                    <Text style={styles.menu_child_text}>质检任务</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View> 
+                                    <View style={styles.flexBoxCol}>
+                                        <View style={styles.flexBoxColChild}>
+                                            <TouchableOpacity onPress={() => this.authority('putaway') }>
+                                                <View style={styles.menu_child}>
+                                                    <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
+                                                    <Text style={styles.menu_child_text}>上架任务</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>  
 
-                <Card style={styles.card}>
-                    <Card.Header
-                        title="测试页面-在这里"
-                        thumb={<Icon name="audit" size="md" color="#1890ff" style={{marginRight:6}} />}
-                    />
-                    <Card.Body>
-                        <View style={styles.cardContent}>
-                            <View style={styles.flexBox}>
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('take') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="folder-add" size="lg" color="#1890ff" />
-                                                <Text style={styles.menu_child_text}>ASN收货</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>  
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('quality') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
-                                                <Text style={styles.menu_child_text}>质检任务</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View> 
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('putaway') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
-                                                <Text style={styles.menu_child_text}>上架任务</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>  
+                                    <View style={styles.flexBoxCol}>
+                                        <View style={styles.flexBoxColChild}>
+                                            <TouchableOpacity onPress={() => this.authority('packages') }>
+                                                <View style={styles.menu_child}>
+                                                    <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
+                                                    <Text style={styles.menu_child_text}>包装任务</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>  
+                                    
+                                    <View style={styles.flexBoxCol}>
+                                        <View style={styles.flexBoxColChild}>
+                                            <TouchableOpacity onPress={() => this.authority('examine') }>
+                                                <View style={styles.menu_child}>
+                                                    <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
+                                                    <Text style={styles.menu_child_text}>复核</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>  
 
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('packages') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
-                                                <Text style={styles.menu_child_text}>包装任务</Text>
-                                            </View>
-                                        </TouchableOpacity>
+                                    <View style={styles.flexBoxCol}>
+                                        <View style={styles.flexBoxColChild}>
+                                            <TouchableOpacity onPress={() => this.authority('orderPicking') }>
+                                                <View style={styles.menu_child}>
+                                                    <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
+                                                    <Text style={styles.menu_child_text}>拣货</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                </View>  
-                                
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('examine') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
-                                                <Text style={styles.menu_child_text}>复核</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>  
 
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('orderPicking') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
-                                                <Text style={styles.menu_child_text}>拣货</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
+                                    <View style={styles.flexBoxCol}>
+                                        <View style={styles.flexBoxColChild}>
+                                            <TouchableOpacity onPress={() => this.authority('transport') }>
+                                                <View style={styles.menu_child}>
+                                                    <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
+                                                    <Text style={styles.menu_child_text}>发运</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>                                  
+                                                                                            
                                 </View>
-
-                                <View style={styles.flexBoxCol}>
-                                    <View style={styles.flexBoxColChild}>
-                                        <TouchableOpacity onPress={() => this.authority('transport') }>
-                                            <View style={styles.menu_child}>
-                                                <Icon style={styles.menu_child_icon} name="export" size="lg" color="#ffad33" />
-                                                <Text style={styles.menu_child_text}>发运</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>                                  
-                                                                                        
-                            </View>
-                                 
-                        </View>         
-                    </Card.Body>
-                </Card>
-
+                                    
+                            </View>         
+                        </Card.Body>
+                    </Card>
+                    :
+                    <View></View>
+                }
 
 
                 { (menuList||[]).map((o,i)=>{
@@ -265,7 +314,7 @@ class HomeScreen extends Component{
                                     { o.children.map((k,j)=>{
                                         return ( <View key={j} style={styles.flexBoxCol}>
                                                 <View style={styles.flexBoxColChild}>
-                                                    <TouchableOpacity onPress={() => this.authority('malfunctionList') }>
+                                                    <TouchableOpacity onPress={() => this.authorityDynamic(k) }>
                                                         <View style={styles.menu_child}>
                                                             <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
                                                             <Text style={styles.menu_child_text}>{k.menuName}</Text>
