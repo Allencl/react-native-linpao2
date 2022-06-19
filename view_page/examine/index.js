@@ -107,7 +107,7 @@ class Page extends Component {
             this.tabsChange(index)
           }}
         >
-          <View>
+          <View style={{height:340}}>
             <ReCheckPage 
               navigation={navigation}
               onRef={(ref)=>{this.reCheckRef=ref}}

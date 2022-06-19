@@ -486,7 +486,7 @@ class Page extends Component {
           // maxHeight={360}
           data={pickOrderBoxingList||[]}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-376}
+          maxHeight={height-320}
           // renderHead={()=>{
           //   return (
           //     <Flex>
@@ -528,7 +528,7 @@ class Page extends Component {
                   <Flex.Item style={{flex:26,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickOrderNo}</Text>
                   </Flex.Item>  
-                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row._boxingTypeValue}</Text>
                 </Flex.Item>                            
               </Flex>
@@ -551,7 +551,7 @@ class Page extends Component {
         />
 
 
-
+        {/* <View style={{height:12}}><Text></Text></View> */}
 
       </ScrollView>
     );

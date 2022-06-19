@@ -290,29 +290,8 @@ class Page extends Component {
 
 
     return (
-      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:16}}>
+      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:8}}>
 
-
-        {/* <Modal
-          title="确认"
-          transparent
-          onClose={()=>{
-            this.setState({visible:false})
-          }}
-          maskClosable
-          visible={visible}
-          closable
-          footer={[
-            {text:'确认',onPress:()=> {  this.responseFunc()  } },
-            {text:'取消',onPress:()=>{}}
-          ]}
-        >
-          <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
-            <View style={{paddingLeft:12,marginTop:18,marginBottom:22}}>
-              <Text style={{fontSize:18}}>确认进行响应操作？？</Text>
-            </View>
-          </ScrollView>
-        </Modal> */}
 
 
         <Flex>
@@ -386,7 +365,7 @@ class Page extends Component {
 
         </Flex>
 
-        <View style={{height:12}}></View>          
+        <View style={{height:6}}></View>          
 
         { showOrder ?
           <WisFlexTable
@@ -520,7 +499,7 @@ class Page extends Component {
                       </Flex.Item>  
                   </Flex> */}
                   <Flex> 
-                    <Flex.Item style={{flex:6,flexDirection:'row',}}>
+                    <Flex.Item style={{flex:6,flexDirection:'row',marginBottom:8}}>
                       <Text style={{marginTop:9}}>本次装箱数量 </Text>
                       <TextInput
                         // editable={( (row.canModifReceiptQty!="0")?true:false )}
@@ -555,7 +534,7 @@ class Page extends Component {
           <View></View>
       }    
 
-
+      <View style={{height:12}}><Text></Text></View>
       </ScrollView>
     );
   }
