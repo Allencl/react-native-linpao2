@@ -219,7 +219,7 @@ class PageForm extends Component {
       <ScrollView style={{padding:8,backgroundColor:"#fff"}}>
 
 
-        <View style={{marginTop:22}}>
+        <View style={{marginTop:2}}>
 
 
             <WisSelectFlex 

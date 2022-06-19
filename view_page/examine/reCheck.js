@@ -500,10 +500,10 @@ class Page extends Component {
                   </Flex> */}
                   <Flex> 
                     <Flex.Item style={{flex:6,flexDirection:'row',marginBottom:8}}>
-                      <Text style={{marginTop:9}}>本次装箱数量 </Text>
+                      <Text style={{marginTop:9,marginRight:6}}>本次装箱数量 </Text>
                       <TextInput
                         // editable={( (row.canModifReceiptQty!="0")?true:false )}
-                        style={{height:38,width:200,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
+                        style={{height:38,width:120,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
                         value={String(row._boxQty)}
                         keyboardType={"numeric"}
                         onChangeText={text => this.takeChangeText(text,index,row)}
