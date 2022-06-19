@@ -48,6 +48,7 @@ class PageForm extends Component {
   componentDidMount(){
     let that=this;
 
+    this.initFunc();
     this.packagingListFunc();
   }
 
@@ -56,27 +57,43 @@ class PageForm extends Component {
 
   }
 
-    /**
-     * 获取包装数据
-    */
-    packagingListFunc=()=>{
-        const that=this;
+  /**
+   * 初始化
+   */
+  initFunc=()=>{
+    const {list=[]}=this.props.route.params.routeParams;
 
-        WISHttpUtils.get('wms/storage/list',{
-            params:{
+    console.log("asas-1111")
+    console.log(list)
+  }
 
-            }
-        },(result)=>{
-            const {rows=[]}=result;
+  /**
+   * 获取包装数据
+  */
+  packagingListFunc=()=>{
+    const that=this;
+    const {list=[]}=this.props.route.params.routeParams;
 
-            that.setState({
-                packagingList:rows.map(o=>Object.assign({_name:o.storageName,id:o.tmBasStorageId}))
-            })
 
-            // console.log(result)
-        })
+      WISHttpUtils.get('wms/package/list?status=1',{
+        params:{
 
-    }
+        }
+      },(result)=>{
+          const {rows=[]}=result;
+          let _list=rows.map(o=>Object.assign({_name:`${o.packageNo}-${o.packageName}`,id:o.tmBasPackageId}));
+
+          that.setState({
+            packagingList:_list
+          });
+
+          that.props.form.setFieldsValue({
+            "packaging":_list.filter(j=>j.id==list[0]["tmBasPackageId"]) 
+          }); 
+          
+      })
+
+  }
 
 
 
@@ -147,7 +164,7 @@ class PageForm extends Component {
         console.log(value)
 
         navigation.navigate("examine");
-
+        DeviceEventEmitter.emit('globalEmitter_examine_reCheck_update_table');
 
         // navigation.navigate("cardPicking");
 

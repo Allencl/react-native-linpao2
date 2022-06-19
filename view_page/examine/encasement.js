@@ -35,7 +35,7 @@ class Page extends Component {
 
       bufferPickOrderBoxingList:[], // 缓存
 
-      odd:"P202206120060",  // 拣货单号
+      odd:"P202206160103",  // 拣货单号
       ctn:"P2022061200602206170046",   // 箱号
       part:"1001550-CA03",  // 零件号
 
@@ -150,6 +150,11 @@ class Page extends Component {
 
       if(code==200){
         // Toast.success(`${data.message}`,1);
+
+
+        // 
+
+
 
         // 装箱类型
         AsyncStorage.getItem("buffer_boxing_type").then((option)=>{

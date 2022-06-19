@@ -11,7 +11,7 @@ import CheckBox from '@react-native-community/checkbox';
 
 
 import WISHttpUtils from '@wis_component/http'; 
-import {WisTableCross,WisFlexTablePage} from '@wis_component/ul';
+import {WisTableCross,WisFlexTable} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
 
 
@@ -26,9 +26,22 @@ class Page extends Component {
     this.state={
       visible:false,
 
+      showOrder:false,
+      showPart:false,
 
-      odd:"",  // 拣货单号
-      part:"",  // 零件号
+
+      odd:"P202206160101",  // 拣货单号
+      part:"1001060-CA02",  // 零件号
+      // 1001060-CA02
+      // 1001550-CA02
+      // 1001560-CA03
+
+
+      pickOrder:{},   //  基础信息
+      pickOrderdList:[],   // 拣货单 table
+
+
+      partList:[],   // 零件列表
 
     }
 
@@ -42,10 +55,20 @@ class Page extends Component {
     let that=this;
 
 
+    // this.initPage();
+    // 
+    this.updatePage=DeviceEventEmitter.addListener('globalEmitter_examine_reCheck_update_table',function(option){
+      // that.initPage(option)
+      that.setState({
+        part:"",  // 零件号
+        partList:[],   // 零件列表
+      });
+    });
 
   }
 
   componentWillUnmount(){
+    this.updatePage.remove();
 
   }
 
@@ -54,6 +77,56 @@ class Page extends Component {
    * 初始化
    */
    initPage=()=>{
+    const that=this;
+    const {odd}=this.state;
+    let _odd=odd.trim();
+
+    if(!_odd){
+      Toast.fail('请扫描或输入拣货号！',1);
+      return
+    }
+
+    this.setState({
+      pickOrder:{},
+      pickOrderdList:[]
+    });
+
+
+    WISHttpUtils.get(`wms/pickOrderd/getOrderDetails/${_odd}`,{
+      params:{}
+      // hideLoading:true
+    },(result) => {
+      let {code,data={}}=result;
+      console.log(result)
+
+
+      if(!data){
+        Toast.offline("无数据！",1);
+        return
+      }
+
+      if(!data.pickOrderdList){
+        Toast.offline("无数据！",1);
+        return
+      }
+
+      if(code==200){
+        // Toast.success(`${data.message}`,1);
+        that.setState({
+          showOrder:true,
+          showPart:false,
+          partList:[],
+
+          pickOrder:data.pickOrder||{},
+          pickOrderdList:(data.pickOrderdList||[]).map(k=>Object.assign(k,{
+            _checked:false
+          }))
+        })
+
+
+      }
+
+    });  
 
    }
 
@@ -63,40 +136,153 @@ class Page extends Component {
    */
    searchFunc=()=>{
     const {odd}=this.state;
-    
-    // console.log(odd)
-    this.tableRef.initFunc({
-      params:{
-        // lotOrOrder:odd
-      }
-    });
-
+    this.initPage();
    }
 
    /**
     * 查询 零件
     */
    searchPartFunc=()=>{
-    const {part}=this.state;
+    const that=this;
+    const {partList,part,pickOrder}=this.state;
     let {navigation,form} = this.props;
+    let _part=part.trim();
 
-    
-    console.log(part)
-    this.tableRef.initFunc({
+    if(!pickOrder.ttMmPickOrderId){
+      Toast.fail('请先通过拣货单号过滤！',1);
+      return
+    }
+
+    if(!_part){
+      Toast.fail('请扫描或输入零件号"！',1);
+      return
+    }
+
+    WISHttpUtils.post('wms/pickOrderd/orderDetailCheck',{
       params:{
-        // lotOrOrder:odd
+        ttMmPickOrderId:pickOrder.ttMmPickOrderId,
+        partCode:_part
       }
-    });
+      // hideLoading:true
+    },(result) => {
+      let {code,data={}}=result;
+      let _list=(data.data||[]);
+
+      // console.log(result)
+
+      // if(!data){
+      //   Toast.offline("无数据！",1);
+      //   return
+      // }
+
+      // if(!data.pickOrderdList){
+      //   Toast.offline("无数据！",1);
+      //   return
+      // }
 
 
-    navigation.navigate("part");
+      // 去重  ttMmPickOrderDId
+      if(code==200){
+        // 去重
+        // partList.filter(j=>{
+        //   _list.filter(k=>k.ttMmPickOrderDId==j.)
+        // })
+
+        that.setState({
+          showOrder:false,
+          showPart:true,
+          partList:[]
+        },()=>{
+          that.setState({
+            partList:_list.map(o=>Object.assign(o,{
+              _boxQty:o.boxQty,
+              _checked:false
+            }))
+          });
+        })
+
+
+
+        // Toast.success(`${data.message}`,1);
+        // that.setState({
+        //   pickOrderdList:(data.pickOrderdList||[]).map(k=>Object.assign(k,{
+        //     _checked:false
+        //   }))
+        // })
+
+
+      }
+
+    });  
+
+    // navigation.navigate("part");
 
    }
 
 
+     /**
+   * 选中
+  */
+  cheCkquarantineFunc=(action,index)=>{
+    const {partList}=this.state;
+
+    this.setState({
+      partList:partList.map((o,i)=>{
+        return Object.assign(o,{_checked:(i==index)?action:o._checked})
+      })
+    });
+  }
+
+
+  /**
+   * 零件 选择完成
+   * @returns 
+   */
+   passHandle=()=>{
+    let {navigation,form} = this.props;
+    const {partList=[]}=this.state;
+    // let _selectData=partList.filter(o=>o._checked);
+
+    // if(!_selectData.length){
+    //   Toast.offline("未选择数据！",1);
+    //   return
+    // }
+
+
+    navigation.navigate("logistics",{
+      list:partList
+    });
+
+   }
+
+
+  /**
+   * 修改 装箱数量
+   * @returns 
+   */
+   takeChangeText=(text,index,row)=>{
+    const {partList}=this.state;
+
+
+    if( !isNaN(text) ){
+      // console.log( Number(text) )
+      if(Number(text)>row.boxQty){
+        Toast.offline("不能大于本次装箱数量！",1);
+      }
+
+      this.setState({
+        partList:partList.map((o,i)=>{
+          return (index==i)?Object.assign(o,{_boxQty:Number(text) }):o;
+        })
+      })
+
+    }
+
+   }
+
   render() {
     let that=this;
-    let {visible,odd,part}=this.state;
+    let {visible,odd,part,partList,pickOrderdList,showOrder,showPart}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -144,11 +330,12 @@ class Page extends Component {
           </Flex.Item>
           <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
               <TouchableOpacity onPress={() =>{ 
-                this.setState({odd:""});
-                this.tableRef.initFunc({
-                  params:{
-                    // lotOrOrder:""
-                  }
+                this.setState({
+                  odd:"",
+                  pickOrderdList:[],   // 拣货单 table
+                  pickOrder:{}
+                },()=>{
+                  // this.initPage();
                 });
                }}>
                 <Icon style={{fontSize:22}} name="delete" />
@@ -169,19 +356,24 @@ class Page extends Component {
                     part:value
                   })
                 }}
-                placeholder="请扫描或输入 零件标签"
+                placeholder="请扫描或输入 零件标签号"
               >
         
               </InputItem>
             </Flex.Item>
             <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
               <TouchableOpacity onPress={() =>{ 
-                this.setState({part:""});
-                this.tableRef.initFunc({
-                  params:{
-                    // lotOrOrder:""
-                  }
+                this.setState({
+                  part:"",
+                  partList:[],   // 零件列表
+                },()=>{
+                  // this.searchPartFunc()
                 });
+                // this.tableRef.initFunc({
+                //   params:{
+                //     // lotOrOrder:""
+                //   }
+                // });
                }}>
                 <Icon style={{fontSize:22}} name="delete" />
               </TouchableOpacity>
@@ -196,69 +388,172 @@ class Page extends Component {
 
         <View style={{height:12}}></View>          
 
-        <WisFlexTablePage
-          RequestURL="wms/iqcTask/listNew"
-          // Parames={{showStatus:'1'}}
-          onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-376}
-          renderHead={()=>{
-            return (
-              <Flex>
-                {/* <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text></Text>
-                </Flex.Item> */}
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <View>
-                    <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
-                  </View>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货数量</Text>
-                </Flex.Item>
-                <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>已复核数量</Text>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>箱号</Text>
-                </Flex.Item>             
-              </Flex>
-            )
-          }}
-          renderBody={(row,index,callBack)=>{
-            return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
-              <Flex>
-                  {/* <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <View>
-                      <Checkbox
-                        checked={row._checked}
-                        onChange={event => {
-                          callBack && callBack(event.target.checked,index)
-                          // that.cheCkquarantineFunc(event.target.checked,i)
-                        }}
-                      >
-                      </Checkbox>
-                    </View>
-                  </Flex.Item> */}
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
-                  </Flex.Item>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{'零件'}</Text>
-                  </Flex.Item>     
+        { showOrder ?
+          <WisFlexTable
+            // title="待收货列表"
+            // maxHeight={360}
+            data={pickOrderdList||[]}
+            maxHeight={height-376}
+            // renderHead={()=>{
+            //   return (
+            //     <Flex>
+            //       {/* <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            //         <Text></Text>
+            //       </Flex.Item> */}
+            //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            //         <View>
+            //           <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
+            //         </View>
+            //       </Flex.Item>
+            //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货数量</Text>
+            //       </Flex.Item>
+            //       <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>已复核数量</Text>
+            //       </Flex.Item>
+            //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>箱号</Text>
+            //       </Flex.Item>             
+            //     </Flex>
+            //   )
+            // }}
+            renderBody={(row,index,callBack)=>{
+              return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
+                <Flex>
+                    {/* <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                      <View>
+                        <Checkbox
+                          checked={row._checked}
+                          onChange={event => {
+                            callBack && callBack(event.target.checked,index)
+                            that.cheCkquarantineFunc(event.target.checked,index)
+                          }}
+                        >
+                        </Checkbox>
+                      </View>
+                    </Flex.Item> */}
+                    <Flex.Item style={{flex:22,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                      <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
+                    </Flex.Item>
+    
+    
+                    {/* <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                      <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickingMsg}</Text>
+                    </Flex.Item>                                */}
+                </Flex>
+                <Flex>
+                    <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                      <Text numberOfLines={1} style={{textAlign:'left'}}>{`拣货数量:${row.boxQty}`}</Text>
+                    </Flex.Item>  
+                </Flex>
+                <Flex>
                   <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskPickingNumber}</Text>
-                  </Flex.Item>    
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickingMsg}</Text>
-                  </Flex.Item>                               
-              </Flex>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{`已复核数量:${row.boxedQty}`}</Text>
+                  </Flex.Item>  
+                </Flex>
 
-            </View>
-            )
-          }}
-        />
+              </View>
+              )
+            }}
+          />
+          :
+          <View></View>
+        }
+        
+        { showPart ?   
+          <View>
+            <WisFlexTable
+              // title="待收货列表"
+              // maxHeight={360}
+              data={partList||[]}
+              // maxHeight={height-376}
+              // renderHead={()=>{
+              //   return (
+              //     <Flex>
+              //       {/* <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              //         <Text></Text>
+              //       </Flex.Item> */}
+              //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              //         <View>
+              //           <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
+              //         </View>
+              //       </Flex.Item>
+              //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货数量</Text>
+              //       </Flex.Item>
+              //       <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>已复核数量</Text>
+              //       </Flex.Item>
+              //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>箱号</Text>
+              //       </Flex.Item>             
+              //     </Flex>
+              //   )
+              // }}
+              renderBody={(row,index,callBack)=>{
+                return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
+                  <Flex>
+                      {/* <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                        <View>
+                          <Checkbox
+                            checked={row._checked}
+                            onChange={event => {
+                              // callBack && callBack(event.target.checked,index)
+                              this.cheCkquarantineFunc(event.target.checked,index)
+                            }}
+                          >
+                          </Checkbox>
+                        </View>
+                      </Flex.Item> */}
+                      <Flex.Item style={{flex:22,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                        <Text numberOfLines={1} style={{textAlign:'left'}}>{`${row.partNo}${row.partName}`}</Text>
+                      </Flex.Item>
+      
+      
+                      {/* <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                        <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickingMsg}</Text>
+                      </Flex.Item>                                */}
+                  </Flex>
+                  {/* <Flex>
+                      <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                        <Text numberOfLines={1} style={{textAlign:'left'}}>{`拣货数量:${row.boxQty}`}</Text>
+                      </Flex.Item>  
+                  </Flex> */}
+                  <Flex> 
+                    <Flex.Item style={{flex:6,flexDirection:'row',}}>
+                      <Text style={{marginTop:9}}>本次装箱数量 </Text>
+                      <TextInput
+                        // editable={( (row.canModifReceiptQty!="0")?true:false )}
+                        style={{height:38,width:200,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
+                        value={String(row._boxQty)}
+                        keyboardType={"numeric"}
+                        onChangeText={text => this.takeChangeText(text,index,row)}
+                      />  
+                    </Flex.Item>
+                    {/* <Flex.Item style={{flex:6}}>
+                      <Text></Text>
+                    </Flex.Item> */}
+                  </Flex>
 
-
+                </View>
+                )
+              }}
+            />
+            { (partList||[]).length ?
+              <View style={{marginTop:6,paddingBottom:6}}>
+                <Flex>
+                  <Flex.Item style={{}}>
+                    <Button style={{height:38}} type="ghost" onPress={()=> this.passHandle() }>完成</Button>          
+                  </Flex.Item>
+                </Flex>
+              </View>
+              :
+              <View></View>
+            }
+          </View>
+          :
+          <View></View>
+      }    
 
 
       </ScrollView>

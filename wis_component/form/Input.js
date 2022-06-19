@@ -27,6 +27,7 @@ class InputComponent extends Component{
         let value=_value;
 
         if(type=="number"){
+            // console.log(value)
             // value=String(Number(value));
         }
 
@@ -79,10 +80,17 @@ class InputComponent extends Component{
                 }
 
                 onChange={(value)=>{
-                    if(type=="number"){
-                        that.onChange(String(Number(value)));
-                    }else{
+
+                    if(type=="text"){
                         that.onChange(value);
+                        return
+                    }
+
+                    if(type=="number"){
+                        if( !isNaN(value) ){
+                            that.onChange(String(value));
+                        }
+                        return
                     }
                 }}               
             >

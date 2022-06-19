@@ -27,6 +27,9 @@ class PageForm extends Component {
       odd:"",   // 单号
       visible:false,
 
+
+      showTable:false
+
     }
   }
 
@@ -41,7 +44,7 @@ class PageForm extends Component {
   componentDidMount(){
     let that=this;
 
-
+    this.initFunc();
 
 
     // 监听扫码枪
@@ -69,6 +72,34 @@ class PageForm extends Component {
 
   componentWillUnmount(){
     this.honeyWell.remove();
+
+  }
+
+  /**
+   * 初始化
+   */
+  initFunc=()=>{
+    const that=this;
+
+    that.setState({showTable:false},()=>{
+      that.setState({showTable:true})
+    });
+    
+    // WISHttpUtils.get("wms/pickOrder/list?pageNum=1&pageSize=10",{
+    //   params:{}
+    //   // hideLoading:true
+    // },(result) => {
+    //   let {code,data={}}=result;
+    //   // console.log(result)
+
+    //   // console.log(result)
+    //   if(code==200){
+    //     that.setState({showTable:false},()=>{
+    //       that.setState({showTable:true})
+    //     });
+    //   }
+
+    // }); 
 
   }
 
@@ -107,7 +138,8 @@ class PageForm extends Component {
       return
     }
 
-
+    console.log(_list)
+    return
     WISHttpUtils.post("wms/pickOrder/shipment",{
       params:_list
       // hideLoading:true
@@ -138,7 +170,7 @@ class PageForm extends Component {
 
   render() {
     let that=this;
-    let{odd,visible}=this.state;
+    let{odd,visible,showTable}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
     const {width, height, scale} = Dimensions.get('window');
@@ -203,72 +235,76 @@ class PageForm extends Component {
           </Flex>
         </View>
 
+        { showTable ?
+          <WisFlexTablePage
+            RequestURL="wms/boxingInfo/list"
+            Parames={{pickOrderStatus:'1'}}
+            maxHeight={height-310}
+            onRef={(ref)=>{ this.tableRef=ref }}
+            // renderHead={()=>{
+            //   return (
+            //     <Flex>
+            //       <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            //         <Text></Text>
+            //       </Flex.Item>
+            //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            //         <View>
+            //           <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>箱号</Text>
+            //         </View>
+            //       </Flex.Item>
+            //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
+            //       </Flex.Item>
+            //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>发运数量</Text>
+            //       </Flex.Item>
+            //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+            //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>物流单号</Text>
+            //       </Flex.Item>               
+            //     </Flex>
+            //   )
+            // }}
+            renderBody={(row,index,callBack)=>{
+              return (<View key={index} style={{paddingTop:4,paddingBottom:4,marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
+                <Flex>
+                    <Flex.Item style={{flex:3,paddingLeft:2,paddingRight:2}}>
+                      <View>
+                        <Checkbox
+                          checked={row._checked}
+                          onChange={event => {
+                            callBack && callBack(event.target.checked,index)
+                            // that.cheCkquarantineFunc(event.target.checked,i)
+                          }}
+                        >
+                        </Checkbox>
+                      </View>
+                    </Flex.Item>     
+                    <Flex.Item style={{flex:26}}>
+                      <Text numberOfLines={1} style={{textAlign:'left'}}>{row.boxNo}</Text>
+                    </Flex.Item>                                       
+                </Flex>
+                <View style={{height:2}}></View>
+                <Flex>
+                  <Flex.Item>
+                    <Text numberOfLines={1}>{row.part}</Text>
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                    <Text numberOfLines={1}>{String(row.qty)}</Text>
+                  </Flex.Item>
+                  <Flex.Item>
+                    <Text numberOfLines={12}>{row.transfOrder}</Text>
+                  </Flex.Item>
+                </Flex>
+              </View>
+              )
+            }}
+          />
+          :
+          <View></View>
+        }
 
-        <WisFlexTablePage
-          RequestURL="wms/boxingInfo/list"
-          Parames={{pickOrderStatus:'1'}}
-          maxHeight={height-310}
-          onRef={(ref)=>{ this.tableRef=ref }}
-          // renderHead={()=>{
-          //   return (
-          //     <Flex>
-          //       <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-          //         <Text></Text>
-          //       </Flex.Item>
-          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-          //         <View>
-          //           <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>箱号</Text>
-          //         </View>
-          //       </Flex.Item>
-          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
-          //       </Flex.Item>
-          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>发运数量</Text>
-          //       </Flex.Item>
-          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>物流单号</Text>
-          //       </Flex.Item>               
-          //     </Flex>
-          //   )
-          // }}
-          renderBody={(row,index,callBack)=>{
-            return (<View key={index} style={{paddingTop:4,paddingBottom:4,marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
-              <Flex>
-                  <Flex.Item style={{flex:3,paddingLeft:2,paddingRight:2}}>
-                    <View>
-                      <Checkbox
-                        checked={row._checked}
-                        onChange={event => {
-                          callBack && callBack(event.target.checked,index)
-                          // that.cheCkquarantineFunc(event.target.checked,i)
-                        }}
-                      >
-                      </Checkbox>
-                    </View>
-                  </Flex.Item>     
-                  <Flex.Item style={{flex:26}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.boxNo}</Text>
-                  </Flex.Item>                                       
-              </Flex>
-              <View style={{height:2}}></View>
-              <Flex>
-                <Flex.Item>
-                  <Text numberOfLines={1}>{row.part}</Text>
-                </Flex.Item>
-              </Flex>
-              <Flex>
-                <Flex.Item>
-                  <Text numberOfLines={1}>{String(row.qty)}</Text>
-                </Flex.Item>
-                <Flex.Item>
-                  <Text numberOfLines={12}>{row.transfOrder}</Text>
-                </Flex.Item>
-              </Flex>
-            </View>
-            )
-          }}
-        />
 
         <View style={{marginTop:12,marginBottom:50}}>
           <Flex>
