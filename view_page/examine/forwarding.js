@@ -156,26 +156,26 @@ class Page extends Component {
           Parames={{pickOrderStatus:'60'}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-376}
-          renderHead={()=>{
-            return (
-              <Flex>
-                <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text></Text>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <View>
-                    <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货单号</Text>
-                  </View>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>复核完成时间</Text>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>推荐发运区库位</Text>
-                </Flex.Item>          
-              </Flex>
-            )
-          }}
+          // renderHead={()=>{
+          //   return (
+          //     <Flex>
+          //       <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text></Text>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <View>
+          //           <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货单号</Text>
+          //         </View>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>复核完成时间</Text>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>推荐发运区库位</Text>
+          //       </Flex.Item>          
+          //     </Flex>
+          //   )
+          // }}
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
@@ -191,17 +191,22 @@ class Page extends Component {
                       </Checkbox>
                     </View>
                   </Flex.Item>                
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:28,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.pickOrderNo }</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.reviewEndDate}</Text>
-                  </Flex.Item>      
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.locNo}</Text>
-                  </Flex.Item>                               
+     
+                             
               </Flex>
-
+              <Flex>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.reviewEndDate}</Text>
+                </Flex.Item> 
+              </Flex>
+              <Flex>
+                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.locNo}</Text>
+                  </Flex.Item>  
+              </Flex>
             </View>
             )
           }}
