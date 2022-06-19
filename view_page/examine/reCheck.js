@@ -393,7 +393,7 @@ class Page extends Component {
             // title="待收货列表"
             // maxHeight={360}
             data={pickOrderdList||[]}
-            maxHeight={height-376}
+            // maxHeight={height-376}
             // renderHead={()=>{
             //   return (
             //     <Flex>

@@ -290,10 +290,11 @@ class PageForm extends Component {
                   </Flex.Item>
                 </Flex>
                 <Flex>
-                  <Flex.Item>
+                  <Flex.Item style={{flex:8,flexDirection:'row'}}>
+                    <Text>发运数量: </Text>
                     <Text numberOfLines={1}>{String(row.qty)}</Text>
                   </Flex.Item>
-                  <Flex.Item>
+                  <Flex.Item style={{flex:8}}>
                     <Text numberOfLines={12}>{row.transfOrder}</Text>
                   </Flex.Item>
                 </Flex>

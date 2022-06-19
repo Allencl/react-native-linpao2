@@ -303,9 +303,9 @@ class PageForm extends Component {
                   <Flex.Item style={{flex:15,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partNo||''}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  {/* <Flex.Item style={{flex:2,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'right'}}>{String(row.checkQty||'')}</Text>
-                  </Flex.Item>       
+                  </Flex.Item>        */}
                              
               </Flex>
               <Flex>
@@ -322,10 +322,14 @@ class PageForm extends Component {
                     <Icon style={{fontSize:24}} name="right" />
                   </Flex.Item>
               </Flex>
-              <Flex>
-                <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              <Flex style={{marginBottom:5}}>
+                <Flex.Item style={{flex:3,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.orderNo}</Text>
                 </Flex.Item> 
+                <Flex.Item style={{flex:3,flexDirection:'row'}}>
+                  <Text>送检数: </Text>
+                  <Text>{String(row.checkQty||'')}</Text>
+                </Flex.Item>
               </Flex>
             </View>
             )

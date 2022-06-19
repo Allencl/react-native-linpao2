@@ -158,7 +158,7 @@ class Page extends Component {
 
 
     return (
-      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:16,backgroundColor:'#fff'}}>
+      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:8,backgroundColor:'#fff'}}>
 
 
         <Modal
@@ -186,9 +186,9 @@ class Page extends Component {
 
 
 
-        <Flex style={{marginBottom:16}}>
+        <Flex style={{marginBottom:8}}>
           <Flex.Item style={{flex:8}}>
-            <Text>请选择需要取消响应的拣货任务</Text>
+            {/* <Text>请选择需要取消响应的拣货任务</Text> */}
           </Flex.Item>
           <Flex.Item style={{flex:2}}></Flex.Item>
           <Flex.Item style={{flex:4,paddingLeft:3,paddingRight:3}}>
@@ -202,30 +202,30 @@ class Page extends Component {
           // maxHeight={360}
           data={data||[]}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-376}
-          renderHead={()=>{
-            return (
-              <Flex>
-                <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text></Text>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <View>
-                    <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>任务编号</Text>
-                  </View>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
-                </Flex.Item>
-                <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>计划数量</Text>
-                </Flex.Item>
-                <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货库位</Text>
-                </Flex.Item>             
-              </Flex>
-            )
-          }}
+          maxHeight={height-252}
+          // renderHead={()=>{
+          //   return (
+          //     <Flex>
+          //       <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text></Text>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <View>
+          //           <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>任务编号</Text>
+          //         </View>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>零件</Text>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>计划数量</Text>
+          //       </Flex.Item>
+          //       <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          //         <Text numberOfLines={1} style={{textAlign:'left',fontWeight:'bold'}}>拣货库位</Text>
+          //       </Flex.Item>             
+          //     </Flex>
+          //   )
+          // }}
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
@@ -241,20 +241,29 @@ class Page extends Component {
                       </Checkbox>
                     </View>
                   </Flex.Item>                
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:17,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
-                  </Flex.Item>     
-                  <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:14,flexDirection:'row',paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text>拣货数量: </Text>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskPickingNumber}</Text>
-                  </Flex.Item>    
+                  </Flex.Item> 
+
+                               
+              </Flex>
+              <Flex>
+              <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.part}</Text>
+                </Flex.Item>  
+              </Flex>   
+              <Flex>
+
+              </Flex>  
+              <Flex>
                   <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.locPName}</Text>
-                  </Flex.Item>                                 
-              </Flex>
-
+                  </Flex.Item>  
+              </Flex>     
             </View>
             )
           }}

@@ -194,7 +194,8 @@ class Page extends Component {
                 </Flex.Item> 
               </Flex>
               <Flex>
-                <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                <Flex.Item style={{flex:8,flexDirection:"row",paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Text>包装数量: </Text>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.qty)}</Text>
                 </Flex.Item>   
                 <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
@@ -207,7 +208,7 @@ class Page extends Component {
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.inboundBatch}</Text>
                 </Flex.Item>  
                   <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left',textAlign:'right'}}>{(row.taskStatus=="0")?'待移库':'未知'}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left',textAlign:'right'}}>{(row.taskStatus=="0")?'待移库':''}</Text>
                   </Flex.Item>   
                 </Flex>
             </View>

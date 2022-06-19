@@ -272,7 +272,8 @@ class Page extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
    
-                  <Flex.Item style={{flex:6,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                  <Flex.Item style={{flex:16,flexDirection:'row',paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+                    <Text>计划数量: </Text>
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskPickingNumber}</Text>
                   </Flex.Item> 
                               

@@ -247,7 +247,7 @@ class PageForm extends Component {
                       </Checkbox>
                     </View>
                   </Flex.Item>                
-                  <Flex.Item style={{flex:15,paddingTop:3,paddingBottom:3,paddingLeft:4,paddingRight:4,borderRadius:4,borderWidth:1,borderColor:'#e6ebf1'}}>
+                  <Flex.Item style={{flex:25,paddingLeft:6,paddingTop:3,paddingBottom:3,paddingLeft:4,paddingRight:4,borderRadius:4,borderWidth:1,borderColor:'#e6ebf1'}}>
                     <TouchableOpacity onPress={() =>{ 
                       // that.setState({
                       //   visible:true,
@@ -260,15 +260,20 @@ class PageForm extends Component {
                     {/* <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text> */}
 
                   </Flex.Item>
-                  <Flex.Item style={{flex:1}}></Flex.Item> 
-                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.dBasLocId||''}</Text>
-                  </Flex.Item> 
-                  <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.taskQty||'')}</Text>
-                  </Flex.Item>                               
+                  {/* <Flex.Item style={{flex:1}}></Flex.Item>  */}
+                              
               </Flex>
               {/* <View style={{height:2}}></View> */}
+              <Flex style={{paddingBottom:2,paddingTop:2}}>
+                <Flex.Item style={{flex:3,flexDirection:"row",paddingLeft:2,paddingRight:2}}>
+                  <Text>推荐库位: </Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.dBasLocId||''}</Text>
+                </Flex.Item> 
+                <Flex.Item style={{flex:3,flexDirection:"row",paddingLeft:2,paddingRight:2}}>
+                  <Text>上架数量: </Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{String(row.taskQty||'')}</Text>
+                </Flex.Item> 
+              </Flex>
               <Flex>
                 <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName||''}</Text>
