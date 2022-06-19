@@ -35,9 +35,11 @@ class Page extends Component {
 
       bufferPickOrderBoxingList:[], // 缓存
 
-      odd:"P202206160103",  // 拣货单号
-      ctn:"P2022061200602206170046",   // 箱号
-      part:"1001550-CA03",  // 零件号
+      // odd:"P202206160103",  // 拣货单号
+      odd:"",  // 拣货单号
+
+      // ctn:"P2022061200602206170046",   // 箱号
+      // part:"1001550-CA03",  // 零件号
 
 
       num:"",  // 物流单号
@@ -53,7 +55,7 @@ class Page extends Component {
   componentDidMount(){
     let that=this;
 
-    this.initFunc();
+    // this.initFunc();
 
 
     // 刷新页面   C:\codeAllen\react-native-linpao2\view_page\examine\encasement.js

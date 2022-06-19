@@ -30,11 +30,16 @@ class Page extends Component {
       showPart:false,
 
 
-      odd:"P202206160101",  // 拣货单号
-      part:"1001060-CA02",  // 零件号
+      odd:"",  // 拣货单号
+      part:"",  // 零件号
+
+      // odd:"P202206160101",  // 拣货单号
+      // part:"1001060-CA02",  // 零件号
       // 1001060-CA02
       // 1001550-CA02
       // 1001560-CA03
+      // 1001570-CA03
+      // 1001550-CA02
 
 
       pickOrder:{},   //  基础信息
@@ -240,7 +245,7 @@ class Page extends Component {
    */
    passHandle=()=>{
     let {navigation,form} = this.props;
-    const {partList=[]}=this.state;
+    const {partList=[],pickOrder}=this.state;
     // let _selectData=partList.filter(o=>o._checked);
 
     // if(!_selectData.length){
@@ -250,6 +255,7 @@ class Page extends Component {
 
 
     navigation.navigate("logistics",{
+      pickOrder:pickOrder,
       list:partList
     });
 
@@ -268,6 +274,7 @@ class Page extends Component {
       // console.log( Number(text) )
       if(Number(text)>row.boxQty){
         Toast.offline("不能大于本次装箱数量！",1);
+        return
       }
 
       this.setState({
@@ -502,7 +509,7 @@ class Page extends Component {
                     <Flex.Item style={{flex:6,flexDirection:'row',marginBottom:8}}>
                       <Text style={{marginTop:9,marginRight:6}}>本次装箱数量 </Text>
                       <TextInput
-                        // editable={( (row.canModifReceiptQty!="0")?true:false )}
+                        editable={( (row.canModifBoxQty!="0")?true:false )}
                         style={{height:38,width:120,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
                         value={String(row._boxQty)}
                         keyboardType={"numeric"}

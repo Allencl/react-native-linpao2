@@ -103,6 +103,8 @@ class PageForm extends Component {
    confirmHandle=()=>{
     const that=this;
     const {navigation} = this.props;
+    const {list=[],pickOrder={}}=this.props.route.params.routeParams;
+
 
 
     this.props.form.validateFields((error, value) => {
@@ -140,56 +142,83 @@ class PageForm extends Component {
         let _weight=Number(value["weight"]);
 
 
-        if(!_longNum){
+        if(!_longNum || (!Number.isInteger(_longNum)) ){
             Toast.fail('长必须是大于0的整数！',1);
             return
         }
 
-        if(!_widthNum){
+        if(!_widthNum || (!Number.isInteger(_widthNum)) ){
             Toast.fail('宽必须是大于0的整数！',1);
             return
         }
 
-        if(!_heightNum){
+        if(!_heightNum || (!Number.isInteger(_heightNum)) ){
             Toast.fail('高必须是大于0的整数！',1);
             return
         }
 
-        if(!_weight){
+        if(!_weight || (!Number.isInteger(_weight)) ){
             Toast.fail('重量必须是大于0的整数！',1);
             return
         }
 
+        // 求和
+        function sum(arr) {
+          var s = 0;
+          arr.forEach(function(val, idx, arr) {
+            s += val;
+          }, 0);
+          return s;
+        };
+        const _partNoList=list.map(o=>o.partNo)   // partNo
 
-        console.log(value)
-
-        navigation.navigate("examine");
-        DeviceEventEmitter.emit('globalEmitter_examine_reCheck_update_table');
-
-        // navigation.navigate("cardPicking");
-
-        // let _json=Object.assign(row,{
-        //     acceptsQty:_acceptsQty,
-        //     concessionQty:_concessionQty,
-        //     concessionReason:value.concessionText,
-        //     unacceptsQty:_unacceptsQty,
-        //     unacceptsReason:value.disqualificationText
-        // })
-
-
-        // WISHttpUtils.post("wms/iqcTask/saveIqcTask",{
-        //   params:_json
-        //   // hideLoading:true
-        // },(result) => {
-        //   let {code}=result;
-
-        //   if(code==200){
-        //     Toast.success("检验完成！",1);
+        let _jsonList=[{
+          "boxNum": "1",
+          "hight": _heightNum,
+          "items": list.map(g=>Object.assign({
+            boxQty:g._boxQty,
+            ttMmPickOrderDId:g.ttMmPickOrderDId,
+            version:g.version
+          })),
+          "tmBasPackageId": value["packaging"][0]["id"],
+          "weight": _weight,
+          "width": _widthNum,
+          "length": _longNum,
+          "parentVersion": pickOrder.version,
+          "singlePacQty": sum(list.map(p=>p._boxQty)),
+          "ttMmPickOrderId": pickOrder.ttMmPickOrderId,
+          "varietyQty": Array.from(new Set(_partNoList)).length
+        }];
 
 
-        //   }
+        // console.log( pickOrder )
+        // console.log(_jsonList)
+        // return
+        WISHttpUtils.post("wms/pickOrderd/orderPartsReviewBoxing",{
+          params:_jsonList
+          // hideLoading:true
+        },(result) => {
+          let {code}=result;
 
-        // });  
+          // console.log(result)
+          if(code==200){
+            Toast.success("复核完成！",1);
+
+            navigation.navigate("examine");
+            DeviceEventEmitter.emit('globalEmitter_examine_reCheck_update_table');
+          }
+
+        });  
+
+
+
+
+
+
+
+
+
+
 
       }
     });
@@ -297,7 +326,7 @@ class PageForm extends Component {
               lableName="重量(KG)"
             />    
 
-            <WisInput  
+            {/* <WisInput  
               form={form} 
               name="code"   
               {...getFieldProps('code',{
@@ -306,7 +335,7 @@ class PageForm extends Component {
               })} 
               error={getFieldError('code')}               
               lableName="物流单号"
-            />             
+            />              */}
 
             
         </View>
