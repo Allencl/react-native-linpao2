@@ -61,15 +61,12 @@ class HomeScreen extends Component{
 
 
         // 初始化菜单
-        this.initMenu()
+        this.initMenu();
 
 
         // 获取菜单
         this.getMenu =DeviceEventEmitter.addListener('globalEmitter_get_menu',function(){
-
-
-
-
+            that.initMenu();
         });
 
 
@@ -95,6 +92,10 @@ class HomeScreen extends Component{
      */
     initMenu=()=>{
         let that=this;
+
+        this.setState({
+            menuList:[]    
+        });
 
         AsyncStorage.getItem("menu_buffer_list").then((data)=>{
             that.setState({

@@ -149,6 +149,8 @@ class PageForm extends Component {
                     Toast.success("进入首页！",1);
                     setTimeout(()=>{
                       navigation.navigate('Home'); 
+                      DeviceEventEmitter.emit('globalEmitter_get_menu');
+
                     },500)   
                 }      
         })
