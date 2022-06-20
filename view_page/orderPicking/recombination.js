@@ -51,8 +51,8 @@ class PageForm extends Component {
 
 
     this.getWarehouseFunc();  // 获取仓库
-    this.reservoirFunc();     // 获取 库区
-    this.storageFunc();        // 获取库位
+    // this.reservoirFunc();     // 获取 库区
+    // this.storageFunc();        // 获取库位
 
 
   }
@@ -94,6 +94,9 @@ class PageForm extends Component {
         that.props.form.setFieldsValue({
           "warehouse":_warehouse
         });
+
+
+        that.reservoirFunc();     // 获取 库区
       }
 
 
@@ -132,6 +135,9 @@ class PageForm extends Component {
         that.props.form.setFieldsValue({
           "reservoir":_row
         });        
+
+
+        that.storageFunc(list[0]["tmBasStorageDId"],_row[0]["id"]);        // 获取库位
       }
 
 
@@ -142,15 +148,15 @@ class PageForm extends Component {
   /**
    * 获取 库位
   */
-  storageFunc=()=>{
+  storageFunc=(_storageId,_dlocId)=>{
       const that=this;
       const {list=[]}=this.props.route.params.routeParams;
 
 
       WISHttpUtils.get('wms/loc/list',{
         params:{
-          dlocId: 'D27',
-          storageId: 'ST1',
+          dlocId: _dlocId,
+          storageId: _storageId,
           status: '1'
         }
       },(result)=>{
