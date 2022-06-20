@@ -272,7 +272,7 @@ class PageForm extends Component {
                 return (<TouchableOpacity key={String(i)} onPress={() =>  this.getMenuFunc(o) }>
                     <Flex style={{marginTop:8,marginBottom:8,paddingTop:12,paddingBottom:12,borderColor:brandPrimary,borderWidth:1,borderRadius:4}}>
                         <Flex.Item style={{flex:1,flexDirection:"row",justifyContent:'flex-end'}}>
-                            <Icon name="cloud" color="#ffad33"/>
+                            <Icon name="cloud" color={brandPrimary}/>
                         </Flex.Item>
                         <Flex.Item style={{flex:6}}>
                             <Text numberOfLines={1} style={{fontSize:15,paddingLeft:8}}>{`${o.storageNo}${o.storageName}`}</Text>
