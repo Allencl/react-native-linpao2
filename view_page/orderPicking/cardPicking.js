@@ -28,6 +28,7 @@ class Page extends Component {
       visible2:false,
       visible3:false,
 
+      cardText:"",   // 小车编号
 
       tableList:[],   // 
 
@@ -160,9 +161,43 @@ class Page extends Component {
   }
 
 
+  /**
+   * 绑定小车
+   * @returns 
+  */
+  bindingCardFunc=()=>{
+    const that=this;
+    const {cardText}=this.state;
+
+    if(!cardText){
+      Toast.offline("小车号不能为空！",1);
+      return
+    }
+
+
+    WISHttpUtils.get("wms/pickingTask/bindingCar",{
+      params:{
+        carUtensilNo:cardText
+      }
+      // hideLoading:true
+    },(result) => {
+      let {code,data}=result;
+
+      // console.log(result)
+      if(code==200){
+        Toast.success("小车切换成功！",1);
+
+        that.initPage();
+        that.setState({visible2:false})
+      }
+
+    });  
+
+  }
+
   render() {
     let that=this;
-    let {visible,visible2,visible3,tableList}=this.state;
+    let {visible,visible2,visible3,cardText,tableList}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
     const {odd}=this.props.route.params.routeParams;
@@ -196,28 +231,6 @@ class Page extends Component {
           </ScrollView>
         </Modal>
 
-
-        <Modal
-          title="确认"
-          transparent
-          onClose={()=>{
-            this.setState({visible2:false})
-          }}
-          maskClosable
-          visible={visible2}
-          closable
-          footer={[
-            {text:'确认',onPress:()=> { }},
-            {text:'取消',onPress:()=>{ }}
-          ]}
-        >
-          <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
-            <View style={{paddingLeft:12,marginTop:18,marginBottom:22}}>
-              <Text style={{fontSize:18}}>切换小车？</Text>
-            </View>
-          </ScrollView>
-        </Modal>
-
         <Modal
           title="确认"
           transparent
@@ -239,6 +252,48 @@ class Page extends Component {
           </ScrollView>
         </Modal>
 
+
+        <Modal
+          title="绑定小车"
+          transparent
+          onClose={()=>{
+            this.setState({visible2:false})
+          }}
+          maskClosable
+          visible={visible2}
+          closable
+          // footer={[
+          //   {text:'确认',onPress:()=> {  
+          //     return false
+          //   }},
+          //   {text:'取消',onPress:()=>{}}
+          // ]}
+        >
+          <ScrollView>
+            <View style={{marginTop:18,marginBottom:22}}>
+
+              <TextInput
+                // editable={( (row.canModifReceiptQty!="0")?true:false )}
+                style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
+                value={String(cardText)}
+                // keyboardType={"numeric"}
+                placeholder="请扫描或输入 小车号"
+                onChangeText={text => this.setState({cardText:text.trim() }) }
+              />  
+
+            </View>
+
+            <View>
+              <Button style={{height:42,paddingLeft:2,paddingRight:2}} type="ghost" onPress={()=> {
+                this.bindingCardFunc();
+              }}>
+                <Text style={{fontSize:14}}>绑定小车</Text>
+              </Button>               
+            </View>
+          </ScrollView>
+        </Modal>
+
+
         <Flex style={{marginBottom:16}}>
           <Flex.Item>
             <Text>{`小车号或器具号:${odd}`}</Text>
@@ -254,7 +309,10 @@ class Page extends Component {
             <Button style={{height:36}} type="ghost" onPress={()=> { this.beginFunc()   }}><Text style={{fontSize:14}}>开始拣货</Text></Button>  
           </Flex.Item>
           <Flex.Item style={{flex:10,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> { this.changeCardFunc()  }}><Text style={{fontSize:14}}>切换小车</Text></Button>  
+            <Button style={{height:36}} type="ghost" onPress={()=> { 
+              // this.changeCardFunc()  
+              this.setState({visible2:true})
+            }}><Text style={{fontSize:14}}>切换小车</Text></Button>  
           </Flex.Item>
           <Flex.Item style={{flex:12,paddingLeft:3,paddingRight:3}}>
             <Button style={{height:36}} type="ghost" onPress={()=> { this.moveFunc() }}><Text style={{fontSize:14}}>移至复核区</Text></Button>  

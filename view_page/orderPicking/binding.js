@@ -83,20 +83,23 @@ class PageForm extends Component {
   updatePage=()=>{
     const that=this;
 
-    WISHttpUtils.get("wms/pickingTask/list",{
-      params:{
+    that.confirmHandle()
 
-      },
-      // hideLoading:true
-    },(result) => {
-      let {code}=result;
 
-      // console.log(77777);
-      // console.log(result);
-      if(code==200){
-        that.confirmHandle()
-      }
-    }); 
+    // WISHttpUtils.get("wms/pickingTask/list",{
+    //   params:{
+
+    //   },
+    //   // hideLoading:true
+    // },(result) => {
+    //   let {code}=result;
+
+    //   // console.log(77777);
+    //   // console.log(result);
+    //   if(code==200){
+    //     that.confirmHandle()
+    //   }
+    // }); 
 
   }
 
@@ -144,9 +147,6 @@ class PageForm extends Component {
           let {stateCode,data}=result;
 
 
-
-
-
           if(stateCode==20){
             Toast.fail(`[${value["code"]}]已被其他人绑定了！`,1);
           }
@@ -176,6 +176,27 @@ class PageForm extends Component {
     //     appliance:result,  // 返回的数据
     //   }
     // )
+
+
+    // 更新版本号
+    WISHttpUtils.post("wms/pickingTask/getLatestData",{
+      params:data
+      // hideLoading:true
+    },(result) => {
+      let {code}=result;
+
+      console.log(889990000);
+      console.log(result);
+      if(code==200){
+
+      }
+    });     
+
+
+
+    return
+
+    // 绑定小车
     WISHttpUtils.post("wms/pickingTask/bdApplianceSelect",{
       method:"PUT",
       params:{
@@ -190,6 +211,8 @@ class PageForm extends Component {
       // console.log(result);
       if(code==200){
         Toast.success("绑定完成！",1);
+        DeviceEventEmitter.emit('globalEmitter_updata_orderPicking_soldOut_table');
+
         navigation.navigate("cardPicking",{
           odd:_odd,
           list:data

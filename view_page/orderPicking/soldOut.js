@@ -28,6 +28,8 @@ class Page extends Component {
       visible2:false,
       visible3:false,
 
+      cardText:'',  // 绑定小车
+
 
       pageTotal:0,   // 总数
 
@@ -45,11 +47,13 @@ class Page extends Component {
     let that=this;
 
 
-    console.log("APP-----------33333")
 
     // 刷新table    
     this.updataList =DeviceEventEmitter.addListener('globalEmitter_updata_orderPicking_soldOut_table',function(){
       that.tableRef.initFunc();
+
+      console.log("APP-----------33333")
+
     });
 
   }
@@ -148,6 +152,7 @@ class Page extends Component {
    * @returns 
    */
   cardOrderPicking=()=>{
+    const that=this;
     let {navigation,form} = this.props;
     let _selectData= this.tableRef.getSelectData();
 
@@ -157,16 +162,102 @@ class Page extends Component {
       return
     }
 
-    navigation.navigate("carBinding",{
-      data:_selectData
-    });
+
+    this.setState({
+      cardText:'',
+      visible:true
+    })
+    // navigation.navigate("carBinding",{
+    //   data:_selectData
+    // });
 
   }
 
 
+  /**
+   * 绑定小车  
+   * @returns 
+  */
+  bindingCardFunc=()=>{
+    const that=this;
+    const {cardText}=this.state;
+
+    if(!cardText){
+      Toast.offline("小车号不能为空！",1);
+      return
+    }
+
+
+    WISHttpUtils.get(`wms/appliance/appBindingSelect/${cardText}`,{
+      params:{
+        // carUtensilNo:value["code"].trim()
+      }
+      // hideLoading:true
+    },(result) => {
+      let {stateCode,data}=result;
+
+
+      if(stateCode==20){
+        Toast.fail(`[${value["code"]}]已被其他人绑定了！`,1);
+      }
+
+      if(stateCode==10 || stateCode==30){
+        that.bindingCardSubmit(data,cardText);
+      }
+
+    });  
+
+
+  }
+
+  /**
+   * 绑定小车  提交
+   * @returns 
+  */
+  bindingCardSubmit=(option={},_odd)=>{
+    const that=this;
+    let {navigation,form} = this.props;
+    let _selectData= this.tableRef.getSelectData();
+
+
+    // console.log(
+    //   {
+    //     pickings:_selectData,     //[选中列表数据]
+    //     appliance:option,  // 返回的数据
+    //   }
+    // )
+
+    // 绑定小车
+    WISHttpUtils.post("wms/pickingTask/bdApplianceSelect",{
+      method:"PUT",
+      params:{
+        pickings:_selectData,     //[选中列表数据]
+        appliance:option,  // 返回的数据
+      }
+      // hideLoading:true
+    },(result) => {
+      let {code}=result;
+
+      // console.log(77777);
+      // console.log(result);
+      if(code==200){
+        Toast.success("绑定完成！",1);
+        // DeviceEventEmitter.emit('globalEmitter_updata_orderPicking_soldOut_table');
+        that.tableRef.initFunc();
+
+        that.setState({visible:false})
+
+        navigation.navigate("cardPicking",{
+          odd:_odd,
+          list:_selectData
+        });
+      }
+    }); 
+  }
+
   render() {
     let that=this;
-    let {visible,visible2,visible3,pageTotal}=this.state;
+    let {visible,visible2,visible3,pageTotal,cardText}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -178,7 +269,7 @@ class Page extends Component {
 
 
         <Modal
-          title="确认"
+          title="绑定小车"
           transparent
           onClose={()=>{
             this.setState({visible:false})
@@ -186,14 +277,33 @@ class Page extends Component {
           maskClosable
           visible={visible}
           closable
-          footer={[
-            {text:'确认',onPress:()=> {    } },
-            {text:'取消',onPress:()=>{}}
-          ]}
+          // footer={[
+          //   {text:'确认',onPress:()=> {  
+          //     return false
+          //   }},
+          //   {text:'取消',onPress:()=>{}}
+          // ]}
         >
-          <ScrollView style={{maxHeight:380,marginTop:12,marginBottom:12}}>
-            <View style={{paddingLeft:12,marginTop:18,marginBottom:22}}>
-              <Text style={{fontSize:18}}>确认取消响应操作？</Text>
+          <ScrollView>
+            <View style={{marginTop:18,marginBottom:22}}>
+
+              <TextInput
+                // editable={( (row.canModifReceiptQty!="0")?true:false )}
+                style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
+                value={String(cardText)}
+                // keyboardType={"numeric"}
+                placeholder="请扫描或输入 小车号"
+                onChangeText={text => this.setState({cardText:text.trim() }) }
+              />  
+
+            </View>
+
+            <View>
+              <Button style={{height:42,paddingLeft:2,paddingRight:2}} type="ghost" onPress={()=> {
+                this.bindingCardFunc();
+              }}>
+                <Text style={{fontSize:14}}>绑定小车</Text>
+              </Button>               
             </View>
           </ScrollView>
         </Modal>
