@@ -13,6 +13,7 @@ import CheckBox from '@react-native-community/checkbox';
 import WISHttpUtils from '@wis_component/http'; 
 import {WisTableCross,WisFlexTable} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
+import {brandPrimary} from './../../theme'; // 使用自定义样式
 
 
 // 拣货响应
@@ -329,7 +330,7 @@ class Page extends Component {
           </Flex.Item>
           <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
             <TouchableOpacity onPress={() =>  this.searchFunc() }>
-              <Icon style={{fontSize:22,color:'blue'}} name="search" />
+              <Icon style={{fontSize:22,color:brandPrimary}} name="search" />
             </TouchableOpacity>
           </Flex.Item>          
         </Flex>
@@ -366,7 +367,7 @@ class Page extends Component {
           </Flex.Item>
           <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
             <TouchableOpacity onPress={() =>  this.searchPartFunc() }>
-              <Icon style={{fontSize:22,color:'blue'}} name="search" />
+              <Icon style={{fontSize:22,color:brandPrimary}} name="search" />
             </TouchableOpacity>
           </Flex.Item>  
 

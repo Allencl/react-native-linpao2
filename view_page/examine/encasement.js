@@ -14,6 +14,7 @@ import WISHttpUtils from '@wis_component/http';
 import {WisTableCross,WisFlexTable} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {brandPrimary} from './../../theme'; // 使用自定义样式
 
 
 // 装箱信息
@@ -389,7 +390,7 @@ class Page extends Component {
           </Flex.Item>
           <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
             <TouchableOpacity onPress={() =>  this.searchFunc() }>
-              <Icon style={{fontSize:22,color:'blue'}} name="search" />
+              <Icon style={{fontSize:22,color:brandPrimary}} name="search" />
             </TouchableOpacity>
           </Flex.Item>    
         </Flex>
