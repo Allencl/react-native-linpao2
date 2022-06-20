@@ -9,6 +9,8 @@ import CenterScreen from './view/Center';       // 个人中心
 import WISHttpUtils from '@wis_component/http';   // http 
 
 
+import theme from './theme'; // 使用自定义样式
+
 import NavigationService from './view/NavigationService'
 
 // 页面
@@ -158,7 +160,7 @@ class App extends Component {
 
 
     return(
-      <Provider>
+      <Provider theme={theme}>
         { activityIndicatorVisible ?
           <View style={{...styles.activityIndicatorStyle,
             marginTop:70,
