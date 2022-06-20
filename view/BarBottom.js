@@ -2,6 +2,7 @@ import React from 'react';
 import { DeviceEventEmitter,TouchableOpacity, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Button, Provider, InputItem, List, Toast,Icon } from '@ant-design/react-native';
 import {WisCameraComponent} from '@wis_component/ul';
+import {brandPrimary} from './../theme'; // 使用自定义样式
 
 
 class BarBottomPage extends React.Component {
@@ -72,7 +73,7 @@ class BarBottomPage extends React.Component {
               }}
             >
               <View style={styles.menu_child}>
-                <Icon style={styles.menu_child_icon} name="arrow-left" size="lg" color="#1890ff" />
+                <Icon style={styles.menu_child_icon} name="arrow-left" size="lg" color={brandPrimary} />
               </View>
             </TouchableOpacity>
             
@@ -81,7 +82,7 @@ class BarBottomPage extends React.Component {
                 DeviceEventEmitter.emit('globalEmitter_updata_home');
             }}>
                 <View style={styles.menu_child}>
-                    <Icon style={styles.menu_child_icon} name="home" size="lg" color="#1890ff" />
+                    <Icon style={styles.menu_child_icon} name="home" size="lg" color={brandPrimary} />
                 </View>    
             </TouchableOpacity>
             <View style={styles.menu_child}>

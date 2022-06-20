@@ -5,6 +5,7 @@ import { Toast,Modal,Card, WhiteSpace, WingBlank, Button, Icon } from '@ant-desi
 
 import WISHttpUtils from '@wis_component/http';   // http 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {brandPrimary} from './../theme'; // 使用自定义样式
 
 
 class HomeScreen extends Component{
@@ -307,7 +308,7 @@ class HomeScreen extends Component{
                     return <Card key={i} style={styles.card}>
                         <Card.Header
                             title={<Text style={{fontWeight:"bold",fontSize:14}}>{o.menuName}</Text>}
-                            thumb={<Icon name="audit" size="md" color="#1890ff" style={{fontSize:16,marginRight:6}} />}
+                            thumb={<Icon name="audit" size="md" color={brandPrimary} style={{fontSize:16,marginRight:6}} />}
                         />
                         <Card.Body>
                             <View style={styles.cardContent}>

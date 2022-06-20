@@ -4,7 +4,9 @@
 const brandPrimary = '#abcf40'
 const brandPrimaryTap = '#abcf40'
 
-
+export {
+    brandPrimary
+};
 
 export default {
   // 支付宝钱包默认主题

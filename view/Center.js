@@ -4,6 +4,9 @@ import { Button, Provider, InputItem, List, Toast,Icon } from '@ant-design/react
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import {brandPrimary} from './../theme'; // 使用自定义样式
+
+
 class CenterPage extends React.Component {
   constructor(props) {
     super(props);
@@ -107,8 +110,8 @@ const styles = StyleSheet.create({
   headContainer:{
     flexDirection:'column',
     // justifyContent:'center',
-    backgroundColor:"#1890ff",    
-    height:260,
+    backgroundColor:brandPrimary,    
+    height:160,
     // paddingTop:19  
   },
   imgBox:{

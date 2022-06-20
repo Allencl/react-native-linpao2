@@ -15,6 +15,7 @@ import {WisFormPhoto} from '@wis_component/form';   // form
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {origin} from '@wis_component/origin';     // 服务地址
+import {brandPrimary} from './../theme'; // 使用自定义样式
 
 
 // 选择仓库
@@ -39,7 +40,7 @@ class PageForm extends Component {
   componentDidMount(){
     const that=this;
 
-
+    
     this.getWarehouseFunc();   // 获取仓库
     this.initFunc();
 
@@ -269,7 +270,7 @@ class PageForm extends Component {
 
             { (list||[]).map((o,i)=>{
                 return (<TouchableOpacity key={String(i)} onPress={() =>  this.getMenuFunc(o) }>
-                    <Flex style={{marginTop:8,marginBottom:8,paddingTop:12,paddingBottom:12,borderColor:'#1890ff',borderWidth:1,borderRadius:4}}>
+                    <Flex style={{marginTop:8,marginBottom:8,paddingTop:12,paddingBottom:12,borderColor:brandPrimary,borderWidth:1,borderRadius:4}}>
                         <Flex.Item style={{flex:1,flexDirection:"row",justifyContent:'flex-end'}}>
                             <Icon name="cloud" color="#ffad33"/>
                         </Flex.Item>

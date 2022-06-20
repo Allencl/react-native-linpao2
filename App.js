@@ -9,7 +9,8 @@ import CenterScreen from './view/Center';       // 个人中心
 import WISHttpUtils from '@wis_component/http';   // http 
 
 
-import theme from './theme'; // 使用自定义样式
+import theme,{brandPrimary} from './theme'; // 使用自定义样式
+
 
 import NavigationService from './view/NavigationService'
 
@@ -126,7 +127,7 @@ class App extends Component {
     // 公共头部
     let headOption={
       headerStyle: {
-        backgroundColor:'#1890ff',
+        backgroundColor:brandPrimary,
         borderWidth:0
       },
       headerTintColor: '#fff',
