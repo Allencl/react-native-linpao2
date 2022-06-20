@@ -138,8 +138,8 @@ class PageForm extends Component {
       return
     }
 
-    console.log(_list)
-    return
+    // console.log(_list)
+    // return
     WISHttpUtils.post("wms/pickOrder/shipment",{
       params:_list
       // hideLoading:true
