@@ -4,6 +4,7 @@ import {TouchableOpacity} from 'react-native';
 import {List,Picker,InputItem,Icon,Modal} from '@ant-design/react-native';
 import CheckBox from '@react-native-community/checkbox';
 
+import {brandPrimary} from './../../theme'; // 使用自定义样式
 
 
 
@@ -156,7 +157,7 @@ class SelectComponent extends Component{
                                         <View style={styles.body}>
                                             <CheckBox
                                                 value={ bufferData.filter(k=>k.id==o["id"])["length"]?true:false}
-                                                tintColors={{true:'#57a3f3',false:'#dcdee2'}}
+                                                tintColors={{true:brandPrimary,false:'#dcdee2'}}
                                                 onValueChange={()=>{
                                                     this.checkBoxChange(o,index);
                                                 }}

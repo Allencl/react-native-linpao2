@@ -15,6 +15,8 @@ import {WisFormPhoto} from '@wis_component/form';   // form
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {origin} from '@wis_component/origin';     // 服务地址
+import {brandPrimary} from './../../theme'; // 使用自定义样式
+
 
 
 // 质检任务
@@ -280,7 +282,7 @@ class PageForm extends Component {
             </Flex.Item>
             <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
               <TouchableOpacity onPress={() =>  that.searchFunc() }>
-                <Icon style={{fontSize:22,color:'blue'}} name="search" />
+                <Icon style={{fontSize:22,color:brandPrimary}} name="search" />
               </TouchableOpacity>
             </Flex.Item>
           </Flex>
