@@ -137,12 +137,12 @@ class Page extends Component {
    * 切换 小车   
    * @returns 
    */
-   changeCardFunc=()=>{
-    const {navigation,form} = this.props;
+  //  changeCardFunc=()=>{
+  //   const {navigation,form} = this.props;
 
-    navigation.navigate("carBinding");
-    DeviceEventEmitter.emit('globalEmitter_clean_cardValue');
-  }
+  //   navigation.navigate("carBinding");
+  //   DeviceEventEmitter.emit('globalEmitter_clean_cardValue');
+  // }
 
   /**
    * 移动至  复核区

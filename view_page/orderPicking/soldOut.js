@@ -52,7 +52,7 @@ class Page extends Component {
     this.updataList =DeviceEventEmitter.addListener('globalEmitter_updata_orderPicking_soldOut_table',function(){
       that.tableRef.initFunc();
 
-      console.log("APP-----------33333")
+      // console.log("APP-----------33333")
 
     });
 
