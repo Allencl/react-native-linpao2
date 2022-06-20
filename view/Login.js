@@ -208,7 +208,7 @@ class LoginScreenForm extends React.Component {
               </View>
           </View>
 
-           <View style={{paddingLeft:16}}>
+           <View style={{paddingLeft:12}}>
               <View style={{marginTop:80}}> 
                 <Text style={{fontSize:16}}>问题支持电话</Text>
               </View>
@@ -250,7 +250,9 @@ const styles = StyleSheet.create({
     textAlign:"center"
   },
   footerBox:{
-    paddingTop:60
+    paddingTop:60,
+    paddingLeft:8,
+    paddingRight:8,
   },
   footerBtn:{
     backgroundColor:"#202123",
