@@ -13,6 +13,8 @@ import WISHttpUtils from '@wis_component/http';
 import {WisTableCross,WisInputSN,WisBluetooth,WisFlexTable} from '@wis_component/ul';
 import {WisFormPhoto} from '@wis_component/form';   // form 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {brandPrimary} from './../../theme'; // 使用自定义样式
+
 
 // import {origin} from '@wis_component/origin';     // 服务地址
 // import a from '@ant-design/react-native/lib/modal/alert';
@@ -573,7 +575,7 @@ class PageForm extends Component {
                     }
                   </Flex.Item>
                   <Flex.Item style={{flex:1,paddingBottom:5,paddingLeft:6,paddingRight:2}}>
-                    <Text numberOfLines={1} style={{textAlign:'left',color:"#1890ff"}}>{row.lineno}</Text>
+                    <Text numberOfLines={1} style={{textAlign:'left',color:brandPrimary}}>{row.lineno}</Text>
                   </Flex.Item>
               
                   <Flex.Item style={{flex:10,paddingBottom:5,paddingLeft:2,paddingRight:2}}>

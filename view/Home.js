@@ -318,7 +318,7 @@ class HomeScreen extends Component{
                                                 <View style={styles.flexBoxColChild}>
                                                     <TouchableOpacity onPress={() => this.authorityDynamic(k) }>
                                                         <View style={styles.menu_child}>
-                                                            <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#009" />
+                                                            <Icon style={styles.menu_child_icon} name="unordered-list" size="lg" color="#ffad33" />
                                                             <Text style={styles.menu_child_text}>{k.menuName}</Text>
                                                         </View>
                                                     </TouchableOpacity>

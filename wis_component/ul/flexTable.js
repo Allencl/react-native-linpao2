@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { TouchableOpacity,StyleSheet,Text, View,ScrollView } from 'react-native';
 import { Checkbox,Card, WhiteSpace, WingBlank,Icon,Flex } from '@ant-design/react-native';
+import {brandPrimary} from './../../theme'; // 使用自定义样式
+
 
 class TableComponent extends Component {
     constructor(props) {
@@ -39,7 +41,7 @@ class TableComponent extends Component {
                     <Flex style={{paddingBottom:16}}>
                         <Flex.Item style={{flex:3}}>
                             <View>
-                                <Text style={{fontSize:13,fontWeight:'600',color:"#1890ff"}}>{title}</Text>
+                                <Text style={{fontSize:13,fontWeight:'600',color:"#000"}}>{title}</Text>
                             </View>
                         </Flex.Item>
                         <Flex.Item style={{flex:3}}>
