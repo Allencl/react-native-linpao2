@@ -617,7 +617,11 @@ class PageForm extends Component {
                     style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
                     value={String(row._takeNumber)}
                     keyboardType={"numeric"}
-                    onChangeText={text => that.takeChangeText(text,index,row)}
+                    onChangeText={text =>{ 
+                      if( !isNaN(text) ){
+                        this.takeChangeText(text,index,row)
+                      }
+                    }}
                   />               
                 </Flex.Item>
                 <Flex.Item style={{flex:15,paddingBottom:5,paddingLeft:2,paddingRight:2}}>

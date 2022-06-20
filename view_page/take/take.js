@@ -229,7 +229,11 @@ class PageForm extends Component {
                     style={{flex:6,height:38,marginBottom:6,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
                     value={String(rowData._takeNumber)}
                     keyboardType={"numeric"}
-                    onChangeText={text => that.takeChangeText(text)}
+                    onChangeText={text =>{ 
+                      if( !isNaN(text) ){
+                        this.takeChangeText(text)
+                      } 
+                    }}
                   /> 
                   
                   {/* <Text style={{flex:7,fontSize:16,paddingLeft:6}} numberOfLines={1}>{rowData.receiveQty}</Text> */}
