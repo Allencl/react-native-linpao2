@@ -310,7 +310,7 @@ class PageForm extends Component {
 
         <View style={{marginTop:12,marginBottom:50}}>
           <Flex>
-            <Flex.Item style={{paddingRight:6}}>
+            <Flex.Item >
               <Button type="ghost" onPress={()=> this.passHandle() }>发运</Button>          
             </Flex.Item>
             {/* <Flex.Item style={{paddingLeft:6}}>
