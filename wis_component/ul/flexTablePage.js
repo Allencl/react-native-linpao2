@@ -5,6 +5,8 @@ import { Checkbox,Card, WhiteSpace, WingBlank,Icon,Flex,Toast } from '@ant-desig
 
 import WISHttpUtils from '@wis_component/http';   // http 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {brandPrimary} from './../../theme'; // 使用自定义样式
+
 
 class TableComponent extends Component {
     constructor(props) {
@@ -154,17 +156,17 @@ class TableComponent extends Component {
                     <Flex>
                         <Flex.Item style={{flex:1}}>
                             <TouchableOpacity onPress={() =>  that.pageChange(false) }>
-                                <Icon style={{fontSize:26,color:"#1890ff"}} name="left-circle" />
+                                <Icon style={{fontSize:26,color:brandPrimary}} name="left-circle" />
                             </TouchableOpacity>
                         </Flex.Item>
                         <Flex.Item style={{flex:1,paddingLeft:2}}>
                             <TouchableOpacity onPress={() =>  that.pageChange(true) }>
-                                <Icon style={{fontSize:26,color:"#1890ff"}} name="right-circle" />
+                                <Icon style={{fontSize:26,color:brandPrimary}} name="right-circle" />
                             </TouchableOpacity>
                         </Flex.Item>
                         <Flex.Item style={{flex:1,paddingLeft:2}}>
                             <TouchableOpacity onPress={() =>{    this.initFunc()  }}>
-                                <Icon style={{fontSize:26,color:"#1890ff"}} name="reload" />
+                                <Icon style={{fontSize:26,color:brandPrimary}} name="reload" />
                             </TouchableOpacity>
                         </Flex.Item>
 

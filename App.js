@@ -168,7 +168,7 @@ class App extends Component {
             width:Dimensions.get('window').width,
             height:Dimensions.get('window').height-160
           }}>
-            <ActivityIndicator size={58} color="#1890ff" />
+            <ActivityIndicator size={58} color={brandPrimary} />
           </View>
           :
           <View></View>
