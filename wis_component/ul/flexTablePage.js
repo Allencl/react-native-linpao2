@@ -78,13 +78,18 @@ class TableComponent extends Component {
      * @returns 
     */
     checkboxAllFunc=(value)=>{
-        const {onCheckedAll} = this.props;
+        // const {onCheckedAll} = this.props;
+        const {tableData=[]}=this.state;
 
         this.setState({
             checkboxValue:value
         })
 
-        onCheckedAll && onCheckedAll(value)
+        this.setState({
+            tableData:tableData.map(o=>Object.assign(o,{_checked:value}))
+        })
+        // console.log(value)
+        // onCheckedAll && onCheckedAll(value)
     }
 
 
@@ -130,6 +135,7 @@ class TableComponent extends Component {
         })
 
         this.setState({
+            checkboxValue:false,
             tableData:_newList
         })
         // console.log(aaa)
@@ -173,7 +179,27 @@ class TableComponent extends Component {
 
                         <Flex.Item style={{flex:8,marginLeft:0}}>
                             <Text style={{fontSize:15}}>{` 第${page}页 共${total}条`}</Text>
-                        </Flex.Item>                  
+                        </Flex.Item>    
+
+                        <Flex.Item style={{flex:1,marginLeft:0}}>
+
+                            { onCheckedAll ? 
+                                <View style={{flexDirection:"row",justifyContent:'flex-end'}}>
+                                    <Text>全选 </Text>
+                                    <Checkbox
+                                        checked={checkboxValue}
+                                        onChange={event => {
+                                            that.checkboxAllFunc(event.target.checked)
+                                        }}
+                                        >
+                                    </Checkbox>
+                                </View>
+                                :
+                                <View></View>
+                            }
+
+                        </Flex.Item>          
+
                     </Flex>
                 </View>
 

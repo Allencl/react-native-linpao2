@@ -207,6 +207,7 @@ class PageForm extends Component {
           Parames={{taskByStatus:'1'}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-306}
+          onCheckedAll={true}
           // onRowClick={(row)=> navigation.navigate('putawayDetailed',{row:row}) }
           // renderHead={()=>{
           //   return (
