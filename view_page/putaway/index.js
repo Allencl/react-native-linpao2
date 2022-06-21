@@ -278,7 +278,7 @@ class PageForm extends Component {
               </Flex>
               <Flex>
                 <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName||''}</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{`${row.partNo||''} ${row.partName||''}`}</Text>
                 </Flex.Item>
               </Flex>
               {/* <View style={{height:2}}></View> */}
