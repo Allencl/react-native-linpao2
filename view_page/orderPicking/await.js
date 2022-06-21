@@ -208,6 +208,7 @@ class Page extends Component {
           Parames={{taskStatus:0}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-300}
+          onCheckedAll={true}
           onInitHandle={(result)=>{
             this.setState({pageTotal:result.total})
             // console.log(result.total)

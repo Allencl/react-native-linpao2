@@ -267,6 +267,7 @@ class Page extends Component {
           Parames={{taskStatus:5}}
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-340}
+          onCheckedAll={true}
           renderBody={(row,index,callBack)=>{
             return (<View key={index} style={{marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
               <Flex>
