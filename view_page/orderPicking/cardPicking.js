@@ -185,7 +185,7 @@ class Page extends Component {
 
       // console.log(result)
       if(code==200){
-        Toast.success("小车切换成功！",1);
+        Toast.success("操作成功！",1);
 
         that.initPage();
         that.setState({visible2:false})

@@ -156,7 +156,7 @@ class PageForm extends Component {
 
           // console.log(result)
           if(code==200){
-            Toast.success("检验完成！",1);
+            Toast.success("操作成功！",1);
             navigation.navigate("examine");
             DeviceEventEmitter.emit('globalEmitter_update_examineForwarding_table');
           }

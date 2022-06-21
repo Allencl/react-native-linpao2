@@ -185,8 +185,8 @@ class PageForm extends Component {
     },(result) => {
       let {code}=result;
 
-      console.log(889990000);
-      console.log(result);
+      // console.log(889990000);
+      // console.log(result);
       if(code==200){
 
       }

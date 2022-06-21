@@ -98,7 +98,7 @@ class Page extends Component {
       let {code}=result;
 
       if(code==200){
-        Toast.success("响应完成！",1);
+        Toast.success("操作成功！",1);
         that.searchFunc();
       }
 

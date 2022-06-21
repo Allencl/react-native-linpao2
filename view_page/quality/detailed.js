@@ -165,7 +165,7 @@ class PageForm extends Component {
           let {code}=result;
 
           if(code==200){
-            Toast.success("检验完成！",1);
+            Toast.success("操作成功！",1);
 
             navigation.navigate("quality");
             DeviceEventEmitter.emit('globalEmitter_update_quality_table');

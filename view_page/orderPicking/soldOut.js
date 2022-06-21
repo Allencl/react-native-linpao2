@@ -257,7 +257,7 @@ class Page extends Component {
       // console.log(77777);
       // console.log(result);
       if(code==200){
-        Toast.success("绑定完成！",1);
+        Toast.success("操作成功！",1);
         // DeviceEventEmitter.emit('globalEmitter_updata_orderPicking_soldOut_table');
         that.tableRef.initFunc();
 

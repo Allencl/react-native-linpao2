@@ -253,7 +253,7 @@ class PageForm extends Component {
 
 
           if(code==200){
-            Toast.success('移库成功！',1);
+            Toast.success('操作成功！',1);
             navigation.navigate('packages'); 
             DeviceEventEmitter.emit('globalEmitter_updata_packagesList');
           }

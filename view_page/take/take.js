@@ -142,7 +142,7 @@ class PageForm extends Component {
 
       // console.log(result)
       if(code==200){
-        Toast.success("收货成功！",1);
+        Toast.success("操作成功！",1);
         navigation.navigate('takeDetailed'); 
         DeviceEventEmitter.emit('globalEmitter_update_take_list',{
           _odd: routeParams._odd

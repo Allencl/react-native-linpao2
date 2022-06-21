@@ -122,7 +122,7 @@ class Page extends Component {
       // console.log(5678);
       // console.log(result);
       if(code==200){
-        Toast.success("取消响应完成！",1);
+        Toast.success("操作成功！",1);
         navigation.navigate("orderPicking");
         DeviceEventEmitter.emit('globalEmitter_updata_orderPicking_soldOut_table');
       }

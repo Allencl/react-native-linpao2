@@ -108,7 +108,7 @@ class Page extends Component {
 
       // console.log(result)
       if(code==200){
-        Toast.success('包装完成！',1);
+        Toast.success('操作成功！',1);
         that.tableRef.initFunc();
       }
     });  
