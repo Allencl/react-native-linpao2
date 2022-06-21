@@ -116,7 +116,7 @@ class Page extends Component {
     const tabs = [
       { title: '拣货响应' },
       { title: '拣货下架' },
-      { title: '移复检区' },
+      { title: '移库复核区' },
     ];
 
     return ( show ?
