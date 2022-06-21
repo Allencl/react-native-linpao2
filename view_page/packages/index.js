@@ -65,12 +65,12 @@ class Page extends Component {
 
       // 待移库
       if(index==0){
-        this.awaitPageRef.initPage();
+        this.awaitPageRef.searchFunc();
       }
 
-      // 包装中
+      // // 包装中
       if(index==1){
-        this.packagingPageRef.initPage();
+        this.packagingPageRef.searchFunc();
       }
 
    }
@@ -93,8 +93,12 @@ class Page extends Component {
       <View style={{height:height,backgroundColor:"#fff"}}>
         <Tabs tabs={tabs} 
           animated={false}
-          onChange={(obj,index)=>{
+          onTabClick={(obj,index)=>{
             // this.tabsChange(index)
+          }}
+          onChange={(obj,index)=>{
+            // console.log(obj)
+            this.tabsChange(index)
           }}
         >
       

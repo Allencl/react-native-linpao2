@@ -66,7 +66,7 @@ class Page extends Component {
    * 初始化
    */
     initPage=()=>{
-      this.tableRef.initFunc();
+
    }
 
 
@@ -235,7 +235,7 @@ class Page extends Component {
               </TouchableOpacity>
             </Flex.Item>
             <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
-              <TouchableOpacity onPress={() =>  that.searchFunc() }>
+              <TouchableOpacity onPress={() =>  this.searchFunc() }>
                 <Icon style={{fontSize:22,color:brandPrimary}} name="search" />
               </TouchableOpacity>
 

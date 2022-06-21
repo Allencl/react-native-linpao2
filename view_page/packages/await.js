@@ -43,7 +43,8 @@ class Page extends Component {
 
     // 刷新table
     this.updataList =DeviceEventEmitter.addListener('globalEmitter_updata_packagesList',function(){
-      that.tableRef.initFunc();
+      // that.tableRef.initFunc();
+      that.searchFunc();
     });
 
 
@@ -74,7 +75,7 @@ class Page extends Component {
    */
   searchFunc=()=>{
     const {no}=this.state;
-    
+
     this.tableRef.initFunc({
       params:{
         lotOrOrder:no
