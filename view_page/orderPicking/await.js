@@ -157,7 +157,7 @@ class Page extends Component {
               <TextInput
                 style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderBottomWidth:1}}
                 value={odd}
-                placeholder={"请扫描或输入 拣货单"}
+                placeholder={"请扫描或输入 拣货单号"}
                 onChangeText={text => this.setState({odd:text}) }
               /> 
             </Flex.Item>
