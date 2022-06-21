@@ -46,7 +46,8 @@ class PageForm extends Component {
 
 
     this.updateTable=DeviceEventEmitter.addListener('globalEmitter_update_putaway_table',function(key=""){
-      that.tableRef.initFunc();
+      // that.tableRef.initFunc();
+      that.searchFunc();
     });
 
 
@@ -67,9 +68,9 @@ class PageForm extends Component {
       // }
 
       // console.log(_key)
-      that.props.form.setFieldsValue({
-        odd:key,
-      });
+      // that.props.form.setFieldsValue({
+      //   odd:key,
+      // });
 
     });
 

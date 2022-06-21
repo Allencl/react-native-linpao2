@@ -48,7 +48,8 @@ class PageForm extends Component {
 
     // 获取菜单
     this.update =DeviceEventEmitter.addListener('globalEmitter_update_quality_table',function(){
-      that.tableRef.initFunc();
+      // that.tableRef.initFunc();
+      that.searchFunc();
     });
 
 
@@ -68,9 +69,9 @@ class PageForm extends Component {
       // }
 
       // console.log(_key)
-      that.props.form.setFieldsValue({
-        odd:key,
-      });
+      // that.props.form.setFieldsValue({
+      //   odd:key,
+      // });
 
     });
 
