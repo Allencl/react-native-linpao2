@@ -13,6 +13,7 @@ import CheckBox from '@react-native-community/checkbox';
 import WISHttpUtils from '@wis_component/http'; 
 import {WisTableCross,WisFlexTablePage} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
+import {brandPrimary} from './../../theme'; // 使用自定义样式
 
 
 // 移复检区
@@ -27,6 +28,8 @@ class Page extends Component {
       visible:false,
       visible2:false,
       visible3:false,
+
+      odd:"",  // 拣货单号
 
       cardText:'',  // 绑定小车
 
@@ -62,6 +65,19 @@ class Page extends Component {
     this.updataList.remove();
   }
 
+
+  /**
+    * 查询
+  */
+  searchFunc=()=>{
+    const {odd}=this.state;
+
+    this.tableRef.initFunc({
+      params:{
+        // lotAndPartNo:odd.trim()
+      }
+    });
+  }
 
   /**
    * 初始化
@@ -257,7 +273,7 @@ class Page extends Component {
 
   render() {
     let that=this;
-    let {visible,visible2,visible3,pageTotal,cardText}=this.state;
+    let {odd,visible,visible2,visible3,pageTotal,cardText}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -309,7 +325,36 @@ class Page extends Component {
         </Modal>
 
 
+        <View>
+          <Flex>
+            <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              <TextInput
+                style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderBottomWidth:1}}
+                value={odd}
+                placeholder={"请扫描或输入 拣货单"}
+                onChangeText={text => this.setState({odd:text}) }
+              /> 
+            </Flex.Item>
 
+            <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({odd:""},()=>{
+                  this.searchFunc();
+                });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+            </Flex.Item>
+
+            <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+
+              <TouchableOpacity onPress={() =>  this.searchFunc() }>
+                <Icon style={{fontSize:22,color:brandPrimary}} name="search" />
+              </TouchableOpacity>
+
+            </Flex.Item>
+          </Flex>
+        </View>
 
 
         <Flex>
