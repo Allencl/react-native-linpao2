@@ -53,9 +53,9 @@ class Page extends Component {
 
     // 刷新table    
     this.updataList =DeviceEventEmitter.addListener('globalEmitter_updata_orderPicking_soldOut_table',function(){
-      that.tableRef.initFunc();
-
+      // that.tableRef.initFunc();
       // console.log("APP-----------33333")
+      that.searchFunc()
 
     });
 

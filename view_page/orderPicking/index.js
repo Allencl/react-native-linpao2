@@ -69,11 +69,26 @@ class Page extends Component {
    tabsChange=(index)=>{
       const {baseCofig}=this.state;
 
-
+      // console.log(index)
       this.setState({
         tabsPage:index
       });
 
+
+      // 拣货响应
+      if(index==0){
+        this.awaitPageRef.searchFunc();
+      }
+
+      // 拣货下架
+      if(index==1){
+        this.SoldOutPagePage.searchFunc();
+      }
+
+      // 移库复核区
+      if(index==2){
+        this.RecheckPage.initPage();
+      }
 
       // // 拣货下架
       // if(index==1){
@@ -126,14 +141,13 @@ class Page extends Component {
           tabs={tabs} 
           animated={false}
           onTabClick={(obj,index)=>{
-            this.tabsChange(index)
+            // this.tabsChange(index)
           }}
           onChange={(obj,index)=>{
             // console.log(obj)
-            // console.log(index)
-
-            // this.tabsChange(index)
+            this.tabsChange(index)
           }}
+
         >
           <View>
             <AwaitPage 
