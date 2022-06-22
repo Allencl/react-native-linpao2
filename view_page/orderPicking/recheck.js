@@ -61,6 +61,10 @@ class Page extends Component {
    initPage=()=>{
     const that=this;
 
+    this.setState({
+      dataList:[]
+    });
+
     WISHttpUtils.get("wms/pickingTask/appSelectPickToStockDToTask",{
       params:{}
       // hideLoading:true
@@ -227,7 +231,7 @@ class Page extends Component {
                     <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text>
                   </Flex.Item>
 
- 
+
                               
               </Flex>
               <Flex>
@@ -240,7 +244,6 @@ class Page extends Component {
                   </Flex.Item>  
 
               </Flex>
-
               <Flex>
               <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.dlocDName}</Text>
@@ -256,6 +259,7 @@ class Page extends Component {
             )
           }}
         />
+
 
         <Flex style={{marginBottom:12}}>
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>

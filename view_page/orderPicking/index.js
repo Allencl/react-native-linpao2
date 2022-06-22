@@ -28,6 +28,7 @@ class Page extends Component {
 
     this.state={
       tabsPage:0,
+
       show:true,
       baseCofig:{
         // isEnd: true,
@@ -76,19 +77,19 @@ class Page extends Component {
 
 
       // 拣货响应
-      if(index==0){
-        this.awaitPageRef.searchFunc();
-      }
+      // if(index==0){
+      //   this.awaitPageRef.searchFunc();
+      // }
 
-      // 拣货下架
-      if(index==1){
-        this.SoldOutPagePage.searchFunc();
-      }
+      // // 拣货下架
+      // if(index==1){
+      //   this.SoldOutPagePage.searchFunc();
+      // }
 
-      // 移库复核区
-      if(index==2){
-        this.RecheckPage.initPage();
-      }
+      // // 移库复核区
+      // if(index==2){
+      //   this.RecheckPage.initPage();
+      // }
 
       // // 拣货下架
       // if(index==1){
@@ -150,22 +151,34 @@ class Page extends Component {
 
         >
           <View>
-            <AwaitPage 
-              navigation={navigation}
-              onRef={(ref)=>{this.awaitPageRef=ref}}
-            />
+            { tabsPage==0 ? 
+              <AwaitPage 
+                navigation={navigation}
+                onRef={(ref)=>{this.awaitPageRef=ref}}
+              />
+              :
+              <View></View>
+            }
           </View>
           <View>
-            <SoldOutPage 
-              navigation={navigation}
-              onRef={(ref)=>{this.SoldOutPagePage=ref}}
-            />
+            { tabsPage==1 ? 
+              <SoldOutPage 
+                navigation={navigation}
+                onRef={(ref)=>{this.SoldOutPagePage=ref}}
+              />
+              :
+              <View></View>
+            }
           </View>
           <View>
-            <RecheckPage 
-              navigation={navigation}
-              onRef={(ref)=>{this.RecheckPage=ref}}
-            />
+            { tabsPage==2 ? 
+              <RecheckPage 
+                navigation={navigation}
+                onRef={(ref)=>{this.RecheckPage=ref}}
+              />
+              :
+              <View></View>
+            }
           </View>
         </Tabs> 
       </View>
