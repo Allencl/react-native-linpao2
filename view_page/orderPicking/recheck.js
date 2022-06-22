@@ -261,7 +261,7 @@ class Page extends Component {
         />
 
 
-        <Flex style={{marginBottom:12}}>
+        <Flex style={{marginTop:8,marginBottom:12}}>
           <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
             <Button style={{height:42}} type="ghost" onPress={()=> { this.moveFunc()   }}><Text style={{fontSize:14}}>移至复核区</Text></Button>  
           </Flex.Item>
