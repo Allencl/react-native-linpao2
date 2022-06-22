@@ -27,6 +27,7 @@ class Page extends Component {
 
     this.state={
       tabsPage:0,
+
       show:true,
       baseCofig:{
         // isEnd: true,
@@ -59,19 +60,19 @@ class Page extends Component {
       const {baseCofig}=this.state;
 
       // console.log(index)
-      // // this.setState({
-      // //   tabsPage:index
-      // // });
+      this.setState({
+        tabsPage:index
+      });
 
       // 待移库
-      if(index==0){
-        this.awaitPageRef.searchFunc();
-      }
+      // if(index==0){
+      //   this.awaitPageRef.searchFunc();
+      // }
 
-      // // 包装中
-      if(index==1){
-        this.packagingPageRef.searchFunc();
-      }
+      // // // 包装中
+      // if(index==1){
+      //   this.packagingPageRef.searchFunc();
+      // }
 
    }
 
@@ -91,7 +92,9 @@ class Page extends Component {
 
     return ( show ?
       <View style={{height:height,backgroundColor:"#fff"}}>
-        <Tabs tabs={tabs} 
+        <Tabs 
+          tabs={tabs} 
+          page={tabsPage}
           animated={false}
           onTabClick={(obj,index)=>{
             // this.tabsChange(index)
@@ -103,16 +106,24 @@ class Page extends Component {
         >
       
             <View >
-              <AwaitPage 
-                navigation={navigation}
-                onRef={(ref)=>{this.awaitPageRef=ref}}
-              />
+              { tabsPage==0 ? 
+                <AwaitPage 
+                  navigation={navigation}
+                  onRef={(ref)=>{this.awaitPageRef=ref}}
+                />
+                :
+                <View></View>
+              }
             </View>
             <View >
-              <PackagingPage 
-                navigation={navigation}
-                onRef={(ref)=>{this.packagingPageRef=ref}}
-              />
+              { tabsPage==1 ? 
+                <PackagingPage 
+                  navigation={navigation}
+                  onRef={(ref)=>{this.packagingPageRef=ref}}
+                />
+                :
+                <View></View>
+              }
             </View>
         </Tabs> 
       </View>
