@@ -128,8 +128,18 @@ class PageForm extends Component {
 
     let _dBasStorageId=_selectData.map(o=>o.dBasStorageId);
 
+    // 必须是同一仓库
     if(Array.from(new Set(_dBasStorageId)).length>1){
       Toast.fail('必须是同一仓库！',1);
+      return
+    }
+
+
+    // 不合格品只能和不合格品一同上架
+    let _taskType=_selectData.map(o=>o.taskType);
+
+    if(Array.from(new Set(_taskType)).length>1){
+      Toast.fail('不合格品只能和不合格品一同上架！',1);
       return
     }
 
@@ -272,7 +282,7 @@ class PageForm extends Component {
               <Flex style={{paddingBottom:2,paddingTop:2}}>
                 <Flex.Item style={{flex:3,flexDirection:"row",paddingLeft:2,paddingRight:2}}>
                   <Text>推荐库位: </Text>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.dBasLocId||''}</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.dLocName||''}</Text>
                 </Flex.Item> 
                 <Flex.Item style={{flex:3,flexDirection:"row",paddingLeft:2,paddingRight:2}}>
                   <Text>上架数量: </Text>

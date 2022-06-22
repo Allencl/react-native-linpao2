@@ -28,7 +28,11 @@ class Page extends Component {
       visible:false,
 
 
+      visible2:false,
+      cardText:'',
+
       odd:"",  // 拣货单号
+      // odd:"P202206120051"
 
 
     }
@@ -97,12 +101,82 @@ class Page extends Component {
    }
 
 
+  /**
+   * 输入物流单号 
+   */
+   importLogisticsNum=()=>{
+    let {navigation,form} = this.props;
+    let _selectData=this.tableRef.getSelectData();
 
 
+    if(!_selectData.length){
+      Toast.fail('请选择数据！',1);
+      return
+    }
+
+
+    // navigation.navigate('logisticsNum',{
+    //   list:_selectData
+    // }); 
+
+
+    console.log(_selectData)
+
+    this.setState({
+      visible2:true
+    })
+    
+   }
+
+
+  /**
+   * 保存运输 单号
+   * @returns 
+   */
+   saveFunc=()=>{
+    const that=this;
+    const {cardText}=this.state;
+    let _selectData=this.tableRef.getSelectData();
+    let _cardText=cardText.trim();
+
+    if(!_cardText){
+      Toast.fail('物流单号不能为空！',1);
+      return
+    }
+
+
+    let _json=_selectData.map(o=>Object.assign({
+        "id": o.ttMmPickOrderId,
+        "transfOrder": _cardText,
+        // "orderRemark": "备注",
+        "version": o.version /*列表查询到的version*/
+    }));
+
+    // console.log(JSON.stringify(_json))
+    WISHttpUtils.post("wms/pickOrder/shipment",{
+      params:_json
+      // hideLoading:true
+    },(result) => {
+      let {code}=result;
+
+      // console.log(result)
+      if(code==200){
+        Toast.success("操作成功！",2);
+        that.searchFunc();
+
+        that.setState({
+          visible2:false
+        });
+      }
+
+    }); 
+
+    // console.log(_selectData)
+   }
 
   render() {
     let that=this;
-    let {visible,odd,part}=this.state;
+    let {visible,odd,part,visible2,cardText}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -111,6 +185,49 @@ class Page extends Component {
 
     return (
       <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:16}}>
+
+
+        <Modal
+          title="输入物流单号"
+          transparent
+          onClose={()=>{
+            this.setState({visible2:false})
+          }}
+          maskClosable
+          visible={visible2}
+          closable
+          // footer={[
+          //   {text:'确认',onPress:()=> {  
+          //     return false
+          //   }},
+          //   {text:'取消',onPress:()=>{}}
+          // ]}
+        >
+          <ScrollView>
+            <View style={{marginTop:18,marginBottom:22}}>
+
+              <TextInput
+                // editable={( (row.canModifReceiptQty!="0")?true:false )}
+                style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
+                value={String(cardText)}
+                // keyboardType={"numeric"}
+                placeholder="请扫描或输入 物流单号"
+                onChangeText={text => this.setState({cardText:text.trim() }) }
+              />  
+
+            </View>
+
+            <View>
+              <Button style={{height:42,paddingLeft:2,paddingRight:2}} type="ghost" onPress={()=> {
+                this.saveFunc();
+              }}>
+                <Text style={{fontSize:14}}>保存</Text>
+              </Button>               
+            </View>
+          </ScrollView>
+        </Modal>
+
+
 
         <Flex>
           <Flex.Item style={{flex:8,borderBottomWidth:1,borderBottomColor:"#e6ebf1"}}>
@@ -148,9 +265,21 @@ class Page extends Component {
 
 
         </Flex>
-
-
         <View style={{height:12}}></View>          
+
+        <Flex>
+          <Flex.Item style={{flex:3,paddingRight:6}}>
+            {/* <Button style={{height:36}} type="ghost" onPress={()=> { this.separateFunc()  } }><Text style={{fontSize:14}}>拆箱</Text></Button>   */}
+          </Flex.Item>
+          {/* <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
+            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible2:true})  } }><Text style={{fontSize:14}}>打印装箱清单</Text></Button>  
+          </Flex.Item> */}
+          <Flex.Item style={{flex:3,paddingLeft:6}}>
+            <Button style={{height:36}} type="ghost" onPress={()=> {  this.importLogisticsNum()  } }><Text style={{fontSize:14}}>输入物流单号</Text></Button>  
+          </Flex.Item>
+        </Flex>
+
+
 
         <WisFlexTablePage
           RequestURL="wms/pickOrder/listMove"

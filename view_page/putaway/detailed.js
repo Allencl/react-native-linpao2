@@ -179,16 +179,19 @@ class PageForm extends Component {
           taskQty:row.taskQty,
           ddStorageId:row.dBasStorageId,
           ddBasDlocId:row.dBasDlocId,
-          ddBasLocId:row.dBasLocId,
+          ddBasLocId:row.dBasLocId,   
           aaStorageId:row.dBasStorageId,
-          aaBasDlocId:row.dBasDlocId,
 
-          aaBasLocId: value.storageForm[0]["id"],  // 确认库位
+          // aaBasDlocId:row.dBasDlocId,
+          aaBasDlocId:"-1",
+
+          aaBasLocId: value.storageForm[0]["id"],  // 确认库位   
           version:row.version
         })
 
         // console.log( value.storageForm)
-        // console.log(_json)
+        // console.log( JSON.stringify(_json) )
+        // console.log( JSON.stringify(row) )
         // return
 
         WISHttpUtils.post("wms/mmTask/moveTask",{

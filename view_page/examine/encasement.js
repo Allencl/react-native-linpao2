@@ -477,7 +477,7 @@ class Page extends Component {
             <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible2:true})  } }><Text style={{fontSize:14}}>打印装箱清单</Text></Button>  
           </Flex.Item> */}
           <Flex.Item style={{flex:3,paddingLeft:6}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> {  this.importLogisticsNum()  } }><Text style={{fontSize:14}}>输入物流单号</Text></Button>  
+            {/* <Button style={{height:36}} type="ghost" onPress={()=> {  this.importLogisticsNum()  } }><Text style={{fontSize:14}}>输入物流单号</Text></Button>   */}
           </Flex.Item>
         </Flex>
 

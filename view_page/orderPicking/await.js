@@ -67,7 +67,7 @@ class Page extends Component {
 
     this.tableRef.initFunc({
       params:{
-        // lotAndPartNo:odd.trim()
+        poNo:odd.trim()
       }
     });
   }

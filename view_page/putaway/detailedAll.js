@@ -11,7 +11,7 @@ import RNFS from "react-native-fs";
 
 import WISHttpUtils from '@wis_component/http'; 
 import {WisTableCross,WisInputSN} from '@wis_component/ul';
-import {WisFormPhoto} from '@wis_component/form';   // form 
+import {WisFormPhoto,WisSelectFlex} from '@wis_component/form';   // form 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {origin} from '@wis_component/origin';     // 服务地址
@@ -24,6 +24,10 @@ class PageForm extends Component {
     super(props);
 
     this.state={
+
+
+      storageForm:[],   //  确认库位
+      storageList:[],   //库位
 
       warehouse:"1",   // 仓库
       reservoir:"1",   // 库区
@@ -44,6 +48,7 @@ class PageForm extends Component {
     let that=this;
 
     this.initFunc();
+    this.getStorageFunc();
 
   }
 
@@ -60,11 +65,75 @@ class PageForm extends Component {
   initFunc=()=>{
     const {rows=[]}=this.props.route.params.routeParams;
 
+    console.log(rows)
     this.setState({
-      warehouse:rows[0]["dBasStorageId"], 
-      reservoir:rows[0]["dBasDlocId"],  
+      warehouse:rows[0]["dStorageName"],   // 仓库
+      reservoir:rows[0]["dDlocName"],     // 库区
       storage:"",   
     })
+  }
+
+
+  /**
+   * 获取 库位
+  */
+   getStorageFunc=()=>{
+    const that=this;
+    const {rows=[]}=this.props.route.params.routeParams;
+
+    // console.log(row)
+    // console.log(
+
+    //   {
+    //     // storageId:"ST1",
+    //     // status:"1"
+    //     storageId:row["storageId"],
+    //     // aaa:row["dBasDlocId"]
+    //     status:"1",
+    //     dlocType:(row.taskType=="5")?"6":"5"
+    //     // dlocType:"6"
+
+
+
+    //     // dlocType:"9"
+    //   }
+
+    // )
+    
+    WISHttpUtils.get('wms/loc/list',{
+      params:{
+        // storageId:"ST1",
+        // status:"1"
+        storageId:rows[0]["storageId"],
+        // aaa:row["dBasDlocId"]
+        status:"1",
+        dlocType:(rows[0]["taskType"]=="5")?"6":"5"
+        // dlocType:"9"
+      }
+    },(result)=>{
+      const {rows=[]}=result;
+
+      // let _storageForm=rows.filter(o=> data[0]["sStorageId"]==o.tmBasStorageId)[0];
+
+
+      // this.props.form.setFieldsValue({
+      //   "storageForm":[{_name:_storageForm.storageName,id:_storageForm.tmBasStorageId}],
+      // });
+
+      // console.log()
+      let _rows=rows.map(o=>Object.assign({_name:`${o.locNo}-${o.locName}`,id:o.tmBasLocId}))
+
+
+
+      that.setState({
+        // warehouseName:_warehouse?.storageName,   
+        storageList:_rows
+      })
+
+      // console.log(data)
+      // console.log(result)
+    })
+
   }
 
 
@@ -84,7 +153,7 @@ class PageForm extends Component {
         // Toast.fail('必填字段未填！');
         // console.log(error)
 
-        if(!value["storage"]){
+        if(!value["storageForm"].length){
           Toast.fail('上架库位不能为空！',1);
           return
         }
@@ -92,16 +161,36 @@ class PageForm extends Component {
 
 
         let _jsonList=rows.map(o=>Object.assign({
+          // ttMmTaskId:o.ttMmTaskId,
+          // taskQty:o.taskQty,
+          // ddStorageId:o.dBasStorageId,
+          // ddBasDlocId:o.dBasDlocId,
+          // ddBasLocId:o.dBasLocId,
+
+          // aaStorageId:o.dBasStorageId,
+          // aaBasDlocId:o.dBasDlocId,
+
+          // aaBasLocId: value["storageForm"][0]["id"], // 库位
+          // version:o.version
+
+
           ttMmTaskId:o.ttMmTaskId,
           taskQty:o.taskQty,
           ddStorageId:o.dBasStorageId,
           ddBasDlocId:o.dBasDlocId,
-          ddBasLocId:o.dBasLocId,
+          ddBasLocId:o.dBasLocId,   
           aaStorageId:o.dBasStorageId,
-          aaBasDlocId:o.dBasDlocId,
-          aaBasLocId: value["storage"].trim(),
+
+          // aaBasDlocId:row.dBasDlocId,
+          aaBasDlocId:rows[0]["dBasDlocId"],
+
+          aaBasLocId: value["storageForm"][0]["id"],  // 确认库位   
           version:o.version
         }));
+
+
+        // console.log( JSON.stringify(_jsonList) )
+        // console.log( JSON.stringify(rows) )
 
 
         WISHttpUtils.post("wms/mmTask/moveTask",{
@@ -136,7 +225,7 @@ class PageForm extends Component {
         reservoir,  
         storage,  
         }=this.state;
-    let {visible,visible3}=this.state;
+    let {visible,visible3,storageForm,storageList}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
 
@@ -174,7 +263,7 @@ class PageForm extends Component {
             />
 
 
-            <WisInput  
+            {/* <WisInput  
                 form={form} 
                 name="storage"       
                 requiredSign={true}
@@ -184,7 +273,29 @@ class PageForm extends Component {
                 })} 
                 error={getFieldError('storage')}               
                 lableName="上架库位"
-            /> 
+            />  */}
+
+
+          <WisSelectFlex 
+            form={form} 
+            name="storageForm"
+            requiredSign={true}
+            {...getFieldProps('storageForm',{
+              rules:[{required:true }],
+              initialValue:[]
+            })} 
+            error={getFieldError('storageForm')}  
+            title="上架库位（单选）"             
+            lableName="上架库位"
+            textFormat={o=>o._name}
+            labelFormat={o=>o._name}
+            onChangeValue={(_list)=>{
+              // that.warehouseChange(_list);
+            }}
+            data={storageList}
+            
+          />
+
 
 
         </View>
