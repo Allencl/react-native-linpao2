@@ -214,6 +214,10 @@ class PageForm extends Component {
 
         // console.log(bufferRow)
         // console.log(_json)
+        // console.log( JSON.stringify(_json) )
+        // console.log( JSON.stringify(bufferRow) )
+
+
         // return
         WISHttpUtils.post("wms/pickingTask/newPickingOffTheShelf",{
           params:_json
