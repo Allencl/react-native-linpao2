@@ -49,6 +49,15 @@ class TableComponent extends Component {
         //     ...option.params
         // })
 
+
+
+        that.setState({
+            total:1,
+            totalPage:1,
+            tableData:[]
+        });
+
+
         WISHttpUtils.get(RequestURL,{
             params:{
                 pageNum:page,
