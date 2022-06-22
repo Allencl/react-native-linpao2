@@ -208,6 +208,8 @@ class PageForm extends Component {
           onRef={(ref)=>{ this.tableRef=ref }}
           maxHeight={height-306}
           onCheckedAll={true}
+          onRowClick={(row)=> navigation.navigate('putawayDetailed',{row:row}) }
+
           // onRowClick={(row)=> navigation.navigate('putawayDetailed',{row:row}) }
           // renderHead={()=>{
           //   return (
@@ -250,8 +252,8 @@ class PageForm extends Component {
                       </Checkbox>
                     </View>
                   </Flex.Item>                
-                  <Flex.Item style={{flex:25,paddingLeft:6,paddingTop:3,paddingBottom:3,paddingLeft:4,paddingRight:4,borderRadius:4,borderWidth:1,borderColor:'#e6ebf1'}}>
-                    <TouchableOpacity onPress={() =>{ 
+                  <Flex.Item style={{flex:25,paddingLeft:2}}>
+                    {/* <TouchableOpacity onPress={() =>{ 
                       // that.setState({
                       //   visible:true,
                       //   rowData:row
@@ -259,8 +261,8 @@ class PageForm extends Component {
                       navigation.navigate('putawayDetailed',{row:row})
                     }}>
                       <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo||''}</Text>
-                    </TouchableOpacity>
-                    {/* <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo}</Text> */}
+                    </TouchableOpacity> */}
+                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.taskNo||''}</Text>
 
                   </Flex.Item>
                   {/* <Flex.Item style={{flex:1}}></Flex.Item>  */}
@@ -287,6 +289,10 @@ class PageForm extends Component {
                 <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
                   <Text numberOfLines={1} style={{textAlign:'left'}}>{row.supplName||''}</Text>
                 </Flex.Item> 
+
+                <Flex.Item style={{flex:1,flexDirection:'row-reverse',paddingBottom:5,paddingLeft:2,paddingRight:0}}>
+                  <Icon style={{fontSize:24}} name="right" />
+                </Flex.Item>
               </Flex>
             </View>
             )
