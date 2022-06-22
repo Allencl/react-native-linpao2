@@ -46,7 +46,7 @@ class PageForm extends Component {
 
 
 
-    // 获取菜单
+    // 刷新页面
     this.update =DeviceEventEmitter.addListener('globalEmitter_update_quality_table',function(){
       // that.tableRef.initFunc();
       that.searchFunc();
@@ -105,50 +105,50 @@ class PageForm extends Component {
    * 提交
    */
   passHandle=(value)=>{
-    const that=this;
-    const {navigation} = this.props;
+  //   const that=this;
+  //   const {navigation} = this.props;
 
 
-    this.props.form.validateFields((error, value) => {
-      // 表单 不完整
-      if(error){
-        // Toast.fail('必填字段未填！');
-        // console.log(error)
+  //   this.props.form.validateFields((error, value) => {
+  //     // 表单 不完整
+  //     if(error){
+  //       // Toast.fail('必填字段未填！');
+  //       // console.log(error)
 
 
-        if(!value["odd"]){
-          Toast.fail('收货单号不能为空！');
-          return
-        }
+  //       if(!value["odd"]){
+  //         Toast.fail('收货单号不能为空！');
+  //         return
+  //       }
 
 
 
-      } else{
-        let _odd=value["odd"].trim();
+  //     } else{
+  //       let _odd=value["odd"].trim();
 
 
-        WISHttpUtils.get(`wms/poOrderPart/getOrderDetails/${_odd}`,{
-          params:{
+  //       WISHttpUtils.get(`wms/poOrderPart/getOrderDetails/${_odd}`,{
+  //         params:{
     
-          }
-        },(result)=>{
-          const {code,msg,data={}}=result;
+  //         }
+  //       },(result)=>{
+  //         const {code,msg,data={}}=result;
 
-          if(code==200){         
-            navigation.navigate('takeDetailed',{
-              data:data
-            });       
-          }else{
-            Toast.offline(msg,1);
-          }
+  //         if(code==200){         
+  //           navigation.navigate('takeDetailed',{
+  //             data:data
+  //           });       
+  //         }else{
+  //           Toast.offline(msg,1);
+  //         }
 
-        })
-
-
+  //       })
 
 
-      }
-  });
+
+
+  //     }
+  // });
   }  
 
 
