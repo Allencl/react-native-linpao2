@@ -171,6 +171,7 @@ class PageForm extends Component {
           Toast.fail('确认库位不能为空！',1);
           return
         }
+        
       } else{
 
 
