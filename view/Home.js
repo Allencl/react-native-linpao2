@@ -196,7 +196,7 @@ class HomeScreen extends Component{
                 break;
         }
 
-        console.log(option)
+        // console.log(option)
      }
 
     render() {
