@@ -383,7 +383,7 @@ class Page extends Component {
           RequestURL="wms/pickingTask/list"
           Parames={{taskStatus:10}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-306}
+          maxHeight={height-346}
           onInitHandle={(result)=>{
             this.setState({pageTotal:result.total})
             // console.log(result.total)
