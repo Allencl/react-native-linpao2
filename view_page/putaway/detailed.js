@@ -11,7 +11,7 @@ import RNFS from "react-native-fs";
 
 import WISHttpUtils from '@wis_component/http'; 
 import {WisTableCross,WisInputSN} from '@wis_component/ul';
-import {WisFormPhoto} from '@wis_component/form';   // form 
+import {WisFormPhoto,WisSelectFlex} from '@wis_component/form';   // form 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {origin} from '@wis_component/origin';     // 服务地址
@@ -25,15 +25,18 @@ class PageForm extends Component {
 
     this.state={
 
-      taskNo:"3",        // 任务号
-      supplier:'3',     // 供应商
-      supplierName:'3',   // 供应商名
-      part:'3',         // 零件号
-      partName:'3',     // 零件名称
-      number:'3',      // 上架数量
-      boxNum:'3',      // 零件箱号
-      storage:'3',    // 推存库位
-      storageAffirm:'3',   // 确认库位
+      storageForm:[],   //  确认库位
+      storageList:[],   //库位
+
+      taskNo:"",        // 任务号
+      supplier:'',     // 供应商
+      supplierName:'',   // 供应商名
+      part:'',         // 零件号
+      partName:'',     // 零件名称
+      number:'',      // 上架数量
+      boxNum:'',      // 零件箱号
+      storage:'',    // 推存库位
+      // storageAffirm:'',   // 确认库位
  
     }
   }
@@ -50,6 +53,9 @@ class PageForm extends Component {
     let that=this;
 
     this.initFunc();
+
+
+    this.getStorageFunc()
 
   }
 
@@ -76,8 +82,72 @@ class PageForm extends Component {
       number:String(row.taskQty||''),     
       boxNum:row.lpnId||'',     
       storage:row.dLocName||'',   
-      storageAffirm:'',   
+      // storageAffirm:'',   
     })
+  }
+
+
+
+  /**
+   * 获取 库位
+  */
+   getStorageFunc=()=>{
+    const that=this;
+    const {row={},data=[]}=this.props.route.params.routeParams;
+
+    // console.log(row)
+    // console.log(
+
+    //   {
+    //     // storageId:"ST1",
+    //     // status:"1"
+    //     storageId:row["storageId"],
+    //     // aaa:row["dBasDlocId"]
+    //     status:"1",
+    //     dlocType:(row.taskType=="5")?"6":"5"
+    //     // dlocType:"6"
+
+
+
+    //     // dlocType:"9"
+    //   }
+
+    // )
+
+    WISHttpUtils.get('wms/loc/list',{
+      params:{
+        // storageId:"ST1",
+        // status:"1"
+        storageId:row["storageId"],
+        // aaa:row["dBasDlocId"]
+        status:"1",
+        dlocType:(row.taskType=="5")?"6":"5"
+        // dlocType:"9"
+      }
+    },(result)=>{
+      const {rows=[]}=result;
+
+      // let _storageForm=rows.filter(o=> data[0]["sStorageId"]==o.tmBasStorageId)[0];
+
+
+      // this.props.form.setFieldsValue({
+      //   "storageForm":[{_name:_storageForm.storageName,id:_storageForm.tmBasStorageId}],
+      // });
+
+      // console.log()
+      let _rows=rows.map(o=>Object.assign({_name:`${o.locNo}-${o.locName}`,id:o.tmBasLocId}))
+
+
+
+      that.setState({
+        // warehouseName:_warehouse?.storageName,   
+        storageList:_rows
+      })
+
+      // console.log(data)
+      // console.log(result)
+    })
+
   }
 
 
@@ -95,9 +165,9 @@ class PageForm extends Component {
       // 表单 不完整
       if(error){
         // Toast.fail('必填字段未填！');
-        // console.log(error)
+        // console.log(value)
 
-        if(!value["storageAffirm"]){
+        if(!value["storageForm"].length){
           Toast.fail('确认库位不能为空！',1);
           return
         }
@@ -112,10 +182,14 @@ class PageForm extends Component {
           ddBasLocId:row.dBasLocId,
           aaStorageId:row.dBasStorageId,
           aaBasDlocId:row.dBasDlocId,
-          aaBasLocId: value["storageAffirm"].trim(),
+
+          aaBasLocId: value.storageForm[0]["id"],  // 确认库位
           version:row.version
         })
 
+        // console.log( value.storageForm)
+        // console.log(_json)
+        // return
 
         WISHttpUtils.post("wms/mmTask/moveTask",{
           params:[_json]
@@ -153,8 +227,9 @@ class PageForm extends Component {
       boxNum,     
       storage,   
       storageAffirm,   
+      storageForm
         }=this.state;
-    let {visible,visible3}=this.state;
+    let {visible,visible3,storageList}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
 
@@ -261,10 +336,11 @@ class PageForm extends Component {
                 })} 
                 error={getFieldError('storage')}               
                 lableName="推荐库位"
+                disabled
             />     
 
 
-            <WisInput  
+            {/* <WisInput  
                 form={form} 
                 name="storageAffirm" 
                 requiredSign={true}
@@ -275,7 +351,29 @@ class PageForm extends Component {
                 placeholder="请输入或扫描 库位"
                 error={getFieldError('storageAffirm')}               
                 lableName="确认库位"
-            /> 
+            />  */}
+
+
+          <WisSelectFlex 
+            form={form} 
+            name="storageForm"
+            requiredSign={true}
+            {...getFieldProps('storageForm',{
+              rules:[{required:true }],
+              initialValue:[]
+            })} 
+            error={getFieldError('storageForm')}  
+            title="确认库位（单选）"             
+            lableName="确认库位"
+            textFormat={o=>o._name}
+            labelFormat={o=>o._name}
+            onChangeValue={(_list)=>{
+              // that.warehouseChange(_list);
+            }}
+            data={storageList}
+            
+          />
+
 
 
         </View>

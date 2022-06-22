@@ -78,19 +78,23 @@ class PageForm extends Component {
     },(result)=>{
       const {rows=[]}=result;
 
-      let _warehouse=rows.filter(o=> data[0]["sStorageId"]==o.tmBasStorageId)[0];
+
+
+      let _rows=rows.map(o=>Object.assign({_name:`${o.storageNo}-${o.storageName}`,id:o.tmBasStorageId}));
+      let _warehouse=_rows.filter(o=> data[0]["sStorageId"]==o.id);
 
 
       this.props.form.setFieldsValue({
-        "warehouse":[{_name:_warehouse.storageName,id:_warehouse.tmBasStorageId}],
+        "warehouse":_warehouse,
       });
+
 
       that.setState({
         // warehouseName:_warehouse?.storageName,   
-        warehouseList:rows.map(o=>Object.assign({_name:o.storageName,id:o.tmBasStorageId}))
+        warehouseList:_rows
       })
 
-      // console.log(data)
+      // console.log(1122)
       // console.log(result)
     })
 
@@ -112,7 +116,7 @@ class PageForm extends Component {
       const {rows=[]}=result;
 
       that.setState({
-        reservoirList:rows.map(o=>Object.assign({_name:o.dlocName,id:o.tmBasDlocId}))
+        reservoirList:rows.map(o=>Object.assign({_name:`${o.dlocNo}-${o.dlocName}`,id:o.tmBasDlocId}))
       })
 
       // console.log(result)
@@ -134,7 +138,7 @@ class PageForm extends Component {
         const {rows=[]}=result;
 
         that.setState({
-          storageList:rows.map(o=>Object.assign({_name:o.locName,id:o.tmBasLocId}))
+          storageList:rows.map(o=>Object.assign({_name:`${o.locNo}-${o.locName}`,id:o.tmBasLocId}))
         })
 
         // console.log(result)
