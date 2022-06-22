@@ -152,8 +152,8 @@ class Page extends Component {
 
 
         <View>
-          <Flex>
-            <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+          <Flex style={{paddingBottom:2}}>
+            <Flex.Item style={{flex:8,paddingBottom:0,paddingLeft:2,paddingRight:2}}>
               <TextInput
                 style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderBottomWidth:1}}
                 value={odd}
@@ -207,7 +207,7 @@ class Page extends Component {
           RequestURL="wms/pickingTask/list"
           Parames={{taskStatus:0}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-300}
+          maxHeight={height-342}
           onCheckedAll={true}
           onInitHandle={(result)=>{
             this.setState({pageTotal:result.total})

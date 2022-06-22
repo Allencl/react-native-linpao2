@@ -153,7 +153,7 @@ class TableComponent extends Component {
 
     render() {
         let that=this;
-        let {title='',renderHead,renderBody,maxHeight=0,onCheckedAll,onRowClick} = this.props;
+        let {title='',renderHead,renderBody,reloadButton=false,maxHeight=0,onCheckedAll,onRowClick} = this.props;
         let {page,total,tableData,checkboxValue}=this.state;
 
         return (
@@ -170,18 +170,22 @@ class TableComponent extends Component {
                                 <Icon style={{fontSize:26,color:brandPrimary}} name="right-circle" />
                             </TouchableOpacity>
                         </Flex.Item>
-                        <Flex.Item style={{flex:1,paddingLeft:2}}>
-                            <TouchableOpacity onPress={() =>{    this.initFunc()  }}>
-                                <Icon style={{fontSize:26,color:brandPrimary}} name="reload" />
-                            </TouchableOpacity>
-                        </Flex.Item>
 
+                        { reloadButton ? 
+                            <Flex.Item style={{flex:1,paddingLeft:2}}>
+                                <TouchableOpacity onPress={() =>{    this.initFunc()  }}>
+                                    <Icon style={{fontSize:26,color:brandPrimary}} name="reload" />
+                                </TouchableOpacity>
+                            </Flex.Item>
+                            :
+                            <View></View>
+                        }
 
-                        <Flex.Item style={{flex:8,marginLeft:0}}>
+                        <Flex.Item style={{flex:5,marginLeft:0}}>
                             <Text style={{fontSize:15}}>{` 第${page}页 共${total}条`}</Text>
                         </Flex.Item>    
 
-                        <Flex.Item style={{flex:1,marginLeft:0}}>
+                        <Flex.Item style={{flex:2,marginLeft:0}}>
 
                             { onCheckedAll ? 
                                 <View style={{flexDirection:"row",justifyContent:'flex-end'}}>
