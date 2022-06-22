@@ -41,6 +41,12 @@ class PageForm extends Component {
     let that=this;
 
 
+
+    this.update=DeviceEventEmitter.addListener('globalEmitter_update_take_index',function(key=""){
+      that.setState({odd:""})
+    });
+
+
     // 监听扫码枪
     this.honeyWell=DeviceEventEmitter.addListener('globalEmitter_honeyWell',function(key=""){
 
@@ -53,6 +59,7 @@ class PageForm extends Component {
 
   componentWillUnmount(){
     this.honeyWell.remove();
+    this.update.remove();
   }
 
 
