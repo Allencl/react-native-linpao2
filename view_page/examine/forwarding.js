@@ -120,7 +120,7 @@ class Page extends Component {
     // }); 
 
 
-    console.log(_selectData)
+    // console.log(_selectData)
 
     this.setState({
       visible2:true
@@ -184,7 +184,7 @@ class Page extends Component {
 
 
     return (
-      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:16}}>
+      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:4}}>
 
 
         <Modal
@@ -265,7 +265,7 @@ class Page extends Component {
 
 
         </Flex>
-        <View style={{height:12}}></View>          
+        <View style={{height:4}}></View>          
 
         <Flex>
           <Flex.Item style={{flex:3,paddingRight:6}}>
@@ -285,7 +285,7 @@ class Page extends Component {
           RequestURL="wms/pickOrder/listMove"
           Parames={{pickOrderStatus:'60'}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-376}
+          maxHeight={height-396}
           // renderHead={()=>{
           //   return (
           //     <Flex>
@@ -342,7 +342,7 @@ class Page extends Component {
           }}
         />
 
-        <Flex>
+        <Flex style={{marginTop:12}}>
           <Flex.Item style={{flex:3,paddingRight:6}}>
             <Button type="ghost" onPress={()=> { this.moveFunc()  } }><Text style={{fontSize:14}}>移库</Text></Button>  
           </Flex.Item>
