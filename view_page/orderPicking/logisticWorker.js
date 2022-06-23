@@ -201,13 +201,17 @@ class PageForm extends Component {
           return
         }
 
+        
         let _json=Object.assign({
-            "actualPickingNumber": bufferRow.actualPickingNumber,
+            // "actualPickingNumber": bufferRow.actualPickingNumber,
+            "actualPickingNumber": Number(value["orderNum"]),  // 拣货数量
+
+
             "holdQty": Number(value.freeze||0),  // 冻结数量
-            "holdReason": value.freezeText||'',
+            "holdReason": value.freezeText||'',   // 冻结原因
             // "locPName": value.storage,
             "locPName": _realStorage,
-            "taskPickingNumber": Number(value.planNum),
+            "taskPickingNumber": Number(value.planNum),   // 计划数量
             "ttMmWmhPickingId": bufferRow.ttMmWmhPickingId,
             "version": bufferRow.version
         })
