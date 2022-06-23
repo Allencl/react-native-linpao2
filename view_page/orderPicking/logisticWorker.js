@@ -77,7 +77,7 @@ class PageForm extends Component {
     const {bufferRow}=this.state;
 
     // console.log(text)
-    if(Number(text) >= Number(bufferRow.taskPickingNumber)){
+    if(Number(text) > Number(bufferRow.taskPickingNumber)){
       Toast.fail('拣货数量不能大于计划数量！',1);
       this.props.form.setFieldsValue({
         freeze:"0",
