@@ -267,17 +267,14 @@ class Page extends Component {
         </Flex>
         <View style={{height:4}}></View>          
 
-        <Flex>
+        {/* <Flex>
           <Flex.Item style={{flex:3,paddingRight:6}}>
-            {/* <Button style={{height:36}} type="ghost" onPress={()=> { this.separateFunc()  } }><Text style={{fontSize:14}}>拆箱</Text></Button>   */}
           </Flex.Item>
-          {/* <Flex.Item style={{flex:3,paddingLeft:3,paddingRight:3}}>
-            <Button style={{height:36}} type="ghost" onPress={()=> { this.setState({visible2:true})  } }><Text style={{fontSize:14}}>打印装箱清单</Text></Button>  
-          </Flex.Item> */}
+
           <Flex.Item style={{flex:3,paddingLeft:6}}>
             <Button style={{height:36}} type="ghost" onPress={()=> {  this.importLogisticsNum()  } }><Text style={{fontSize:14}}>输入物流单号</Text></Button>  
           </Flex.Item>
-        </Flex>
+        </Flex> */}
 
 
 
@@ -285,7 +282,9 @@ class Page extends Component {
           RequestURL="wms/pickOrder/listMove"
           Parames={{pickOrderStatus:'60'}}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-396}
+          maxHeight={height-386}
+          onCheckedAll={true}
+
           // renderHead={()=>{
           //   return (
           //     <Flex>

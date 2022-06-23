@@ -27,6 +27,12 @@ class PageForm extends Component {
     this.state={
       odd:"",   // 单号
       visible:false,
+      visible2:false,  
+
+
+      cardText:"",   // 单号
+      remarkText:"",  // 备注
+      pickUp:false,   // 自提
 
 
       showTable:false
@@ -122,27 +128,54 @@ class PageForm extends Component {
     })
    }
 
-
-
-
   /**
-   * 提交
+   * 发运
    */
-  passHandle=(value)=>{
-    const that=this;
-    const {navigation} = this.props;
+   forwardingFunc=()=>{
     const _selectData=this.tableRef.getSelectData();
-    let _list=_selectData.map(o=>Object.assign({pickOrderNo:o.pickOrderNo}));
 
     if(!_selectData.length){
       Toast.fail('请选择数据！',1);
       return
     }
 
-    // console.log(_list)
-    // return
+    this.setState({
+      cardText:"",
+      remarkText:"",
+      pickUp:false,
+      visible2:true
+    });
+
+   }
+
+
+  /**
+   * 发运 提交
+   */
+  passHandle=()=>{
+
+    const that=this;
+    const {cardText,remarkText,pickUp}=this.state;
+    const {navigation} = this.props;
+    const _selectData=this.tableRef.getSelectData();
+
+
+    if(!cardText){
+      Toast.fail('物流单号不能为空！',1);
+      return
+    }
+
+    let _json=_selectData.map(o=>Object.assign({
+      "id": o.ttMmPickOrderId,
+      "transfOrder": cardText.trim(),
+      "orderRemark": remarkText,
+      "version":o.version,
+      "isShippByOneself":pickUp
+    }))
+    
+
     WISHttpUtils.post("wms/pickOrder/shipment",{
-      params:_list
+      params:_json
       // hideLoading:true
     },(result) => {
       let {code}=result;
@@ -150,6 +183,7 @@ class PageForm extends Component {
       // console.log(result)
       if(code==200){
         Toast.success("操作成功！",1);
+        that.setState({visible2:false})
         that.tableRef.initFunc();
       }
 
@@ -171,7 +205,7 @@ class PageForm extends Component {
 
   render() {
     let that=this;
-    let{odd,visible,showTable}=this.state;
+    let{odd,visible,visible2,showTable,cardText,remarkText,pickUp}=this.state;
     let {navigation,form} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
     const {width, height, scale} = Dimensions.get('window');
@@ -179,6 +213,73 @@ class PageForm extends Component {
 
     return (
       <View style={{padding:8,backgroundColor:"#fff"}}>
+
+
+        <Modal
+          title="发运确认"
+          transparent
+          onClose={()=>{
+            this.setState({visible2:false})
+          }}
+          maskClosable
+          visible={visible2}
+          closable
+          // footer={[
+          //   {text:'确认',onPress:()=> {  
+          //     return false
+          //   }},
+          //   {text:'取消',onPress:()=>{}}
+          // ]}
+        >
+          <ScrollView>
+            <View style={{marginTop:18,marginBottom:22}}>
+
+              <TextInput
+                // editable={( (row.canModifReceiptQty!="0")?true:false )}
+                style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
+                value={String(cardText)}
+                // keyboardType={"numeric"}
+                placeholder="请扫描或输入 物流单号"
+                onChangeText={text => this.setState({cardText:text }) }
+              />  
+              <View style={{height:12}}></View>
+
+              <TextInput
+                // editable={( (row.canModifReceiptQty!="0")?true:false )}
+                style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderWidth:1}}
+                value={String(remarkText)}
+                // keyboardType={"numeric"}
+                placeholder="请扫描或输入 备注"
+                onChangeText={text => this.setState({remarkText:text }) }
+              />  
+              <View style={{height:12}}></View>
+
+              <Checkbox
+                checked={pickUp}
+                onChange={event => {
+                  this.setState({pickUp:event.target.checked})
+                  // callBack && callBack(event.target.checked,index)
+                  // that.cheCkquarantineFunc(event.target.checked,i)
+                }}
+              >
+                是否自提
+              </Checkbox>
+
+            </View>
+
+            <View>
+              <Button style={{height:42,paddingLeft:2,paddingRight:2}} type="ghost" onPress={()=> {
+                this.passHandle()
+              }}>
+                <Text style={{fontSize:14}}>保存</Text>
+              </Button>               
+            </View>
+          </ScrollView>
+        </Modal>
+
+
+
+
 
         <Modal
           title="发运确认"
@@ -190,7 +291,7 @@ class PageForm extends Component {
           visible={visible}
           closable
           footer={[
-            {text:'确认',onPress:()=> {  this.passHandle() } },
+            {text:'确认',onPress:()=> {   } },
             {text:'取消',onPress:()=>{}}
           ]}
         >
@@ -242,6 +343,8 @@ class PageForm extends Component {
             Parames={{pickOrderStatus:'1'}}
             maxHeight={height-310}
             onRef={(ref)=>{ this.tableRef=ref }}
+            onCheckedAll={true}
+
             // renderHead={()=>{
             //   return (
             //     <Flex>
@@ -311,7 +414,7 @@ class PageForm extends Component {
         <View style={{marginTop:12,marginBottom:50}}>
           <Flex>
             <Flex.Item >
-              <Button type="ghost" onPress={()=> this.passHandle() }>发运</Button>          
+              <Button type="ghost" onPress={()=> this.forwardingFunc() }>发运</Button>          
             </Flex.Item>
             {/* <Flex.Item style={{paddingLeft:6}}>
               <Button type="ghost" onPress={()=>{ this.cancelFunc() }}>取 消</Button>          
