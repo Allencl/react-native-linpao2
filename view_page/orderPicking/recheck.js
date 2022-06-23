@@ -236,13 +236,14 @@ class Page extends Component {
               </Flex>
               <Flex>
                 <Flex.Item style={{flex:12,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.partName}</Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{`${row.partNo}-${row.partName}`}</Text>
                 </Flex.Item> 
+              </Flex>
+              <Flex>
                 <Flex.Item style={{flex:12,flexDirection:'row',paddingBottom:5,paddingLeft:2,paddingRight:2}}>
-                    <Text>拣货数量: </Text>
-                    <Text numberOfLines={1} style={{textAlign:'left'}}>{row.actualPickingNumber}</Text>
-                  </Flex.Item>  
-
+                  <Text>拣货数量: </Text>
+                  <Text numberOfLines={1} style={{textAlign:'left'}}>{row.actualPickingNumber}</Text>
+                </Flex.Item>  
               </Flex>
               <Flex>
               <Flex.Item style={{flex:3,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
