@@ -152,6 +152,15 @@ class TableComponent extends Component {
 
 
     /**
+     * 返回所有数据
+    */
+    getData=()=>{
+        const {tableData}=this.state;
+        return tableData
+    }
+
+
+    /**
      * 返回 选中 数据
      * @returns 
     */

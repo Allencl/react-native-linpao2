@@ -132,10 +132,10 @@ class PageForm extends Component {
    * 发运
    */
    forwardingFunc=()=>{
-    const _selectData=this.tableRef.getSelectData();
+    const _selectData=this.tableRef.getData();
 
     if(!_selectData.length){
-      Toast.fail('请选择数据！',1);
+      Toast.fail('无数据！',1);
       return
     }
 
@@ -157,7 +157,8 @@ class PageForm extends Component {
     const that=this;
     const {cardText,remarkText,pickUp}=this.state;
     const {navigation} = this.props;
-    const _selectData=this.tableRef.getSelectData();
+    const _selectData=this.tableRef.getData();
+
 
 
     if(!cardText){
@@ -169,11 +170,13 @@ class PageForm extends Component {
       "id": o.ttMmPickOrderId,
       "transfOrder": cardText.trim(),
       "orderRemark": remarkText,
-      // "version":o.version,
+      "version":o.pickVersion,
       "isShippByOneself":pickUp
-    }))
+    }));
     
-
+    // console.log(_selectData)
+    // console.log(_json)
+    // return
     WISHttpUtils.post("wms/pickOrder/shipment",{
       params:_json
       // hideLoading:true
@@ -343,7 +346,7 @@ class PageForm extends Component {
             Parames={{pickOrderStatus:'1'}}
             maxHeight={height-310}
             onRef={(ref)=>{ this.tableRef=ref }}
-            onCheckedAll={true}
+            // onCheckedAll={true}
 
             // renderHead={()=>{
             //   return (
@@ -371,7 +374,7 @@ class PageForm extends Component {
             renderBody={(row,index,callBack)=>{
               return (<View key={index} style={{paddingTop:4,paddingBottom:4,marginBottom:10,borderBottomWidth:1,borderColor:'#e6ebf1'}}>
                 <Flex>
-                    <Flex.Item style={{flex:3,paddingLeft:2,paddingRight:2}}>
+                    {/* <Flex.Item style={{flex:3,paddingLeft:2,paddingRight:2}}>
                       <View>
                         <Checkbox
                           checked={row._checked}
@@ -382,7 +385,7 @@ class PageForm extends Component {
                         >
                         </Checkbox>
                       </View>
-                    </Flex.Item>     
+                    </Flex.Item>      */}
                     <Flex.Item style={{flex:26}}>
                       <Text numberOfLines={1} style={{textAlign:'left'}}>{row.boxNo}</Text>
                     </Flex.Item>                                       
