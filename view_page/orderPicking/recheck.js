@@ -13,6 +13,7 @@ import CheckBox from '@react-native-community/checkbox';
 import WISHttpUtils from '@wis_component/http'; 
 import {WisTableCross,WisFlexTable} from '@wis_component/ul';
 import {WisFormText} from '@wis_component/form';   // form 
+import {brandPrimary} from './../../theme'; // 使用自定义样式
 
 
 // 移复检区
@@ -25,6 +26,7 @@ class Page extends Component {
 
     this.state={
       visible:false,
+      odd:"",
 
       dataList:[],
 
@@ -60,13 +62,16 @@ class Page extends Component {
    */
    initPage=()=>{
     const that=this;
+    const {odd}=this.state;
 
     this.setState({
       dataList:[]
     });
 
     WISHttpUtils.get("wms/pickingTask/appSelectPickToStockDToTask",{
-      params:{}
+      params:{
+        pickOrderNo:odd.trim()
+      }
       // hideLoading:true
     },(result) => {
       let {code,rows=[]}=result;
@@ -130,7 +135,7 @@ class Page extends Component {
 
   render() {
     let that=this;
-    let {visible,dataList}=this.state;
+    let {visible,dataList,odd}=this.state;
     let {navigation,form} = this.props;
     const {width, height, scale} = Dimensions.get('window');
 
@@ -138,7 +143,7 @@ class Page extends Component {
 
 
     return (
-      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:16}}>
+      <ScrollView style={{paddingLeft:8,paddingRight:8,paddingTop:8}}>
 
 
         <Modal
@@ -163,8 +168,39 @@ class Page extends Component {
         </Modal>
 
 
+        <View>
+          <Flex>
+            <Flex.Item style={{flex:8,paddingBottom:5,paddingLeft:2,paddingRight:2}}>
+              <TextInput
+                style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderBottomWidth:1}}
+                value={odd}
+                placeholder={"请扫描或输入 拣货单号"}
+                onChangeText={text => this.setState({odd:text}) }
+              /> 
+            </Flex.Item>
 
-        <Flex>
+            <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+              <TouchableOpacity onPress={() =>{ 
+                this.setState({odd:""},()=>{
+                  this.initPage();
+                });
+               }}>
+                <Icon style={{fontSize:22}} name="delete" />
+              </TouchableOpacity>
+            </Flex.Item>
+
+            <Flex.Item style={{flex:1,paddingLeft:2,paddingRight:2}}>
+
+              <TouchableOpacity onPress={() =>  this.initPage() }>
+                <Icon style={{fontSize:22,color:brandPrimary}} name="search" />
+              </TouchableOpacity>
+
+            </Flex.Item>
+          </Flex>
+        </View>
+
+
+        {/* <Flex>
 
           <Flex.Item style={{flex:6,paddingRight:6}}>
             <Text style={{paddingLeft:1}}>已完成下架任务行记录</Text>
@@ -172,9 +208,9 @@ class Page extends Component {
           <Flex.Item style={{flex:3,paddingLeft:6}}>
             <Button style={{height:36}} type="ghost" onPress={()=> { this.initPage()  } }><Text style={{fontSize:14}}>刷新</Text></Button>  
           </Flex.Item>
-        </Flex>
+        </Flex> */}
 
-        <View style={{height:12}}></View>
+        <View style={{height:2}}></View>
 
 
         <WisFlexTable
@@ -182,7 +218,7 @@ class Page extends Component {
           // maxHeight={360}
           data={dataList||[]}
           onRef={(ref)=>{ this.tableRef=ref }}
-          maxHeight={height-310}
+          maxHeight={height-302}
           // renderHead={()=>{
           //   return (
           //     <Flex>

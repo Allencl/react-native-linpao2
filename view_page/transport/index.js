@@ -169,7 +169,7 @@ class PageForm extends Component {
       "id": o.ttMmPickOrderId,
       "transfOrder": cardText.trim(),
       "orderRemark": remarkText,
-      "version":o.version,
+      // "version":o.version,
       "isShippByOneself":pickUp
     }))
     
