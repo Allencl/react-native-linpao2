@@ -232,6 +232,10 @@ class PageForm extends Component {
           if(code==200){
             Toast.success("操作成功！",1);
             that.nextArticleHandle()
+
+            // 刷新 table
+            DeviceEventEmitter.emit('globalEmitter_updata_orderPicking_soldOut_table');
+
           }
 
         });  
