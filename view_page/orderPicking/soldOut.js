@@ -106,6 +106,7 @@ class Page extends Component {
    * @returns 
   */
   orderPickingFunc =()=>{
+    const {odd}=this.state;
     let {navigation,form} = this.props;
     let _selectData= this.tableRef.getSelectData();
 
@@ -129,6 +130,7 @@ class Page extends Component {
 
       if(code==200){
         navigation.navigate("logisticWorker",{
+          _odd:odd,
           row:_selectData[0]
         });
       }

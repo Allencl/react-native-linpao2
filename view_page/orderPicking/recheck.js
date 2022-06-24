@@ -70,7 +70,7 @@ class Page extends Component {
 
     WISHttpUtils.get("wms/pickingTask/appSelectPickToStockDToTask",{
       params:{
-        pickOrderNo:odd.trim()
+        poNo:odd.trim()
       }
       // hideLoading:true
     },(result) => {

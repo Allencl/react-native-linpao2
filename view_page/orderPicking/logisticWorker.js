@@ -132,10 +132,14 @@ class PageForm extends Component {
   nextArticleHandle=()=>{
     const that=this;
     const {navigation} = this.props;
+    const {_odd=""}=this.props.route.params.routeParams;
 
 
+    // console.log(_odd)
     WISHttpUtils.get("wms/pickingTask/appNextTask",{
-      params:{}
+      params:{
+        poNo:_odd
+      }
       // hideLoading:true
     },(result) => {
       let {code,data={}}=result;
@@ -171,7 +175,9 @@ class PageForm extends Component {
     const that=this;
     const {bufferRow}=this.state;
     const {navigation,form} = this.props;
-
+    const {_odd=""}=this.props.route.params.routeParams;
+    
+    // console.log(_odd)
 
 
     this.props.form.validateFields((error, value) => {
