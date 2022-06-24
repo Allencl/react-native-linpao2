@@ -1,5 +1,5 @@
 import React from 'react';
-import { BackHandler,DeviceEventEmitter,window,TouchableOpacity,Text,Image, View, StyleSheet } from 'react-native';
+import { BackHandler,DeviceEventEmitter,window,TextInput,TouchableOpacity,Text,Image, View, StyleSheet } from 'react-native';
 import { Icon,Button, Provider, InputItem, List, Toast, Flex } from '@ant-design/react-native';
 import { createForm, formShape } from 'rc-form';
 
@@ -14,15 +14,24 @@ class LoginScreenForm extends React.Component {
     super(props);
 
     this.state = {
+      numClick:0,  // 计数
+
+      showIP:false,    
       toggleEye:true,  // 显示密码
 
       userName:"",
       password:"",
+
+      // origin:"http://10.192.8.69:8188/stage-api/",   // 零跑测试  现场服务器地址  
+      IPDress:"",  //IP
     };
   }
 
   componentDidMount() {
     let that=this;
+
+
+    this.getIP();
 
     // 缓存的 登录信息
     AsyncStorage.getItem("login_message").then((option)=>{
@@ -126,12 +135,45 @@ class LoginScreenForm extends React.Component {
     });
   }
 
+  getIP=()=>{
+    const that=this;
+
+    this.setState({
+      numClick:0
+    });
+
+    AsyncStorage.getItem("global_IP_Buffer").then((option="")=>{
+      // console.log(option)
+      // console.log(4333222111)
+      if(!option){
+        AsyncStorage.setItem("global_IP_Buffer","http://10.192.8.69:8188/stage-api/").then(()=>{
+          that.setState({IPDress:"http://10.192.8.69:8188/stage-api/"}); 
+        });
+      }else{
+        that.setState({IPDress:option});
+      }
+    });
+
+  }
+
+  /**
+   * 缓存IP
+   * @returns 
+   */
+  bufferIP=()=>{
+    const {IPDress=""}=this.state;
+
+    let _IP=IPDress.trim();
+
+    AsyncStorage.setItem("global_IP_Buffer",_IP);
+    Toast.success(`设置成功-${_IP}`,1);
+  }
 
   render() {
 
     const {navigation} = this.props;
     const {getFieldProps, getFieldError, isFieldValidating} = this.props.form;
-    const {userName,password,toggleEye}=this.state;
+    const {userName,password,toggleEye,IPDress,showIP,numClick}=this.state;
   
     return (
       <Provider>
@@ -144,10 +186,17 @@ class LoginScreenForm extends React.Component {
 
         <Flex style={{marginTop:50,marginBottom:12,paddingLeft:16}}>
           <Flex.Item>
-            <Image
+            <TouchableOpacity onPress={() =>{ 
+                this.setState({
+                  numClick:this.state.numClick+1
+                })
+              }}
+            >
+              <Image
 
-              source={require('./img/logo3.png')}
-            /> 
+                source={require('./img/logo3.png')}
+              /> 
+            </TouchableOpacity>
           </Flex.Item>
         </Flex>
         <View style={{marginTop:8,marginBottom:28,paddingLeft:16}}>
@@ -207,6 +256,41 @@ class LoginScreenForm extends React.Component {
                 </Button>
               </View>
           </View>
+            {/* <Text>{String(numClick)}</Text> */}
+
+            { numClick>=6 ?
+              <Flex style={{marginTop:12}}>
+                <Flex.Item style={{flex:6}}>
+                  <TextInput
+                    style={{height:38,borderColor:'#d9d9d9',borderRadius:4,borderBottomWidth:1}}
+                    value={IPDress}
+                    placeholder={"输入 服务器地址"}
+                    onChangeText={text => this.setState({IPDress:text }) }
+                  />
+                </Flex.Item>
+                <Flex.Item style={{flex:1}}>
+
+                  <TouchableOpacity onPress={() =>{ 
+                    this.bufferIP()
+                  }}>
+                    <Icon style={{color:"blue",fontSize:22}} name="check" />
+                  </TouchableOpacity>
+
+                </Flex.Item>
+                <Flex.Item style={{flex:1}}>
+
+                  <TouchableOpacity onPress={() =>{ 
+                    this.setState({numClick:0})
+                  }}>
+                    <Icon style={{fontSize:22,color:"red"}} name="close" />
+                  </TouchableOpacity>
+
+                  </Flex.Item>
+              </Flex>
+              :
+              <View></View>
+             }
+
 
            <View style={{paddingLeft:12}}>
               <View style={{marginTop:80}}> 

@@ -65,8 +65,19 @@ export default class WISHttpUtils extends Component{
     /**
      * 获取服务器 地址
      */
-    static getHttpOrigin(){  
-        return origin;
+    static async getHttpOrigin(){  
+        const _IP="http://101.34.72.122:8188/stage-api/"; // 零跑测试 服务器地址  3
+        // const _IP="http://10.192.8.69:8188/stage-api/";   // 零跑测试  现场服务器地址  
+
+
+        return new Promise((resolve, reject) => {
+            AsyncStorage.getItem("global_IP_Buffer").then((option)=>{
+                // resolve(_IP);
+                resolve(option);
+                // console.log(option)
+            });
+        })
+        // return origin;
     }  
 
     /**
@@ -122,8 +133,10 @@ export default class WISHttpUtils extends Component{
     /**
      * 登录 方法
     */
-    static loginFunc(option,callback){
-        
+    static async loginFunc(option,callback){
+        var _origin= await this.getHttpOrigin();
+
+        // console.log(_origin)
         var that=this;
 
         // 关闭 loading
@@ -134,7 +147,7 @@ export default class WISHttpUtils extends Component{
 
 
         // fetch(origin+"api-uaa/oauth/user/token",{
-        fetch(origin+"auth/login",{
+        fetch(_origin+"auth/login",{
             method:'POST',
             mode:"cors",
             headers:{
@@ -325,6 +338,8 @@ export default class WISHttpUtils extends Component{
      * post Ajax
      */
     static async getAjax(url,option,callback){
+        var _origin= await this.getHttpOrigin();
+
 
         try {
 
@@ -349,7 +364,7 @@ export default class WISHttpUtils extends Component{
 
 
 
-                fetch(`${origin}${url}${_parmasURL}`,{
+                fetch(`${_origin}${url}${_parmasURL}`,{
                     method:'GET',
                     headers: {
                         // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -471,6 +486,8 @@ export default class WISHttpUtils extends Component{
      * post Ajax
      */
     static async postAjax(url,option,callback){
+        var _origin= await this.getHttpOrigin();
+
 
         try {
 
@@ -485,7 +502,7 @@ export default class WISHttpUtils extends Component{
                 }
 
 
-                fetch(origin+url,{
+                fetch(_origin+url,{
                     method:option.method||'POST',
                     mode:"cors",
                     headers:{
