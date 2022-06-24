@@ -65,6 +65,8 @@ class Page extends Component {
     // 
     this.updatePage=DeviceEventEmitter.addListener('globalEmitter_examine_reCheck_update_table',function(option){
       // that.initPage(option)
+      that.searchFunc();  // 搜索拣货单号
+
       that.setState({
         part:"",  // 零件号
         partList:[],   // 零件列表
